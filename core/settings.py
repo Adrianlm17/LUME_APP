@@ -40,6 +40,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'app.authentication.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 ROOT_URLCONF = 'core.urls'
 
 LOGIN_REDIRECT_URL = "/home"

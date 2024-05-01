@@ -5,24 +5,24 @@ from .forms import LoginForm, SignUpForm
 
 def login_view(request):
     form = LoginForm(request.POST or None)
-
     msg = None
 
     if request.method == "POST":
-
         if form.is_valid():
-            username = form.cleaned_data.get("username")
+            email = form.cleaned_data.get("email")
             password = form.cleaned_data.get("password")
-            user = authenticate(username=username, password=password)
+            user = authenticate(request, email=email, password=password)
             if user is not None:
                 login(request, user)
                 return redirect("/home/index.html")
             else:
-                msg = '¡Credenciales invalidas!'
+                msg = '¡Credenciales inválidas!'
         else:
             msg = '¡Error al validar el formulario!'
 
     return render(request, "accounts/login.html", {"form": form, "msg": msg})
+
+
 
 
 def register_user(request):
@@ -33,14 +33,12 @@ def register_user(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get("username")
+            email = form.cleaned_data.get("email")
             password = form.cleaned_data.get("password1")
-            user = authenticate(username=username, password=password)
+            user = authenticate(username=email, password=password)
 
             msg = '¡Usuario creado correctamente!'
             success = True
-
-            #return redirect("/home/login/")
 
         else:
             msg = '¡Formulario no valido!'
@@ -48,6 +46,8 @@ def register_user(request):
         form = SignUpForm()
 
     return render(request, "accounts/register.html", {"form": form, "msg": msg, "success": success})
+
+
 
 def logout_view(request):
     

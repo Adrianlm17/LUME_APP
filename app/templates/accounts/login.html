@@ -28,7 +28,7 @@
             {% csrf_token %} 
 
             <div>
-                {{ form.username }}
+                {{ form.email }}
             </div>
 
             <br><br>
@@ -45,7 +45,7 @@
         <br><br>
 
         <p class="mt-3">
-            ¿Aún no tienes una cuenta? <a href="/home/register/">Regístrate</a>
+            ¿Aún no tienes una cuenta? <a href="{% url 'register' %}">Regístrate</a>
         </p>
     </div>
 
