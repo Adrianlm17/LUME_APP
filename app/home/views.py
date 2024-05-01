@@ -1,10 +1,7 @@
-from django import template
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect
-from django.template import loader
+from django.template import TemplateDoesNotExist, loader
 from django.urls import reverse
-from app.authentication.views import register_user
 
 
 
@@ -22,7 +19,9 @@ def home_index(request):
 
 @login_required(login_url="/login/login/")
 def pages(request):
+
     context = {}
+    
     try:
 
         load_template = request.path.split('/')[-1]
@@ -36,9 +35,9 @@ def pages(request):
 
 
     # ------------------------ EXCEPTS ------------------------
-    except template.TemplateDoesNotExist:
+    except TemplateDoesNotExist:
 
-        html_template = loader.get_template('errores/404.html')
+        html_template = loader.get_template('errors/404.html')
         return HttpResponse(html_template.render(context, request))
 
     # except:
