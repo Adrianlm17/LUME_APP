@@ -40,10 +40,10 @@ def register_user(request):
             msg = '¿Ya tienes un usuario? <a href="/login">LOGIN</a>'
             success = True
 
-            # return redirect("/login/")
+            return redirect("/login/")
 
         else:
-            msg = 'Formulario no valido'
+            msg = '¡Formulario no valido!'
     else:
         form = SignUpForm()
 

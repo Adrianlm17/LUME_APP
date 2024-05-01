@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 
 
 class LoginForm(forms.Form):
-    name = forms.CharField(
+    username = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Name",
+                "placeholder": "Username",
                 "class": "form-control"
             }
         ))
@@ -25,7 +25,7 @@ class SignUpForm(UserCreationForm):
     name = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Nombre",
+                "placeholder": "Name",
                 "class": "form-control"
             }
         ))
@@ -33,7 +33,7 @@ class SignUpForm(UserCreationForm):
     surname = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Apellido",
+                "placeholder": "Surname",
                 "class": "form-control"
             }
         ))
@@ -41,7 +41,7 @@ class SignUpForm(UserCreationForm):
     email = forms.EmailField(
         widget=forms.EmailInput(
             attrs={
-                "placeholder": "Correo electrónico",
+                "placeholder": "Gmail",
                 "class": "form-control"
             }
         ))
@@ -53,64 +53,16 @@ class SignUpForm(UserCreationForm):
                 "type": "tel",
                 "pattern": "[0-9]+",
                 "id": "phone",
-                "placeholder": "Número de teléfono",
+                "placeholder": "Phone",
                 "class": "form-control"
             }
         )
     )
 
-    country = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "País",
-                "class": "form-control"
-            }
-        ))
-
-    address = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Dirección",
-                "class": "form-control"
-            }
-        ))
-
-    street = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Calle",
-                "class": "form-control"
-            }
-        ))
-
-    number = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Número",
-                "class": "form-control"
-            }
-        ))
-
-    floor = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Piso",
-                "class": "form-control"
-            }
-        ))
-
-    door = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Puerta",
-                "class": "form-control"
-            }
-        ))
-
     password1 = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
-                "placeholder": "Contraseña",
+                "placeholder": "Password",
                 "class": "form-control"
             }
         ))
@@ -118,7 +70,7 @@ class SignUpForm(UserCreationForm):
     password2 = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
-                "placeholder": "Confirmar contraseña",
+                "placeholder": "Confirm Password",
                 "class": "form-control"
             }
         ))
