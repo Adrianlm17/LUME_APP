@@ -16,7 +16,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("/")
+                return redirect("/home/index.html")
             else:
                 msg = '¡Credenciales invalidas!'
         else:
@@ -33,14 +33,14 @@ def register_user(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            name = form.cleaned_data.get("name")
-            raw_password = form.cleaned_data.get("password1")
-            user = authenticate(name=name, password=raw_password)
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password1")
+            user = authenticate(username=username, password=password)
 
-            msg = '¿Ya tienes un usuario? <a href="/login">LOGIN</a>'
+            msg = '¡Usuario creado correctamente!'
             success = True
 
-            return redirect("/login/")
+            #return redirect("/home/login/")
 
         else:
             msg = '¡Formulario no valido!'
