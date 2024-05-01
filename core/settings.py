@@ -42,7 +42,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'core.urls'
 
-# AÑADIR RUTA HOME
+LOGIN_REDIRECT_URL = "home"
+
+LOGOUT_REDIRECT_URL = "home"
+
 TEMPLATE_DIR = os.path.join(CORE_DIR, "app/templates")
 
 TEMPLATES = [

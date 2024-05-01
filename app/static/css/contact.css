@@ -1,0 +1,33 @@
+/***************************************************************** CONTACT *****************************************************************/
+.body-container{
+    background-color: aliceblue;
+}
+
+.lume-title {
+    text-align: center;
+    margin-bottom: 50px;
+    font-family: serif;
+}
+
+.lume-title h1 {
+    color: #4b4b4b;
+    font-size: 48px;
+    line-height: 1.2;
+}
+
+.blue-line {
+    height: 2px;
+    width: 80%;
+    background-color: #406c8a;
+    margin: 0 auto 20px;
+}
+
+.lume-title h2 {
+    font-size: 24px;
+    color: #848ca8;
+    line-height: 46px;
+}
+
+.lume-description{
+    text-align: left;
+}
