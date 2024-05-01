@@ -1,29 +1,15 @@
 from django import template
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 from django.template import loader
 from django.urls import reverse
 
 
-
-# ------------------------ VISIT VIEWS ------------------------
-def index(request):
-    context = {'segment': 'index'}
-
-    html_template = loader.get_template('home/index.html')
-    return HttpResponse(html_template.render(context, request))
-
-
-
-
-
-# ------------------------ VIEWS with LOGIN ------------------------
 @login_required(login_url="/login/")
-def index(request):
+def home_index(request):
     context = {'segment': 'index'}
-
-    html_template = loader.get_template('home/index.html')
-    return HttpResponse(html_template.render(context, request))
+    return render(request, 'home/index.html', context)
 
 
 

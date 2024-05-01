@@ -1,9 +1,6 @@
-from django.urls import path, re_path
-from app.home import views
+from django.urls import path
+from . import views as home_views
 
 urlpatterns = [
-
-    path('', views.index, name='home'),
-    re_path(r'^.*\.*', views.pages, name='pages'),
-
+    path('', home_views.home_index, name='home'),
 ]

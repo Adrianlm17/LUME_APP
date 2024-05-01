@@ -1,0 +1,98 @@
+{% extends 'default.html' %}
+
+{% block title %} CONTACT {% endblock %}
+{% block links %} 
+    <link href="../static/css/lume/lume.css" rel="stylesheet"> 
+    <link href="../static/css/lume/contact.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
+{% endblock %}
+
+{% block body %}
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top" id="lume-navbar">
+            <div class="container-fluid">
+
+                <!-- Logo -->
+                <a class="navbar-brand">
+                    <img src="/static/img/LUME.png" alt="LUME Logo" height="90px">
+                </a>
+                
+                <!-- LUME PAGES -->
+                <div class="collapse navbar-collapse justify-content-end ms-4" id="navbarNav">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/info">Quiénes somos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/projects">Nuestros proyectos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Regístrate</a>
+                        </li>
+
+                        <!-- LANGUAGES -->
+                        <li class="nav-item">
+                            <div class="language-dropdown">
+                                <a class="nav-link language-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ language }}
+                                </a>
+                                
+                                <!-- CHANGE LANGUAGE -->
+                                <ul class="language-menu dropdown-menu">
+                                    <li>
+                                        <form class="language-form" action="/" method="post">
+                                            <input type="hidden" name="idioma" value="es">
+                                            <button class="dropdown-item language-button" type="submit">{{ translation.button_spanish }}</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form class="language-form" action="/" method="post">
+                                            <input type="hidden" name="idioma" value="en">
+                                            <button class="dropdown-item language-button" type="submit">{{ translation.button_english }}</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <br><br>
+
+    <!-- BODY-->
+    <div id="body-container" style="padding: 100px 0;">
+        <div class="container">
+            <div class="lume-contact">
+                <div class="lume-title">
+                    <h1>Contacta con nosotros</h1>
+                    <div class="blue-line"></div>
+                    <h2>Solicita tu presupuesto o contáctanos para resolver cualquier duda, consulta o sugerencia.</h2>
+                </div>
+            </div>
+        </div>
+
+        <form action="/contact" method="post" class="contact-form">
+            <input type="text" name="name" placeholder="Nombre *" required>
+            <input type="email" name="email" placeholder="Correo electrónico *" required>
+            <input type="phone" name="phone" placeholder="Teléfono *" required>
+            <textarea name="message" placeholder="Mensaje *" required></textarea>
+            <button type="submit">Enviar</button>
+        </form>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer" style="background-color: #687a85; color: #fff; text-align: center; padding: 20px;">
+        <p>© 2024 LUME - Todos los derechos reservados | Desarrollado por <a href="https://github.com/Adrianlm17">Adrianlm17</a></p>
+    </footer>
+
+{% endblock %}

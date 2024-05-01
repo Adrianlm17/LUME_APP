@@ -33,9 +33,9 @@ def register_user(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get("username")
+            name = form.cleaned_data.get("name")
             raw_password = form.cleaned_data.get("password1")
-            user = authenticate(username=username, password=raw_password)
+            user = authenticate(name=name, password=raw_password)
 
             msg = '¿Ya tienes un usuario? <a href="/login">LOGIN</a>'
             success = True
