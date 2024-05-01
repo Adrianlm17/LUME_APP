@@ -1,12 +1,10 @@
-{% extends 'default.html' %}
+{% extends 'layouts/base.html' %}
+{% load static %} 
 
 {% block title %} LUME {% endblock %}
 {% block links %} 
-    <link href="../static/css/lume/lume.css" rel="stylesheet">
-    <link href="../static/css/lume/info.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/info.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/lume.css' %}" > 
 {% endblock %}
 
 {% block body %}
@@ -16,30 +14,33 @@
 
                 <!-- Logo -->
                 <a class="navbar-brand">
-                    <img src="/static/img/LUME.png" alt="LUME Logo" height="90px">
+                    <img src="{% static 'img/LUME.png' %}" alt="LUME Logo" height="90px">
                 </a>
                 
-                <!-- LUME PAGES -->
-                <div class="collapse navbar-collapse justify-content-end ms-4" id="navbarNav">
-                    <ul class="navbar-nav mr-auto">
+                <!-- Botón del Menú -->
+                <button class="navbar-toggler order-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="/">Inicio</a>
+                            <a class="nav-link" href="/index.html">Inició</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/projects">Nuestros proyectos</a>
+                            <a class="nav-link" href="/projects.html">Nuestros proyectos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/contact">Contacto</a>
+                            <a class="nav-link" href="/contact.html">Contacto</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/login">Regístrate</a>
+                            <a class="nav-link" href="/home/login">Regístrate</a>
                         </li>
-
                         <!-- LANGUAGES -->
                         <li class="nav-item">
                             <div class="language-dropdown">
                                 <a class="nav-link language-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ language }}
+                                    IDIOMA
                                 </a>
                                 
                                 <!-- CHANGE LANGUAGE -->
@@ -47,13 +48,13 @@
                                     <li>
                                         <form class="language-form" action="/" method="post">
                                             <input type="hidden" name="idioma" value="es">
-                                            <button class="dropdown-item language-button" type="submit">{{ translation.button_spanish }}</button>
+                                            <button class="dropdown-item language-button" type="submit">ESPAÑOL</button>
                                         </form>
                                     </li>
                                     <li>
                                         <form class="language-form" action="/" method="post">
                                             <input type="hidden" name="idioma" value="en">
-                                            <button class="dropdown-item language-button" type="submit">{{ translation.button_english }}</button>
+                                            <button class="dropdown-item language-button" type="submit">INGLES</button>
                                         </form>
                                     </li>
                                 </ul>
@@ -87,10 +88,15 @@
         <br><br><br>
 
         <!-- BENEFITS -->
-        <section class="benefits" style="background-color: #cee5f3; padding-top: 25px;">
+        <section class="benefits" style="background-color: #cee5f3;">
             <div class="benefits-container">
-                <div class="col-md-6 benefits-column">
-                    <div class="benefits-wrapper">
+                <div class="col-md-6 d-flex flex-column align-items-center order-2 order-md-1">
+                    <div class="image-wrapper">
+                        <img src="{% static 'img/lume_app.png' %}" alt="Imagen LUME" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex flex-column justify-content-center order-1 order-md-2">
+                    <div class="benefits-text">
                         <h3>Beneficios de usar LUME</h3>
                         <div class="divider"></div>
                         <ul class="benefits-list">
@@ -101,13 +107,10 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-6 image-column">
-                    <div class="image-wrapper">
-                        <img src="/static/img/lume_app.png" alt="Imagen LUME">
-                    </div>
-                </div>
             </div>
         </section>
+
+
 
         <br><br><br>
 

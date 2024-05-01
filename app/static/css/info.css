@@ -1,0 +1,117 @@
+/***************************************************************** INFORMATION *****************************************************************/
+.lume-title {
+    text-align: center;
+    margin-bottom: 50px;
+    font-family: serif;
+}
+
+.lume-title h1 {
+    color: #4b4b4b;
+    font-size: 48px;
+    line-height: 1.2;
+}
+
+.blue-line {
+    height: 2px;
+    width: 80%;
+    background-color: #406c8a;
+    margin: 0 auto 20px;
+}
+
+.lume-title h2 {
+    font-size: 24px;
+    color: #848ca8;
+    line-height: 46px;
+}
+
+.lume-description{
+    text-align: left;
+}
+
+
+
+/***************************************************************** BENEFITS *****************************************************************/
+.benefits-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 50px 0;
+}
+
+.benefits-column,
+.image-column {
+    flex-basis: 100%;
+    max-width: 100%;
+}
+
+.image-column {
+    order: -1;
+    margin-bottom: 20px;
+}
+
+.image-wrapper img {
+    max-width: 100%;
+    height: auto;
+}
+
+.benefits-text {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.benefits-list li {
+    margin-bottom: 10px;
+}
+
+/***************************************************************** CONTENT *****************************************************************/
+.table-container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.content-title {
+    text-align: center;
+    font-family: serif;
+}
+
+.content-table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    background-color: #cdcecf;
+    border-radius: 15px;
+}
+
+.content-table tr:nth-child(even) {
+    background-color: #f5f2f2;
+}
+
+.content-table td {
+    padding: 8px;
+}
+
+
+/**************************************************************** RESPONSIVE *****************************************************************/
+@media (max-width: 768px) {
+    .benefits-container {
+        flex-direction: column;
+    }
+
+    .benefits-column,
+    .image-column {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+
+    .image-column {
+        order: -1;
+    }
+}
