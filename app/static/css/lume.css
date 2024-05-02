@@ -13,6 +13,7 @@
     background-color: rgb(172, 200, 216);
     color: #272626;
     margin: 0 5px;
+    font-family: serif;
 }
 
 .navbar-nav .nav-item .nav-link:hover {
