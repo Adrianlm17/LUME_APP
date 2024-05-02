@@ -199,12 +199,6 @@ button,
 select {
   text-transform: none; }
 
-button,
-html [type="button"],
-[type="reset"],
-[type="submit"] {
-  -webkit-appearance: button; }
-
 button::-moz-focus-inner,
 [type="button"]::-moz-focus-inner,
 [type="reset"]::-moz-focus-inner,
@@ -216,12 +210,6 @@ input[type="radio"],
 input[type="checkbox"] {
   box-sizing: border-box;
   padding: 0; }
-
-input[type="date"],
-input[type="time"],
-input[type="datetime-local"],
-input[type="month"] {
-  -webkit-appearance: listbox; }
 
 textarea {
   overflow: auto;
@@ -251,9 +239,6 @@ progress {
 [type="number"]::-webkit-outer-spin-button {
   height: auto; }
 
-[type="search"] {
-  outline-offset: -2px;
-  -webkit-appearance: none; }
 
 [type="search"]::-webkit-search-cancel-button,
 [type="search"]::-webkit-search-decoration {
@@ -507,12 +492,6 @@ button,
 select {
   text-transform: none; }
 
-button,
-html [type="button"],
-[type="reset"],
-[type="submit"] {
-  -webkit-appearance: button; }
-
 button::-moz-focus-inner,
 [type="button"]::-moz-focus-inner,
 [type="reset"]::-moz-focus-inner,
@@ -524,12 +503,6 @@ input[type="radio"],
 input[type="checkbox"] {
   box-sizing: border-box;
   padding: 0; }
-
-input[type="date"],
-input[type="time"],
-input[type="datetime-local"],
-input[type="month"] {
-  -webkit-appearance: listbox; }
 
 textarea {
   overflow: auto;
@@ -558,10 +531,6 @@ progress {
 [type="number"]::-webkit-inner-spin-button,
 [type="number"]::-webkit-outer-spin-button {
   height: auto; }
-
-[type="search"] {
-  outline-offset: -2px;
-  -webkit-appearance: none; }
 
 [type="search"]::-webkit-search-cancel-button,
 [type="search"]::-webkit-search-decoration {
@@ -3835,7 +3804,7 @@ button.close {
   padding: 0;
   background-color: transparent;
   border: 0;
-  -webkit-appearance: none; }
+}
 
 .badge {
   display: inline-block;
@@ -7497,7 +7466,6 @@ a.text-dark:hover, a.text-dark:focus {
     vertical-align: middle;
     position: relative;
     top: -2px;
-    float: left;
     padding-right: 10px;
     display: inline-block; }
     .form-check .form-check-sign:before {
@@ -7680,7 +7648,6 @@ a.text-dark:hover, a.text-dark:focus {
   vertical-align: middle;
   position: relative;
   top: -2px;
-  float: left;
   padding-right: 10px;
   display: inline-block; }
 
@@ -9051,9 +9018,7 @@ label {
   .bmd-form-group.is-focused .form-control.form-control-danger {
     background-size: 100% 100%, 100% 100%, 0.9375rem 0.9375rem; }
 
-select, select.form-control {
-  -moz-appearance: none;
-  -webkit-appearance: none; }
+
 
 @media (min-width: 576px) {
   .form-inline .input-group {
@@ -9220,7 +9185,6 @@ fieldset[disabled] .form-group .form-control {
     .navbar .navbar-toggler .navbar-toggler-icon {
       width: 22px;
       height: 2px;
-      vertical-align: middle;
       outline: 0;
       display: block;
       border-radius: 1px; }
@@ -9339,7 +9303,6 @@ fieldset[disabled] .form-group .form-control {
     border-radius: 10px;
     text-align: center;
     line-height: 19px;
-    vertical-align: middle;
     display: block; }
 
 .navbar .navbar-minimize {
@@ -11019,7 +10982,6 @@ a[aria-expanded="true"] .caret,
   text-align: center; }
 
 .fixed-plugin .adjustments-line p {
-  float: left;
   display: inline-block;
   margin-bottom: 0;
   font-size: 1em;
@@ -11600,7 +11562,7 @@ html[dir="rtl"] .form-check .form-check-sign .check:before {
   .card .card-header-primary:not(.card-header-icon):not(.card-header-text), .card.bg-primary,
   .card.card-rotate.bg-primary .front,
   .card.card-rotate.bg-primary .back {
-    background: linear-gradient(60deg, #fb8d3f, #cf4a4a) }
+    background: linear-gradient(60deg, #ab47bc, #8e24aa); }
   .card .card-header-info .card-icon,
   .card .card-header-info .card-text,
   .card .card-header-info:not(.card-header-icon):not(.card-header-text), .card.bg-info,
@@ -12777,8 +12739,6 @@ Copyright (c) 2015 Daniel Eden
     border-top-color: white; }
   .dropdown-menu {
     display: none; }
-  .navbar-fixed-top {
-    -webkit-backface-visibility: hidden; }
   #bodyClick {
     height: 100%;
     width: 100%;

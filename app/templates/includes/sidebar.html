@@ -9,43 +9,49 @@
         {% if request.user.is_authenticated %}
 
           <li class="nav-item {% if 'index' in segment %} active {% endif %}">
-            <a class="nav-link" href="/">
+            <a class="nav-link" href="/home/index.html">
               <i class="material-icons">dashboard</i>
               <p>Index</p>
             </a>
           </li>
-          <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
-            <a class="nav-link" href="/ui-tables.html">
+          <li class="nav-item {% if 'chat' in segment %} active {% endif %}">
+            <a class="nav-link" href="/home/chat.html">
               <i class="material-icons">forum</i>
               <p>Chat</p>
             </a>
           </li>
-          <li class="nav-item {% if 'ui-tables' in segment %} active {% endif %}">
-            <a class="nav-link" href="/ui-tables.html">
+          <li class="nav-item {% if 'actas' in segment %} active {% endif %}">
+            <a class="nav-link" href="/home/actas.html">
               <i class="material-icons">library_books</i>
               <p>Actas</p>
             </a>
           </li>
-          <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
-            <a class="nav-link" href="/page-user.html">
+          <li class="nav-item {% if 'calendario' in segment %} active {% endif %}">
+            <a class="nav-link" href="/home/calendario.html">
+              <i class="material-icons">calendar_today</i>
+              <p>Calendario</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'incidencias' in segment %} active {% endif %}">
+            <a class="nav-link" href="/home/incidencias.html">
               <i class="material-icons">warning</i>
               <p>Incidencias</p>
             </a>
           </li>
-          <li class="nav-item {% if 'ui-typography' in segment %} active {% endif %}">
-            <a class="nav-link" href="/ui-typography.html">
+          <li class="nav-item {% if 'eventos' in segment %} active {% endif %}">
+            <a class="nav-link" href="/home/eventos.html">
               <i class="material-icons">celebration</i>
               <p>Eventos</p>
             </a>
           </li>
-          <li class="nav-item {% if 'ui-icons' in segment %} active {% endif %}">
-            <a class="nav-link" href="/ui-icons.html">
+          <li class="nav-item {% if 'gastos' in segment %} active {% endif %}">
+            <a class="nav-link" href="/home/gastos.html">
               <i class="material-icons">insert_chart_outline</i>
               <p>Gastos</p>
             </a>
           </li>
-          <li class="nav-item {% if 'ui-maps' in segment %} active {% endif %}">
-            <a class="nav-link" href="/ui-maps.html">
+          <li class="nav-item {% if 'config' in segment %} active {% endif %}">
+            <a class="nav-link" href="/home/config.html">
               <i class="material-icons">settings</i>
               <p>Config</p>
             </a>

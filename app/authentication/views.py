@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+
+from app.home.models import User
 from .forms import LoginForm, SignUpForm
 
 
@@ -32,16 +34,18 @@ def register_user(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
             email = form.cleaned_data.get("email")
-            password = form.cleaned_data.get("password1")
-            user = authenticate(username=email, password=password)
-
-            msg = '¡Usuario creado correctamente!'
-            success = True
-
+            
+            if User.objects.filter(auth_user__email=email).exists():
+                msg = '¡El correo electrónico ya está en uso!'
+            else:
+                form.save()
+                password = form.cleaned_data.get("password1")
+                user = authenticate(username=email, password=password)
+                msg = '¡Usuario creado correctamente!'
+                success = True
         else:
-            msg = '¡Formulario no valido!'
+            msg = '¡Formulario no válido!'
     else:
         form = SignUpForm()
 

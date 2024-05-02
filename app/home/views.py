@@ -1,7 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect, render
 from django.template import TemplateDoesNotExist, loader
 from django.urls import reverse
+from app.home.forms import UserForm, UserProfileEditForm
+from app.home.models import UserProfile
 
 
 
@@ -43,3 +46,34 @@ def pages(request):
     # except:
     #     html_template = loader.get_template('home/page-500.html')
     #     return HttpResponse(html_template.render(context, request))
+
+
+# @login_required(login_url="/login/login/")
+# def edit_profile(request):
+#     if request.method == "POST":
+#         user_form = UserForm(request.POST, instance=request.user)
+#         if user_form.is_valid():
+#             user_form.save()
+#             return redirect('config')
+#     else:
+#         user_form = UserForm(instance=request.user)
+    
+#     return render(request, "home/config.html", {"form": user_form})
+
+@login_required(login_url="/login/login/")
+def edit_profile(request):
+    user_instance = request.user
+    profile_instance, created = UserProfile.objects.get_or_create(user=user_instance)
+    
+    if request.method == "POST":
+        user_form = UserForm(request.POST, instance=user_instance)
+        profile_form = UserProfileEditForm(request.POST, request.FILES, instance=profile_instance)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return redirect('config')
+    else:
+        user_form = UserForm(instance=user_instance)
+        profile_form = UserProfileEditForm(instance=profile_instance)
+    
+    return render(request, "home/config.html", {"user_form": user_form, "profile_form": profile_form})

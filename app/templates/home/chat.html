@@ -1,0 +1,65 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %} CHAT | LUME {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-success">
+          <h4 class="card-title mt-0"><i class="material-icons">chat</i> CHAT</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <tbody>
+                <tr>
+                  <td>
+                    <!-- IMG -->
+                  </td>
+                  <td>
+                    Mario 4B
+                  </td>
+                  <td>
+                    <!-- NUMBER OF NEW MESSAGES -->
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <!-- IMG -->
+                  </td>
+                  <td>
+                    Anna 1C
+                  </td>
+                  <td>
+                    <!-- NUMBER OF NEW MESSAGES -->
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <!-- IMG -->
+                  </td>
+                  <td>
+                    Electricista Bombillas - Paco
+                  </td>
+                  <td>
+                    <!-- NUMBER OF NEW MESSAGES -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'includes/new_chat.html' %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
