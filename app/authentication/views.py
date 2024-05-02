@@ -36,7 +36,7 @@ def register_user(request):
         if form.is_valid():
             email = form.cleaned_data.get("email")
             
-            if User.objects.filter(auth_user__email=email).exists():
+            if User.objects.filter(email=email).exists():
                 msg = '¡El correo electrónico ya está en uso!'
             else:
                 form.save()
