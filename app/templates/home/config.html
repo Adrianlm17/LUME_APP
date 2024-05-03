@@ -1,4 +1,5 @@
 {% extends "layouts/base_app.html" %}
+{% load static %}
 
 {% block title %} Personal Config {% endblock %} 
 
@@ -25,16 +26,18 @@
                     {{ user_form.username }}
                     </div>
                     <div class="form-group">
+                      <h4>{{ user_form.email.label_tag }}</h4>
+                      {{ user_form.email }}
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
                       <h4>{{ user_form.first_name.label_tag }}</h4>
                       {{ user_form.first_name }}
                     </div>
                     <div class="form-group">
                       <h4>{{ user_form.last_name.label_tag }}</h4>
                       {{ user_form.last_name }}
-                    </div>
-                    <div class="form-group">
-                      <h4>{{ user_form.email.label_tag }}</h4>
-                      {{ user_form.email }}
                     </div>
                   </div>
                   <div class="col-sm-6">
@@ -46,32 +49,8 @@
                       <h4>{{ profile_form.birthday.label_tag }}</h4>
                       {{ profile_form.birthday }}
                     </div>
-                    <div class="form-group">
-                      <h4>{{ profile_form.country.label_tag }}</h4>
-                      {{ profile_form.country }}
-                    </div>
-                    <div class="form-group">
-                      <h4>{{ profile_form.city.label_tag }}</h4>
-                      {{ profile_form.city }}
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="form-group">
-                      <h4>{{ profile_form.address.label_tag }}</h4>
-                      {{ profile_form.address }}
-                    </div>
-                    <div class="form-group">
-                      <h4>{{ profile_form.floor.label_tag }}</h4>
-                      {{ profile_form.floor }}
-                    </div>
                   </div>
                   <div class="col-sm-6">
-                    <div class="form-group">
-                      <h4>{{ profile_form.door.label_tag }}</h4>
-                      {{ profile_form.door }}
-                    </div>
                     <div class="form-group">
                       <h4>{{ profile_form.lang.label_tag }}</h4>
                       {{ profile_form.lang }}
@@ -80,7 +59,7 @@
                 </div>
 
                 <br>
-                
+
                 <div class="row">
                   <div class="col-sm-12 text-center">
                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
@@ -93,19 +72,24 @@
     <div class="col-md-4">
       <div class="card card-profile">
           <div class="card-avatar">
-            <img class="img" src="{{ current_user.img_profile.url }}" />
+              {% if user_profile.IMG_profile %}
+                  <img class="img" src="{{ user_profile.IMG_profile.url }}" />
+              {% else %}
+                  <img class="img" src="{% static 'img/anonimo.png' %}" />
+              {% endif %}
           </div>
           <div class="card-body">
-            <form method="post" enctype="multipart/form-data">
-              {% csrf_token %}
-              <input type="file" name="img_profile">
-              <button type="submit" class="btn btn-primary btn-round">Cambiar Foto</button>
-          </form>
+              <form method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <input type="file" name="IMG_profile">
+                  <br>
+                  <button type="submit" class="btn btn-primary btn-round">Guardar Imagen</button>
+              </form>
           </div>
       </div>
+    </div>  
   </div>
-
-{% endblock content %}
+  {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}{% endblock javascripts %}
