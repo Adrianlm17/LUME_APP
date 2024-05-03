@@ -72,8 +72,8 @@
     <div class="col-md-4">
       <div class="card card-profile">
           <div class="card-avatar">
-              {% if user_profile.IMG_profile %}
-                  <img class="img" src="{{ user_profile.IMG_profile.url }}" />
+              {% if profile_form.IMG_profile %}
+                  <img class="img" src="{{ profile_form.IMG_profile.url }}" />
               {% else %}
                   <img class="img" src="{% static 'img/anonimo.png' %}" />
               {% endif %}
@@ -81,13 +81,83 @@
           <div class="card-body">
               <form method="post" enctype="multipart/form-data">
                   {% csrf_token %}
-                  <input type="file" name="IMG_profile">
+                  {{ profile_form.IMG_profile }}
                   <br>
                   <button type="submit" class="btn btn-primary btn-round">Guardar Imagen</button>
               </form>
           </div>
       </div>
     </div>  
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+        <div class="card">
+          <div class="card-header card-header-primary">
+              <h4 class="card-title">Datos Comunidad</h4>
+          </div>
+          <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+              
+              {% csrf_token %}
+              
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <h4>NOMBRE</h4>
+                    </div>
+                    <div class="form-group">
+                      <h4>PAIS</h4>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <h4>Provincia</h4>
+                    </div>
+                    <div class="form-group">
+                      <h4>Municipio</h4>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <h4>Calle</h4>
+                    </div>
+                    <div class="form-group">
+                      <h4>Portal</h4>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <h4>TOKEN</h4>
+                    </div>
+                  </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                  <div class="col-sm-12 text-center">
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                  </div>
+                </div>
+            </form>
+          </div>        
+        </div>
+    </div>
+    <!-- <div class="col-md-4">
+      <div class="card card-profile">
+          <div class="card-avatar">
+            <img class="img" src="{% static 'img/anonimo.png' %}" />
+          </div>
+          <div class="card-body">
+              <form method="post" enctype="multipart/form-data">
+                  IMAGEN COMUNIDAD
+                  <br>
+                  <button type="submit" class="btn btn-primary btn-round">Guardar Imagen</button>
+              </form>
+          </div>
+      </div>
+    </div> -->
   </div>
   {% endblock content %}
 

@@ -8,7 +8,7 @@ class UserProfile(models.Model):
     fondo = models.CharField(max_length=20, default='clear')
     lang = models.CharField(max_length=10, default='es')
     user_rol = models.CharField(max_length=100, blank=True)
-    IMG_profile = models.ImageField(upload_to='profiles', default='profiles/anonimo.png')
+    IMG_profile = models.ImageField(upload_to='profiles/', blank=True, null=True)
 
     def __str__(self):
         return self.user.username
