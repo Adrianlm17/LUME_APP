@@ -1,32 +1,78 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import UserProfile
+from .models import Acta, Chat, ChatReadBy, Comunidad, ExtendsChat, Nota
 
 
-class UserForm(forms.ModelForm):
+
+class UpdateProfileForm(forms.ModelForm):
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Username",
+                "class": "form-control"
+            }
+        ))
+
+    first_name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Primer apellido",
+                "class": "form-control"
+            }
+        ))
+    
+    last_name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Segundo apellido",
+                "class": "form-control"
+            }
+        ))
+
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                "placeholder": "Email",
+                "class": "form-control"
+            }
+        ))
+
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']
 
-    username = forms.CharField(max_length=100, required=True)
-    first_name = forms.CharField(max_length=100, required=True)
-    last_name = forms.CharField(max_length=100, required=True)
-    email = forms.EmailField(max_length=100, required=True)
 
-
-
-class UserProfileEditForm(forms.ModelForm):
-    LANG_CHOICES = [
-        ('es', 'Español'),
-        ('cat', 'Català'),
-        ('en', 'English'),
-        ('de', 'Deutsch'),
-    ]
-    phone = forms.RegexField(regex=r'^\d{9}$', error_messages={'invalid': 'Introduce un número de teléfono válido.'})
-    birthday = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
-    lang = forms.ChoiceField(choices=LANG_CHOICES)
-    # IMG_profile = forms.FileField(required=False)
-
+class NotaForm(forms.ModelForm):
     class Meta:
-        model = UserProfile
-        fields = ['phone', 'birthday', 'lang', 'IMG_profile']
+        model = Nota
+        fields = ['titulo', 'descripcion']
+
+
+class ChatForm(forms.ModelForm):
+    class Meta:
+        model = Chat
+        fields = ["titulo"]
+
+
+class ExtendsChatForm(forms.ModelForm):
+    class Meta:
+        model = ExtendsChat
+        fields = ["text"]
+
+
+
+class ActaForm(forms.ModelForm):
+    class Meta:
+        model = Acta
+        fields = ['titulo', 'comunidad', 'texto']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['comunidad'].queryset = Comunidad.objects.filter(
+                vivienda__usuario=user,
+                vivienda__rol_comunidad__in=['community_president', 'community_vicepresident']
+            )
+        else:
+            self.fields['comunidad'].queryset = Comunidad.objects.none()

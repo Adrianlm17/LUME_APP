@@ -1,0 +1,111 @@
+{% extends "layouts/base_admin.html" %}
+
+{% block title %} ADMIN | LUME {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+{% if success %}
+  <div class="alert alert-success alert-dismissible">
+    <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>¡CREADO!</strong> Usuario creado correctamente
+  </div> 
+{% endif %} 
+
+<div class="row">
+  <div class="col-md-8">
+      <div class="card">
+        <div class="card-header card-header-primary">
+            <h4 class="card-title">CREAR USUARIO</h4>
+        </div>
+        <div class="card-body">
+
+          {% if msg %}
+            <br>
+            <h6 class="card-category">
+              <span class="text-danger">{{ msg | safe }}</span>
+            </h6>
+          {% endif %}  
+
+          <br>
+
+          <form method="post" enctype="multipart/form-data">
+            
+            {% csrf_token %}
+            
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Nombre:</label>
+                  {{ form.username }}
+                  <span class="text-danger">{{ form.username.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Primer Apellido:</label>
+                  {{ form.first_name }}
+                  <span class="text-danger">{{ form.first_name.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Segundo Apellido:</label>
+                  {{ form.last_name }}
+                  <span class="text-danger">{{ form.last_name.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Correo:</label>
+                  {{ form.email }}
+                  <span class="text-danger">{{ form.email.errors }}</span>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Contraseña:</label>
+                  {{ form.password1 }}
+                  <span class="text-danger">{{ form.password1.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Confirmar Contraseña:</label>
+                  {{ form.password2 }}
+                  <span class="text-danger">{{ form.password2.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Telefono:</label>
+                  {{ form_profile.phone }}
+                  <span class="text-danger">{{ form.phone.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Fecha de nacimiento:</label>
+                  {{ form_profile.birthday }}
+                  <span class="text-danger">{{ form_profile.birthday.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Idioma:</label>
+                  {{ form_profile.lang }}
+                  <span class="text-danger">{{ form_profile.lang.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Rol del usuario:</label>
+                  {{ form_profile.user_rol }}
+                  <span class="text-danger">{{ form_profile.user_rol.errors }}</span>
+                </div>
+              </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+              <div class="col-sm-12 text-center">
+                <button type="submit" class="btn btn-primary">Crear Usuario</button>
+              </div>
+            </div>
+          </form>
+        </div>        
+      </div>
+  </div> 
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

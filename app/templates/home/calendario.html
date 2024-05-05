@@ -1,0 +1,47 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %} CALENDARIO | LUME {% endblock %} 
+
+{% block content %}
+<div class="text-center">
+    <h1>{{ titulo }}</h1>
+    <a href="{{ url_mes_anterior }}" class="btn btn-outline-dark">&lt;</a>
+    <a href="{{ url_mes_siguiente }}" class="btn btn-outline-dark">&gt;</a>
+</div>
+
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            {% for dia_semana in dias_de_la_semana %}
+                <th>{{ dia_semana }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for semana in calendario_mes %}
+            <tr>
+                {% for dia, recordatorios in semana %}
+                    <td>
+                        {% if dia %}
+                            {{ dia }}
+                            {% if recordatorios %}
+                                <ul>
+                                    {% for recordatorio in recordatorios %}
+                                        <a href="{% url 'home:detalle_evento' recordatorio.id %}" class="btn btn-outline-dark">{{ recordatorio.titulo }}</a><br>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>    
+</table>
+
+<br>
+
+<div class="text-center">
+    <a href="{% url 'home:crear_recordatorio' %}" class="btn btn-primary">Agregar Evento/Recordatorio</a>
+</div>
+{% endblock content %}

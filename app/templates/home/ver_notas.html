@@ -1,0 +1,66 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %} NOTAS | LUME {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header card-header-success">
+        <h4 class="card-title mt-0"><i class="material-icons">house_siding</i> Listado de Viviendas </h4>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <tbody>
+              <tr>
+                <th>
+                  USUARIO
+                </th>
+                <th>
+                  COMUNIDAD
+                </th>
+                <th>
+                  PISO
+                </th>
+                <th>
+                  PUERTA
+                </th>
+                <th>
+                  EDITAR
+                </th>
+                <th>
+                  ELIMINAR
+                </th>
+              </tr>
+              
+              {% for nota in notas %}
+              
+              <tr>
+                <td>
+                  {{ nota.usuario }}
+                </td>
+                <td>
+                  {{ nota.titulo }}
+                </td>
+                <td>
+                  {{ nota.descripcion }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>  
+</div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

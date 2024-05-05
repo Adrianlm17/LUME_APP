@@ -1,65 +1,80 @@
+<!-- chat.html -->
 {% extends "layouts/base_app.html" %}
 
 {% block title %} CHAT | LUME {% endblock %} 
 
-<!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
-
 {% block content %}
-  <div class="row">
+<div class="row">
     <div class="col-md-12">
-      <div class="card">
-        <div class="card-header card-header-success">
-          <h4 class="card-title mt-0"><i class="material-icons">chat</i> CHAT</h4>
+        <div class="card">
+            <div class="card-header card-header-success">
+                <h4 class="card-title mt-0"><i class="material-icons">chat</i> CHAT</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Titulo</th>
+                                <th>Último mensaje</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for chat in user_chats %}
+                            <tr>
+                                {% if chat.user == request.user %}
+                                    <td>{{ chat.mensaje_user.email }}</td>
+                                {% else %}
+                                    <td>{{ chat.user.email }}</td>
+                                {% endif %}
+                                <td>{{ chat.titulo }}</td>
+                                <td>{{ chat.last_chat|slice:":25" }}</td>
+                                <td>
+                                    {% if chat.id in user_read_chats %}
+                                    <button class="btn btn-success">Leído</button>
+                                    {% else %}
+                                    <button class="btn btn-danger">No leído</button>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'home:chat_detail' chat.id %}" class="btn btn-info">Abrir Chat</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">No hay chats disponibles.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-hover">
-              <tbody>
-                <tr>
-                  <td>
-                    <!-- IMG -->
-                  </td>
-                  <td>
-                    Mario 4B
-                  </td>
-                  <td>
-                    <!-- NUMBER OF NEW MESSAGES -->
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <!-- IMG -->
-                  </td>
-                  <td>
-                    Anna 1C
-                  </td>
-                  <td>
-                    <!-- NUMBER OF NEW MESSAGES -->
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <!-- IMG -->
-                  </td>
-                  <td>
-                    Electricista Bombillas - Paco
-                  </td>
-                  <td>
-                    <!-- NUMBER OF NEW MESSAGES -->
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 
-  {% include 'includes/new_chat.html' %}
+<div class="fixed-plugin" style="background-color: #4CAF50; display: flex; justify-content: center; align-items: center; border: 1px solid #000; border-radius: 5px; width: 50px; height: 50px;">
+    <div class="dropdown show-dropdown">
+        <a href="" data-toggle="dropdown">
+            <i class="fa fa-address-book fa-2x" style="color: #fff;"></i>
+        </a>
+        <ul class="dropdown-menu">
+            <h2><b>Nuevo chat</b></h2>
+            <form action="{% url 'home:open_chat' %}" method="post">
+              {% csrf_token %}
+              <select name="usuario" style="margin-bottom: 10px;">
+                  {% for user in users %}
+                  <option value="{{ user.id }}">{{ user.email }}</option> 
+                  {% endfor %}
+              </select>
+              <br>
+              <button type="submit" class="btn btn-primary">Abrir chat</button>
+            </form>            
+        </ul>
+    </div>
+</div>
 
 {% endblock content %}
-
-<!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}

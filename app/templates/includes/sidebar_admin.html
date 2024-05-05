@@ -1,0 +1,88 @@
+    <div class="sidebar" data-color="purple" data-background-color="white" data-image="/static/img/sidebar-1.jpg">
+      <div class="logo">
+        <a class="navbar-brand">
+          <img src="/static/img/LUME.png" alt="LUME Logo" height="70px">
+        </a>
+      </div>
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+        {% if request.user.is_authenticated %}
+
+          <li class="nav-item {% if 'index' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/index.html">
+              <i class="material-icons">dashboard</i>
+              <p>Index</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'chat' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/create_user.html">
+              <i class="material-icons">person_add_alt_1</i>
+              <p>Crear Usuario</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'chat' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/users.html">
+              <i class="material-icons">groups</i>
+              <p>Ver Usuarios</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'actas' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/create_community.html">
+              <i class="material-icons">house</i>
+              <p>Crear Comunidad</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'chat' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/communitys.html">
+              <i class="material-icons">other_houses</i>
+              <p>Ver Comunidades</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'calendario' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/create_company.html">
+              <i class="material-icons">add_business</i>
+              <p>Crear Empresa</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'chat' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/companys.html">
+              <i class="material-icons">other_houses</i>
+              <p>Ver Empresa</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'incidencias' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/create_viviendas.html">
+              <i class="material-icons">group_add</i>
+              <p>Asignar Viviendas</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'chat' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/viviendas.html">
+              <i class="material-icons">house_siding</i>
+              <p>Ver Viviendas</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'eventos' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/create_worker.html">
+              <i class="material-icons">shopping_cart</i>
+              <p>Asignar Trabajador</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'chat' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/trabajadores.html">
+              <i class="material-icons">add_shopping_cart</i>
+              <p>Ver Trabajador</p>
+            </a>
+          </li>
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'logout' %}" >
+              <i class="material-icons">logout</i>
+              <p>Logout</p>
+            </a>
+          </li>       
+        {% endif %}
+        </ul>
+      </div>
+
+    </div>

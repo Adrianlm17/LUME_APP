@@ -1,0 +1,46 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %} Ver Acta | LUME {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-8">
+      <div class="card">
+        <div class="card-header card-header-info">
+            <h4 class="card-title"><i class="material-icons">history_edu</i> ACTA</h4>
+        </div>
+        <div class="card-body">
+
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Título:</label>
+                <p>{{ acta.titulo }}</p>
+              </div>
+              <div class="form-group">
+                <label>Fecha:</label>
+                <p>{{ acta.fecha }}</p>
+              </div>
+              <div class="form-group">
+                <label>Texto del Acta:</label>
+                <p>{{ acta.texto }}</p>
+              </div>
+              <div class="form-group">
+                <label>Firmado por:</label>
+                <p>{{ acta.firmada.username }}</p>
+              </div>
+            </div>
+          </div>
+
+        </div>        
+      </div>
+  </div> 
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

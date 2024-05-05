@@ -1,0 +1,19 @@
+{% extends 'layouts/base_lume.html' %}
+{% load static %}
+
+{% block title %}
+    Detalles del Anuncio - LUME
+{% endblock title %}
+
+{% block body %}
+    <div class="container">
+        <h2>Detalles del Anuncio</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ anuncio.titulo }}</h5>
+                <p class="card-text">{{ anuncio.descripcion }}</p>
+                <p class="card-text">Fecha fin: {{ anuncio.fecha_anuncio|date:'d/m/Y' }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

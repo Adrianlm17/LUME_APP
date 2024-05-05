@@ -1,0 +1,37 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %} Recordatorios | LUME {% endblock %} 
+
+{% block content %}
+<div class="container">
+    <h2>Crear Recordatorio</h2>
+
+    <br>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="fecha">Fecha:</label>
+            <input type="date" class="form-control" id="fecha" name="fecha">
+        </div>
+        
+        <br>
+
+        <div class="form-group">
+            <label for="titulo">Título:</label>
+            <input type="text" class="form-control" id="titulo" name="titulo">
+        </div>
+        
+        <br>
+
+        <div class="form-group">
+            <label for="descripcion">Descripción:</label>
+            <textarea class="form-control" id="descripcion" name="descripcion"></textarea>
+        </div>
+        
+        <br>
+
+        <button type="submit" class="btn btn-primary">Crear</button>
+    </form>
+</div>
+{% endblock content %}

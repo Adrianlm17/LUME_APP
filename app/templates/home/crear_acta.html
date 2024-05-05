@@ -1,0 +1,73 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %} Crear Acta | LUME {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% if success %}
+  <div class="alert alert-success alert-dismissible">
+    <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>¡CREADA!</strong> Acta creada correctamente
+  </div> 
+{% endif %} 
+
+<div class="row">
+  <div class="col-md-8">
+      <div class="card">
+        <div class="card-header card-header-warning">
+            <h4 class="card-title"><i class="material-icons">note_add</i> ACTA</h4>
+        </div>
+        <div class="card-body">
+
+          {% if msg %}
+            <br>
+            <h6 class="card-category">
+              <span class="text-danger">{{ msg | safe }}</span>
+            </h6>
+          {% endif %}  
+
+          <br>
+
+          <form method="post" enctype="multipart/form-data">
+            
+            {% csrf_token %}
+
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Título:</label>
+                  {{ acta_form.titulo }}
+                  <span class="text-danger">{{ acta_form.titulo.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label for="id_comunidad">Comunidad:</label>
+                  {{ acta_form.comunidad }}
+                  <span class="text-danger">{{ acta_form.comunidad.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Texto del Acta:</label><br>
+                  {{ acta_form.texto }}
+                  <span class="text-danger">{{ acta_form.texto.errors }}</span>
+                </div>
+              </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+              <div class="col-sm-12 text-center">
+                <button type="submit" class="btn btn-warning">Guardar Acta</button>
+              </div>
+            </div>
+          </form>
+        </div>        
+      </div>
+  </div> 
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

@@ -8,10 +8,11 @@ class UserProfile(models.Model):
     fondo = models.CharField(max_length=20, default='clear')
     lang = models.CharField(max_length=10, default='es')
     user_rol = models.CharField(max_length=100, blank=True)
-    IMG_profile = models.ImageField(upload_to='profiles/', blank=True, null=True)
+    IMG_profile = models.ImageField(default='anonimo.png')
 
     def __str__(self):
-        return self.user.username
+        return self.user.email
+
 
 
 class Comunidad(models.Model):
@@ -29,14 +30,16 @@ class Comunidad(models.Model):
         return self.nombre
 
 
+
 class Vivienda(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE)
+    rol_comunidad = models.CharField(max_length=100, blank=True)
     piso = models.CharField(max_length=100)
     puerta = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.comunidad.nombre}, {self.piso} {self.puerta}"
+        return self.usuario.username
 
 
 class Incidencia(models.Model):
@@ -87,7 +90,7 @@ class Trabajador(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.usuario.username} - {self.empresa.nombre}"
+        return self.usuario.username
 
 
 class Gasto(models.Model):
@@ -113,6 +116,85 @@ class Evento(models.Model):
     titulo = models.CharField(max_length=100)
     descripcion = models.TextField()
     fecha_hora = models.DateTimeField()
+
+    def __str__(self):
+        return self.titulo
+
+
+
+class Nota(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    titulo = models.CharField(max_length=100)
+    descripcion = models.TextField()
+
+    def __str__(self):
+        return self.titulo
+
+
+
+class Chat(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
+    mensaje_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mensaje_user')
+    titulo = models.CharField(max_length=100)
+    last_chat = models.CharField(max_length=100)
+    read_by = models.ManyToManyField(User, related_name='read_chats', through='ChatReadBy')
+
+    def __str__(self):
+        return f"Chat {self.id} - From: {self.user.email} - To: {self.mensaje_user.email}"
+
+
+class ChatReadBy(models.Model):
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_read = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = (('chat', 'user'),)
+
+    def __str__(self):
+        status = "Read" if self.is_read else "Unread"
+        return f"Chat {self.chat.id} read by {self.user.email}: {status}"
+
+
+
+
+class ExtendsChat(models.Model):
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    text = models.TextField()
+    user_send = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Extendido Chat {self.chat.id} - {self.text[:20]}"
+
+
+
+class Acta(models.Model):
+    comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
+    titulo = models.CharField(max_length=100)
+    fecha = models.DateTimeField(auto_now_add=True)
+    texto = models.TextField()
+    firmada = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.titulo} - {self.comunidad}"
+    
+
+class Calendario(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE, null=True)
+    fecha = models.DateField()
+    titulo = models.CharField(max_length=200)
+    descripcion = models.TextField(null=True)
+    evento = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return self.titulo
+
+class Anuncio(models.Model):
+    comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE)
+    titulo = models.CharField(max_length=100)
+    descripcion = models.TextField()
+    fecha_anuncio = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.titulo
