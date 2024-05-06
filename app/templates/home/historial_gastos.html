@@ -1,0 +1,31 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %} CHAT | LUME {% endblock %} 
+
+{% block content %}
+<div class="tab-pane active" id="historial">
+    <h4>Últimos 10 movimientos</h4>
+    <table class="table">
+        <tbody>
+            {% for movimiento in ultimos_movimientos %}
+                <tr>
+                    <td>{{ movimiento.descripcion }}</td>
+                    <td>{{ movimiento.fecha }}</td>
+                    <td class="td-actions text-right">
+                        <button type="button" rel="tooltip" title="Ver más detalles" class="btn btn-primary btn-link btn-sm">
+                            <i class="material-icons">VER</i>
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <a href="Ver historial" class="btn btn-success btn-lg">Ver Historial completo</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}

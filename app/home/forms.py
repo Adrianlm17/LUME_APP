@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Acta, Chat, ChatReadBy, Comunidad, ExtendsChat, Nota
+from .models import Acta, Chat, Comunidad, ExtendsChat, Gasto, Motivo, Nota, Recibo
 
 
 
@@ -76,3 +76,26 @@ class ActaForm(forms.ModelForm):
             )
         else:
             self.fields['comunidad'].queryset = Comunidad.objects.none()
+
+
+
+class GastoForm(forms.ModelForm):
+    class Meta:
+        model = Gasto
+        fields = ['titulo', 'descripcion', 'cantidad_total', 'fecha_tope', 'usuario']
+        widgets = {'fecha_tope': forms.DateInput(attrs={'type': 'date'})}
+
+class MotivoReciboForm(forms.ModelForm):
+    class Meta:
+        model = Motivo
+        fields = ['tipo', 'cantidad']
+
+MotivoReciboFormSet = forms.inlineformset_factory(
+    Recibo, Motivo, form=MotivoReciboForm, extra=1, can_delete=True
+)
+
+class ReciboForm(forms.ModelForm):
+    class Meta:
+        model = Recibo
+        fields = ['titulo', 'descripcion', 'fecha_tope', 'cantidad_total']
+        widgets = {'fecha_tope': forms.DateInput(attrs={'type': 'date'})}

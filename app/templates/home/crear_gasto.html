@@ -1,0 +1,29 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %}Crear Gastos | CHAT | LUME{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Crear Gastos</h2>
+
+    <!-- Formulario para crear recibos mensuales -->
+    <form method="post">
+        {% csrf_token %}
+        {{ recibo_formset.management_form }}
+        <table>
+            {% for form in recibo_formset %}
+                {{ form.as_table }}
+            {% endfor %}
+        </table>
+        <button type="submit">Guardar Recibos Mensuales</button>
+    </form>
+
+    <!-- Formulario para crear gastos individuales -->
+    <form method="post">
+        {% csrf_token %}
+        {{ gasto_form.as_p }}
+        {{ motivo_form.as_p }}
+        <button type="submit">Guardar Gasto Individual</button>
+    </form>
+</div>
+{% endblock %}

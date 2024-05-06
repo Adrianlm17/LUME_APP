@@ -91,24 +91,7 @@ class Trabajador(models.Model):
 
     def __str__(self):
         return self.usuario.username
-
-
-class Gasto(models.Model):
-    comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE)
-    monto = models.DecimalField(max_digits=10, decimal_places=2)
-    fecha = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Gasto en {self.comunidad.nombre}: ${self.monto} - {self.fecha}"
-
-
-class Transaccion(models.Model):
-    comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE)
-    monto = models.DecimalField(max_digits=10, decimal_places=2)
-    fecha = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Transaccion en {self.comunidad.nombre}: ${self.monto} - {self.fecha}"
+    
 
 
 class Evento(models.Model):
@@ -198,3 +181,87 @@ class Anuncio(models.Model):
 
     def __str__(self):
         return self.titulo
+    
+
+
+# ------------------------------------------- GASTOS --------------------------------------------
+class Recibo(models.Model):
+    titulo = models.CharField(max_length=100)
+    descripcion = models.TextField()
+    fecha_tope = models.DateField()
+    cantidad_total = models.DecimalField(max_digits=10, decimal_places=2)
+    comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Recibo: {self.titulo} - {self.fecha_tope}"
+    
+class Motivo(models.Model):
+    TIPO_CHOICES = [
+        ('luz', 'Luz'),
+        ('agua', 'Agua'),
+        ('gas', 'Gas'),
+        ('piscina', 'Piscina'),
+        ('jardineria', 'Jardinería'),
+        ('personal_comunidad', 'Personal de comunidad'),
+        ('limpieza', 'Limpieza'),
+        ('extras', 'Extras'),
+    ]
+
+    tipo = models.CharField(max_length=100, choices=TIPO_CHOICES)
+    cantidad = models.DecimalField(max_digits=10, decimal_places=2)
+    recibo = models.ForeignKey(Recibo, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.tipo}: {self.cantidad}"
+
+class Gasto(models.Model):
+    titulo = models.CharField(max_length=100)
+    descripcion = models.TextField()
+    cantidad_total = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha_tope = models.DateField()
+    comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return f"Gasto: {self.titulo} - {self.fecha_tope}"
+
+class MotivoRecibo(models.Model):
+    recibo = models.ForeignKey(Recibo, on_delete=models.CASCADE, related_name='motivos')
+    tipo = models.CharField(max_length=100)
+    cantidad = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.tipo}: {self.cantidad}"
+
+class Transaccion(models.Model):
+    comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
+    monto = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha = models.DateField(auto_now_add=True)
+    descripcion = models.CharField(max_length=100, null=True)
+
+class UltimosMovimientos(models.Model):
+    comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
+
+class ProximosPagos(models.Model):
+    comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
+
+class PagosHechos(models.Model):
+    comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
+
+class Historial(models.Model):
+    cantidad = models.DecimalField(max_digits=10, decimal_places=2)
+    mes = models.CharField(max_length=100)
+
+
+
+class SeguroComunidad(models.Model):
+    comunidad = models.OneToOneField('Comunidad', on_delete=models.CASCADE)
+    cubre = models.CharField(max_length=200)
+    cantidad = models.DecimalField(max_digits=10, decimal_places=2)
+    pagado = models.BooleanField(default=False)
+    fecha_pago = models.DateField(null=True)
+    fecha_vencimiento = models.DateField()
+
+    def __str__(self):
+        estado = "Pagado" if self.pagado else "Pendiente"
+        return f"Seguro de {self.comunidad.nombre} - Vencimiento: {self.fecha_vencimiento} ({estado})"

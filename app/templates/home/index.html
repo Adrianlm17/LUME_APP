@@ -31,7 +31,7 @@
                           <tbody>
                               {% for anuncio in anuncios %}
                               <tr>
-                                  <td>{{ anuncio.titulo }}</td>
+                                  <td>{{ anuncio.titulo|slice:":150" }}</td>
                                   <td>{{ anuncio.fecha_anuncio|date:'d/m/Y' }}</td>
                                   <td class="td-actions text-right">
                                       <a href="{% url 'home:detalles_anuncio' anuncio.id %}" class="btn btn-primary btn-link btn-sm" title="Ver anuncio">
@@ -72,7 +72,7 @@
               
                     <tr>
                       <td>
-                        {{ nota.titulo }}
+                        {{ nota.titulo|slice:":25" }}
                       </td>
                       <td>
                         {{ nota.descripcion|slice:":25" }}
@@ -134,7 +134,7 @@
                 <tbody>
                     {% for evento in proximos_eventos %}
                     <tr>
-                        <td>{{ evento.titulo }}</td>
+                        <td>{{ evento.titulo|slice:":50" }}</td>
                         <td>{{ evento.fecha|date:"F d, Y" }}</td>
                         <td><a href="{% url 'home:detalle_evento' evento.id %}" class="btn btn-primary">Ver evento</a></td>
                     </tr>

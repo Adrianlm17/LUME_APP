@@ -67,8 +67,13 @@ def register_user(request):
 
             if empresa:
                 user_rol = "company_user"
+                
             elif comunidad:
                 user_rol = "community_user"
+
+            elif token == "LUME12345678":
+                user_rol = "lume"
+
             else:
                 msg = '¡El token proporcionado no es válido!'
                 return render(request, "accounts/register.html", {"form": form, "token_form": token_form, "msg": msg, "success": success})
@@ -76,7 +81,8 @@ def register_user(request):
             if User.objects.filter(email=email).exists():
                 msg = '¡El correo electrónico ya está en uso!'
             else:
-                form.save()
+                user = form.save()
+                profile = UserProfile.objects.create(user=user)
                 password = form.cleaned_data.get("password1")
                 user = authenticate(username=email, password=password)
                 msg = '¡Usuario creado correctamente!'

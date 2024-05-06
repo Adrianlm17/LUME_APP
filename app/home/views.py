@@ -1,16 +1,19 @@
 import calendar
+from django.db.models import Sum
 from datetime import datetime, timedelta
+from django.forms import inlineformset_factory
 from django.utils import timezone
+from django.db.models.functions import TruncMonth
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateDoesNotExist, loader
 from django.urls import reverse
 from app.admin_lume.forms import CrearUserProfileForm
-from app.home.forms import ActaForm, ChatForm, ExtendsChatForm, NotaForm, UpdateProfileForm
+from app.home.forms import ActaForm, ChatForm, ExtendsChatForm, GastoForm, MotivoReciboFormSet, NotaForm, ReciboForm, UpdateProfileForm
 from app.home.models import Nota, User
 from django.db.models import Q
-from .models import Acta, Anuncio, Calendario, Chat, ChatReadBy, ExtendsChat, Nota, Vivienda  
+from .models import Acta, Anuncio, Calendario, Chat, ChatReadBy, Comunidad, ExtendsChat, Gasto, Historial, Motivo, Nota, PagosHechos, ProximosPagos, Recibo, Transaccion, UltimosMovimientos, UserProfile, Vivienda  
 
 
 
@@ -410,6 +413,185 @@ def delete_calendario(request, recordatorio_id):
     mes = hoy.month
 
     return redirect('home:calendario', año=año, mes=mes)
+
+
+
+
+
+
+# ---------------------------------------------------------- GASTOS ---------------------------------------------------------- 
+@login_required(login_url="/login/login/")
+def gastos(request, comunidad_seleccionada):
+    user_profile = UserProfile.objects.get(user=request.user)
+    viviendas_usuario = Vivienda.objects.filter(usuario=request.user)
+    comunidades = [vivienda.comunidad for vivienda in viviendas_usuario]
+
+    es_presidente_o_vicepresidente = False
+
+    if not comunidad_seleccionada:
+        if comunidades:
+            primera_comunidad = comunidades[0]
+            return redirect('home:gastos', comunidad_seleccionada=primera_comunidad.pk)
+    
+    else:
+
+        es_presidente_o_vicepresidente = Vivienda.objects.filter(usuario=request.user, comunidad=comunidad_seleccionada, rol_comunidad__in=['community_president', 'community_vicepresident']).exists()
+
+        # Obtener la comunidad seleccionada
+        comunidad_seleccionada = Comunidad.objects.get(pk=comunidad_seleccionada)
+
+        # Obtener el último movimiento de la comunidad
+        ultimo_movimiento = obtener_ultimo_movimiento(comunidad_seleccionada)
+
+        # Obtener el dinero actual de la comunidad
+        dinero_actual_comunidad = comunidad_seleccionada.dinero
+
+        # Obtener la fecha del próximo recibo pendiente
+        proximo_recibo_pendiente = obtener_proximo_recibo_pendiente(comunidad_seleccionada)
+
+        # Obtener el historial del dinero de la comunidad
+        historial_dinero_comunidad = obtener_historial_dinero_comunidad(comunidad_seleccionada)
+
+        # Obtener la distribución de gastos del último recibo
+        distribucion_gastos_ultimo_recibo = obtener_distribucion_gastos_ultimo_recibo(comunidad_seleccionada)
+
+        # Obtener los últimos 10 pagos/derramas o recibos realizados
+        ultimos_pagos_derramas_recibos = obtener_ultimos_pagos_derramas_recibos(comunidad_seleccionada)
+
+        # Obtener los próximos pagos
+        proximos_pagos = obtener_proximos_pagos(comunidad_seleccionada)
+
+        # Obtener mis pagos
+        mis_pagos = obtener_mis_pagos(request.user, comunidad_seleccionada)
+
+        return render(request, 'home/gastos.html', {'user_profile': user_profile, 'comunidades': comunidades, 'comunidad_seleccionada': comunidad_seleccionada, 'ultimo_movimiento': ultimo_movimiento, 'dinero_actual_comunidad': dinero_actual_comunidad, 'proximo_recibo_pendiente': proximo_recibo_pendiente, 'historial_dinero_comunidad': historial_dinero_comunidad, 'distribucion_gastos_ultimo_recibo': distribucion_gastos_ultimo_recibo, 'ultimos_pagos_derramas_recibos': ultimos_pagos_derramas_recibos, 'proximos_pagos': proximos_pagos, 'mis_pagos': mis_pagos, 'es_presidente_o_vicepresidente': es_presidente_o_vicepresidente})
+
+
+def obtener_ultimo_movimiento(comunidad):
+    try:
+        ultimo_gasto = Gasto.objects.filter(comunidad=comunidad).latest('fecha_tope')
+        ultimo_transaccion = Transaccion.objects.filter(comunidad=comunidad).latest('fecha')
+
+        if ultimo_gasto.fecha > ultimo_transaccion.fecha:
+            return f"Gasto: ${ultimo_gasto.monto} - {ultimo_gasto.fecha}"
+        else:
+            return f"Transacción: ${ultimo_transaccion.monto} - {ultimo_transaccion.fecha}"
+    except:
+        return "No hay movimientos"
+
+
+def obtener_proximo_recibo_pendiente(comunidad):
+    try:
+        proximo_recibo = Recibo.objects.filter(comunidad=comunidad, fecha_tope__gte=datetime.now()).order_by('fecha_tope').first()
+
+        if proximo_recibo:
+            if proximo_recibo.fecha_tope == datetime.now().date():
+                return "HOY"
+            else:
+                return proximo_recibo.fecha_tope.strftime("%Y-%m-%d")
+        else:
+            return "Pendiente actualizar"
+        
+    except:
+        return "Pendiente actualizar"
+
+def obtener_historial_dinero_comunidad(comunidad):
+    historial = []
+    
+    try:
+        recibos = Recibo.objects.filter(comunidad=comunidad)
+
+        for recibo in recibos:
+            cantidad_total_a_pagar = recibo.cantidad_total * comunidad.numero_propietarios
+            historial.append(Historial.objects.create(cantidad=cantidad_total_a_pagar, mes=recibo.fecha_tope.strftime("%Y-%m")))
+
+        return historial
+    except:
+        return historial
+    
+
+def obtener_distribucion_gastos_ultimo_recibo(comunidad):
+    try:
+        ultimo_recibo = Recibo.objects.filter(comunidad=comunidad).latest('fecha_tope')
+        motivos_recibo = Motivo.objects.filter(recibo=ultimo_recibo)
+
+        distribucion = {}
+        for motivo in motivos_recibo:
+            distribucion[motivo.tipo] = motivo.cantidad
+
+        return distribucion
+    except:
+        return {}
+
+
+def obtener_ultimos_pagos_derramas_recibos(comunidad):
+    return Recibo.objects.filter(comunidad=comunidad).order_by('-fecha_tope')[:10]
+
+
+def obtener_proximos_pagos(comunidad):
+    try:
+        return Recibo.objects.filter(comunidad=comunidad, fecha__gte=datetime.now()).order_by('fecha')
+    
+    except:
+        return []
+
+
+def obtener_mis_pagos(usuario, comunidad):
+    try:
+        return Recibo.objects.filter(comunidad=comunidad, usuario=usuario)
+    except:
+        return []
+
+
+@login_required(login_url="/login/login/")
+def cambiar_comunidad(request, comunidad_id):
+    if request.method == 'POST':
+        nueva_comunidad_id = request.POST.get('comunidad_id')
+        request.session['comunidad_id'] = nueva_comunidad_id
+        return redirect('home:gastos', comunidad_seleccionada=nueva_comunidad_id)
+    else:
+        return redirect(reverse('home:gastos'))
+
+
+
+@login_required(login_url="/login/login/")
+def crear_gasto(request, comunidad_seleccionada):
+    comunidad = Comunidad.objects.get(pk=comunidad_seleccionada)
+    
+    if request.method == 'POST':
+        gasto_form = GastoForm(request.POST)
+        recibo_form = ReciboForm(request.POST)
+        motivo_recibo_formset = MotivoReciboFormSet(request.POST)
+
+        if gasto_form.is_valid() and recibo_form.is_valid() and motivo_recibo_formset.is_valid():
+            # Guardar el gasto/incidencia
+            gasto = gasto_form.save(commit=False)
+            gasto.comunidad = comunidad
+            gasto.save()
+
+            # Guardar el recibo
+            recibo = recibo_form.save(commit=False)
+            recibo.comunidad = comunidad
+            recibo.save()
+
+            # Guardar los motivos del recibo
+            for form in motivo_recibo_formset:
+                motivo_recibo = form.save(commit=False)
+                motivo_recibo.recibo = recibo
+                motivo_recibo.save()
+
+            return redirect('ruta_hacia_la_vista_donde_quieres_redirigir')
+    else:
+        gasto_form = GastoForm()
+        recibo_form = ReciboForm()
+        motivo_recibo_formset = MotivoReciboFormSet()
+
+    return render(request, 'nombre_de_tu_template.html', {
+        'gasto_form': gasto_form,
+        'recibo_form': recibo_form,
+        'motivo_recibo_formset': motivo_recibo_formset,
+        'comunidad': comunidad,
+    })
 
 
 

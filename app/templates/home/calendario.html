@@ -27,7 +27,7 @@
                             {% if recordatorios %}
                                 <ul>
                                     {% for recordatorio in recordatorios %}
-                                        <a href="{% url 'home:detalle_evento' recordatorio.id %}" class="btn btn-outline-dark">{{ recordatorio.titulo }}</a><br>
+                                        <a href="{% url 'home:detalle_evento' recordatorio.id %}" class="btn btn-outline-dark">{{ recordatorio.titulo|slice:":50" }}</a><br>
                                     {% endfor %}
                                 </ul>
                             {% endif %}

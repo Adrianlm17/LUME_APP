@@ -40,6 +40,12 @@ urlpatterns = [
     # ------------------------------- ANUNCIOS --------------------------------
     path('<int:anuncio_id>/detalles_anuncio', home_views.detalles_anuncio, name='detalles_anuncio'),
 
+    # GASTOS
+    path('gastos', home_views.gastos, name='gastos'),
+    path('<int:comunidad_seleccionada>/gastos', home_views.gastos, name='gastos'),
+    path('cambiar_comunidad/<int:comunidad_id>/', home_views.cambiar_comunidad, name='cambiar_comunidad'),
+    path('<int:comunidad_seleccionada>/crear_gasto/', home_views.crear_gasto, name='crear_gasto'),
+
     # ------------------------------- EXTRA -------------------------------
     re_path(r'^.*\.*', home_views.pages, name='pages'),
 ]
