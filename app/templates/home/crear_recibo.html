@@ -1,0 +1,86 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %}Crear Recibo | CHAT | LUME{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'home:gastos' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<br>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header card-header-success">
+                <h2 class="text-center">Crear Recibo | {{ comunidad.nombre }}</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" id="recibo_form"> 
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Titulo:</label>
+                        {{ recibo_form.titulo }}
+                        <span class="text-danger">{{ recibo_form.titulo.errors }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción:</label><br>
+                        {{ recibo_form.descripcion }}
+                        <span class="text-danger">{{ recibo_form.descripcion.errors }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Mes:</label>
+                        {{ recibo_form.fecha_tope }}
+                        <span class="text-danger">{{ recibo_form.fecha_tope.errors }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad Total:</label>
+                        {{ recibo_form.cantidad_total }}
+                        <span class="text-danger">{{ recibo_form.cantidad_total.errors }}</span>
+                    </div>
+
+                    {{ motivo_recibo_formset.management_form }}
+            
+                    <div class="card-body">
+                        <div class="card-body table-responsive">
+                            <table class="table table-hover">
+                              <thead class="text-dark">
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if motivos_recibo %}
+                                        {% for motivo in motivos_recibo %}
+                                            <tr>
+                                                <td>{{ motivo.tipo }}</td>
+                                                <td>{{ motivo.cantidad }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    
+                                    {% else %}
+                                        <tr>
+                                            <th>¡Pendiente de asignar motivos!</th>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <button type="button" onclick="submitForm()" class="btn btn-primary">Agregar Motivos</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function submitForm() {
+        document.getElementById('recibo_form').submit();
+    }
+</script>
+
+{% endblock %}

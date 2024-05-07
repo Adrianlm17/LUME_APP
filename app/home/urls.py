@@ -37,14 +37,20 @@ urlpatterns = [
     path('detalle_evento/<int:evento_id>/', home_views.detalle_evento, name='detalle_evento'),
     path('<int:recordatorio_id>/delete_calendario', home_views.delete_calendario, name='delete_calendario'),
 
-    # ------------------------------- ANUNCIOS --------------------------------
+    # ------------------------------- ANUNCIOS ------------------------------
     path('<int:anuncio_id>/detalles_anuncio', home_views.detalles_anuncio, name='detalles_anuncio'),
 
-    # GASTOS
+    # ------------------------------- GASTOS ------------------------------
     path('gastos', home_views.gastos, name='gastos'),
     path('<int:comunidad_seleccionada>/gastos', home_views.gastos, name='gastos'),
     path('cambiar_comunidad/<int:comunidad_id>/', home_views.cambiar_comunidad, name='cambiar_comunidad'),
     path('<int:comunidad_seleccionada>/crear_gasto/', home_views.crear_gasto, name='crear_gasto'),
+    path('<int:comunidad_seleccionada>/crear_recibo/', home_views.crear_recibo, name='crear_recibo'),
+    path('<int:comunidad_seleccionada>/crear_motivo/', home_views.crear_motivo, name='crear_motivo'),
+    path('<int:recibo_id>/editar_recibo/', home_views.editar_recibo, name='editar_recibo'),
+    path('historial_completo/<int:comunidad_id>/', home_views.historial_completo, name='historial_completo'),
+    path('ver_historial_individual/<str:tipo>/<int:movimiento_id>/', home_views.ver_historial_individual, name='ver_historial_individual'),
+
 
     # ------------------------------- EXTRA -------------------------------
     re_path(r'^.*\.*', home_views.pages, name='pages'),

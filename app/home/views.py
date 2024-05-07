@@ -1,19 +1,16 @@
 import calendar
-from django.db.models import Sum
 from datetime import datetime, timedelta
-from django.forms import inlineformset_factory
 from django.utils import timezone
-from django.db.models.functions import TruncMonth
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateDoesNotExist, loader
 from django.urls import reverse
 from app.admin_lume.forms import CrearUserProfileForm
-from app.home.forms import ActaForm, ChatForm, ExtendsChatForm, GastoForm, MotivoReciboFormSet, NotaForm, ReciboForm, UpdateProfileForm
+from app.home.forms import ActaForm, ChatForm, ExtendsChatForm, GastoForm, MotivoReciboForm, MotivoReciboFormSet, NotaForm, ReciboForm, UpdateProfileForm
 from app.home.models import Nota, User
 from django.db.models import Q
-from .models import Acta, Anuncio, Calendario, Chat, ChatReadBy, Comunidad, ExtendsChat, Gasto, Historial, Motivo, Nota, PagosHechos, ProximosPagos, Recibo, Transaccion, UltimosMovimientos, UserProfile, Vivienda  
+from .models import Acta, Anuncio, Calendario, Chat, ChatReadBy, Comunidad, ExtendsChat, Gasto, Motivo, Nota, PagosUsuario, Recibo, Transaccion, UserProfile, Vivienda  
 
 
 
@@ -421,7 +418,7 @@ def delete_calendario(request, recordatorio_id):
 
 # ---------------------------------------------------------- GASTOS ---------------------------------------------------------- 
 @login_required(login_url="/login/login/")
-def gastos(request, comunidad_seleccionada):
+def gastos(request, comunidad_seleccionada=False):
     user_profile = UserProfile.objects.get(user=request.user)
     viviendas_usuario = Vivienda.objects.filter(usuario=request.user)
     comunidades = [vivienda.comunidad for vivienda in viviendas_usuario]
@@ -432,9 +429,7 @@ def gastos(request, comunidad_seleccionada):
         if comunidades:
             primera_comunidad = comunidades[0]
             return redirect('home:gastos', comunidad_seleccionada=primera_comunidad.pk)
-    
     else:
-
         es_presidente_o_vicepresidente = Vivienda.objects.filter(usuario=request.user, comunidad=comunidad_seleccionada, rol_comunidad__in=['community_president', 'community_vicepresident']).exists()
 
         # Obtener la comunidad seleccionada
@@ -450,21 +445,68 @@ def gastos(request, comunidad_seleccionada):
         proximo_recibo_pendiente = obtener_proximo_recibo_pendiente(comunidad_seleccionada)
 
         # Obtener el historial del dinero de la comunidad
-        historial_dinero_comunidad = obtener_historial_dinero_comunidad(comunidad_seleccionada)
+        historial_dinero_mensual_comunidad = obtener_historial_mensual_dinero_comunidad(comunidad_seleccionada, request.user)
+        historial_dinero_comunidad = obtener_historial_dinero_comunidad(comunidad_seleccionada, request.user)
 
         # Obtener la distribución de gastos del último recibo
         distribucion_gastos_ultimo_recibo = obtener_distribucion_gastos_ultimo_recibo(comunidad_seleccionada)
 
-        # Obtener los últimos 10 pagos/derramas o recibos realizados
-        ultimos_pagos_derramas_recibos = obtener_ultimos_pagos_derramas_recibos(comunidad_seleccionada)
+        proximos_pagos = obtener_proximos_pagos_usuario(request.user, comunidad_seleccionada)
+        
+        mis_pagos = obtener_mis_pagos_usuario(request.user, comunidad_seleccionada)
 
-        # Obtener los próximos pagos
-        proximos_pagos = obtener_proximos_pagos(comunidad_seleccionada)
+        return render(request, 'home/gastos.html', {'segment': 'gastos', 'user_profile': user_profile, 'comunidades': comunidades, 'comunidad_seleccionada': comunidad_seleccionada, 'ultimo_movimiento': ultimo_movimiento, 'dinero_actual_comunidad': dinero_actual_comunidad, 'proximo_recibo_pendiente': proximo_recibo_pendiente, 'historial_dinero_mensual_comunidad': historial_dinero_mensual_comunidad, 'historial_dinero_comunidad': historial_dinero_comunidad, 'distribucion_gastos_ultimo_recibo': distribucion_gastos_ultimo_recibo, 'proximos_pagos': proximos_pagos, 'mis_pagos': mis_pagos, 'es_presidente_o_vicepresidente': es_presidente_o_vicepresidente})
 
-        # Obtener mis pagos
-        mis_pagos = obtener_mis_pagos(request.user, comunidad_seleccionada)
 
-        return render(request, 'home/gastos.html', {'user_profile': user_profile, 'comunidades': comunidades, 'comunidad_seleccionada': comunidad_seleccionada, 'ultimo_movimiento': ultimo_movimiento, 'dinero_actual_comunidad': dinero_actual_comunidad, 'proximo_recibo_pendiente': proximo_recibo_pendiente, 'historial_dinero_comunidad': historial_dinero_comunidad, 'distribucion_gastos_ultimo_recibo': distribucion_gastos_ultimo_recibo, 'ultimos_pagos_derramas_recibos': ultimos_pagos_derramas_recibos, 'proximos_pagos': proximos_pagos, 'mis_pagos': mis_pagos, 'es_presidente_o_vicepresidente': es_presidente_o_vicepresidente})
+def obtener_historial_mensual_dinero_comunidad(comunidad, usuario):
+    historial = []
+
+    # Obtener todos los recibos de la comunidad para el año actual
+    recibos = Recibo.objects.filter(comunidad=comunidad, fecha_tope__year=timezone.now().year)
+    
+    # Iterar sobre cada recibo para obtener la información relevante
+    for recibo in recibos:
+        historial.append({
+            'tipo': 'Recibo',
+            'titulo': recibo.titulo,
+            'fecha': recibo.fecha_tope,
+            'cantidad': recibo.cantidad_total
+        })
+    
+    return historial
+
+
+
+def obtener_historial_dinero_comunidad(comunidad, usuario):
+    historial = []
+
+    # Obtener todos los gastos de la comunidad para el año actual
+    gastos_comunidad = Gasto.objects.filter(comunidad=comunidad, fecha_tope__year=timezone.now().year, usuario=None).order_by('-id')[:2]
+    
+    # Iterar sobre cada gasto de la comunidad
+    for gasto in gastos_comunidad:
+        historial.append({
+            'tipo': 'Gasto Comunidad',
+            'titulo': gasto.titulo,
+            'fecha': gasto.fecha_tope,
+            'cantidad': gasto.cantidad_total,
+            'estado': gasto.estado
+        })
+
+    # Obtener todos los gastos personales del usuario para el año actual
+    gastos_personales = PagosUsuario.objects.filter(usuario=usuario).order_by('-id')[:2]
+    
+    # Iterar sobre cada gasto personal del usuario
+    for gasto_personal in gastos_personales:
+        historial.append({
+            'tipo': 'Gasto Personal',
+            'titulo': gasto_personal.titulo,
+            'fecha': gasto_personal.fecha,
+            'cantidad': gasto_personal.cantidad,
+            'estado': gasto_personal.estado
+        })
+    
+    return historial
 
 
 def obtener_ultimo_movimiento(comunidad):
@@ -473,7 +515,7 @@ def obtener_ultimo_movimiento(comunidad):
         ultimo_transaccion = Transaccion.objects.filter(comunidad=comunidad).latest('fecha')
 
         if ultimo_gasto.fecha > ultimo_transaccion.fecha:
-            return f"Gasto: ${ultimo_gasto.monto} - {ultimo_gasto.fecha}"
+            return f"Gasto: ${ultimo_gasto.cantidad_total} - {ultimo_gasto.fecha}"
         else:
             return f"Transacción: ${ultimo_transaccion.monto} - {ultimo_transaccion.fecha}"
     except:
@@ -482,65 +524,89 @@ def obtener_ultimo_movimiento(comunidad):
 
 def obtener_proximo_recibo_pendiente(comunidad):
     try:
-        proximo_recibo = Recibo.objects.filter(comunidad=comunidad, fecha_tope__gte=datetime.now()).order_by('fecha_tope').first()
-
-        if proximo_recibo:
-            if proximo_recibo.fecha_tope == datetime.now().date():
-                return "HOY"
-            else:
-                return proximo_recibo.fecha_tope.strftime("%Y-%m-%d")
-        else:
-            return "Pendiente actualizar"
-        
+        ultimo_recibo = Recibo.objects.filter(comunidad=comunidad).latest('fecha_tope')
+        return ultimo_recibo.fecha_tope.strftime("%Y-%m-%d")
     except:
-        return "Pendiente actualizar"
+        return "No hay recibo pendiente"
 
-def obtener_historial_dinero_comunidad(comunidad):
-    historial = []
-    
-    try:
-        recibos = Recibo.objects.filter(comunidad=comunidad)
 
-        for recibo in recibos:
-            cantidad_total_a_pagar = recibo.cantidad_total * comunidad.numero_propietarios
-            historial.append(Historial.objects.create(cantidad=cantidad_total_a_pagar, mes=recibo.fecha_tope.strftime("%Y-%m")))
-
-        return historial
-    except:
-        return historial
-    
 
 def obtener_distribucion_gastos_ultimo_recibo(comunidad):
     try:
+        # Obtener el último recibo
         ultimo_recibo = Recibo.objects.filter(comunidad=comunidad).latest('fecha_tope')
+        
+        # Obtener todos los tipos de gastos posibles
+        tipos_gastos = ['luz', 'agua', 'gas', 'piscina', 'jardineria', 'personal', 'limpieza', 'extras']
+        
+        # Inicializar el diccionario de distribución con todos los tipos de gastos y cantidades en 0
+        distribucion = {tipo: 0 for tipo in tipos_gastos}
+        
+        # Obtener los motivos del último recibo y actualizar la distribución
         motivos_recibo = Motivo.objects.filter(recibo=ultimo_recibo)
-
-        distribucion = {}
         for motivo in motivos_recibo:
             distribucion[motivo.tipo] = motivo.cantidad
-
+        
         return distribucion
     except:
+        # Si no hay recibo disponible, devolver un diccionario vacío
         return {}
-
-
-def obtener_ultimos_pagos_derramas_recibos(comunidad):
-    return Recibo.objects.filter(comunidad=comunidad).order_by('-fecha_tope')[:10]
-
-
-def obtener_proximos_pagos(comunidad):
-    try:
-        return Recibo.objects.filter(comunidad=comunidad, fecha__gte=datetime.now()).order_by('fecha')
     
-    except:
-        return []
 
-
-def obtener_mis_pagos(usuario, comunidad):
+def obtener_proximos_pagos_usuario(usuario, comunidad):
     try:
-        return Recibo.objects.filter(comunidad=comunidad, usuario=usuario)
+        return PagosUsuario.objects.filter(usuario=usuario, comunidad=comunidad, fecha__gte=datetime.now()).order_by('fecha')
     except:
         return []
+
+
+def obtener_mis_pagos_usuario(usuario, comunidad):
+    try:
+        return PagosUsuario.objects.filter(usuario=usuario, comunidad=comunidad)
+    except:
+        return []
+    
+
+def obtener_historial_completo(comunidad, usuario):
+    historial_completo = []
+
+    # Obtener todos los gastos de la comunidad
+    gastos_comunidad = Gasto.objects.filter(comunidad=comunidad)
+    for gasto in gastos_comunidad:
+        historial_completo.append({'tipo': 'Gasto', 'id': gasto.id, 'fecha': gasto.fecha_tope, 'titulo': gasto.titulo, 'descripcion': gasto.descripcion, 'cantidad_total': gasto.cantidad_total})
+
+    # Obtener todos los gastos personales del usuario
+    gastos_personales = PagosUsuario.objects.filter(usuario=usuario)
+    for gasto_personal in gastos_personales:
+        historial_completo.append({'tipo': 'Gasto Personal', 'id': gasto_personal.id, 'fecha': gasto_personal.fecha, 'titulo': gasto_personal.titulo, 'descripcion': gasto_personal.descripcion, 'cantidad_total': gasto_personal.cantidad})
+
+    # Ordenar el historial por fecha en orden descendente
+    historial_completo.sort(key=lambda x: x['fecha'], reverse=True)
+
+    return historial_completo
+
+
+
+
+def historial_completo(request, comunidad_id):
+    # Obtener la comunidad
+    comunidad = Comunidad.objects.get(pk=comunidad_id)
+    
+    # Obtener el historial completo de la comunidad
+    historial_completo = obtener_historial_completo(comunidad, request.user)
+
+    return render(request, 'home/historial_completo.html', {'segment': 'gastos', 'comunidad': comunidad, 'historial_completo': historial_completo})
+
+
+@login_required(login_url="/login/login/")
+def ver_historial_individual(request, tipo, movimiento_id):
+    if tipo == 'gasto':
+        movimiento = get_object_or_404(Gasto, pk=movimiento_id)
+    elif tipo == 'gasto_personal':
+        movimiento = get_object_or_404(PagosUsuario, pk=movimiento_id)
+    else:
+        pass
+    return render(request, 'home/ver_historial_individual.html', {'segment': 'gastos', 'movimiento': movimiento})
 
 
 @login_required(login_url="/login/login/")
@@ -553,6 +619,7 @@ def cambiar_comunidad(request, comunidad_id):
         return redirect(reverse('home:gastos'))
 
 
+from .models import Transaccion
 
 @login_required(login_url="/login/login/")
 def crear_gasto(request, comunidad_seleccionada):
@@ -560,40 +627,157 @@ def crear_gasto(request, comunidad_seleccionada):
     
     if request.method == 'POST':
         gasto_form = GastoForm(request.POST)
-        recibo_form = ReciboForm(request.POST)
-        motivo_recibo_formset = MotivoReciboFormSet(request.POST)
-
-        if gasto_form.is_valid() and recibo_form.is_valid() and motivo_recibo_formset.is_valid():
-            # Guardar el gasto/incidencia
+        
+        if gasto_form.is_valid():
             gasto = gasto_form.save(commit=False)
             gasto.comunidad = comunidad
             gasto.save()
 
-            # Guardar el recibo
-            recibo = recibo_form.save(commit=False)
-            recibo.comunidad = comunidad
-            recibo.save()
+            # Obtener el usuario asignado si tiene
+            usuario = request.POST.get('usuario')
+            
+            if usuario:
+                gasto.usuario = request.user
+                gasto.save()
+                
+            else:
+                # Calcular la cantidad que cada miembro de la comunidad debe pagar
+                total_gasto = gasto.cantidad_total
+                viviendas_comunidad = Vivienda.objects.filter(comunidad=comunidad)
+                numero_viviendas = viviendas_comunidad.count()
+                cantidad_por_vivienda = total_gasto / numero_viviendas
 
-            # Guardar los motivos del recibo
-            for form in motivo_recibo_formset:
-                motivo_recibo = form.save(commit=False)
-                motivo_recibo.recibo = recibo
-                motivo_recibo.save()
+                # Crear un registro de pago para cada usuario de cada vivienda en la comunidad
+                for vivienda in viviendas_comunidad:
+                    pago = PagosUsuario.objects.create(
+                        usuario=vivienda.usuario,
+                        comunidad=comunidad,
+                        titulo=gasto.titulo,
+                        descripcion=gasto.descripcion,
+                        fecha=gasto.fecha_tope,
+                        cantidad=cantidad_por_vivienda,
+                        estado='pendiente'
+                    )
 
-            return redirect('ruta_hacia_la_vista_donde_quieres_redirigir')
+                comunidad.dinero_actual -= total_gasto
+                comunidad.save()
+
+                Transaccion.objects.create(
+                    comunidad=comunidad,
+                    monto=-total_gasto,
+                    descripcion=f"Gasto: {gasto.titulo}"
+                )
+
+            return redirect('home:gastos')
     else:
         gasto_form = GastoForm()
-        recibo_form = ReciboForm()
-        motivo_recibo_formset = MotivoReciboFormSet()
 
-    return render(request, 'nombre_de_tu_template.html', {
+    return render(request, 'home/crear_gasto.html', {
+        'segment': 'gastos',
         'gasto_form': gasto_form,
-        'recibo_form': recibo_form,
-        'motivo_recibo_formset': motivo_recibo_formset,
         'comunidad': comunidad,
     })
 
 
+
+@login_required(login_url="/login/login/")
+def crear_recibo(request, comunidad_seleccionada):
+    comunidad = Comunidad.objects.get(pk=comunidad_seleccionada)
+
+    if request.method == 'POST':
+        recibo_form = ReciboForm(request.POST)
+        motivo_recibo_formset = MotivoReciboFormSet(request.POST)
+
+        if recibo_form.is_valid() and motivo_recibo_formset.is_valid():
+            recibo = recibo_form.save(commit=False)
+            recibo.comunidad = comunidad
+            recibo.save()
+
+            # Calcular la cantidad que cada miembro de la comunidad debe pagar
+            total_recibo = recibo.cantidad_total
+            viviendas_comunidad = Vivienda.objects.filter(comunidad=comunidad)
+            numero_viviendas = viviendas_comunidad.count()
+            cantidad_por_usuario = total_recibo / numero_viviendas
+
+            # Crear un registro de pago para cada usuario de cada vivienda en la comunidad
+            for vivienda in viviendas_comunidad:
+                pago = PagosUsuario.objects.create(
+                    usuario=vivienda.usuario,
+                    comunidad=comunidad,
+                    titulo=recibo.titulo,
+                    descripcion=recibo.descripcion,
+                    fecha=recibo.fecha_tope,
+                    cantidad=cantidad_por_usuario,
+                    estado='pendiente'
+                )
+
+            # Restar el monto del recibo al dinero actual de la comunidad
+            comunidad.dinero -= total_recibo
+            comunidad.save()
+
+            # Registrar la transacción en el modelo Transaccion
+            Transaccion.objects.create(
+                comunidad=comunidad,
+                monto=-total_recibo,
+                descripcion=f"Recibo: {recibo.titulo}"
+            )
+
+            # Después de guardar el recibo y los pagos, redirigir a gastos
+            return redirect('home:crear_motivo', comunidad_seleccionada=comunidad_seleccionada)
+
+    else:
+        recibo_form = ReciboForm()
+        motivo_recibo_formset = MotivoReciboFormSet()
+
+    motivos_recibo = Recibo.objects.filter(comunidad=comunidad).order_by('-id').first().motivos.all() if Recibo.objects.filter(comunidad=comunidad) else None
+
+    return render(request, 'home/crear_recibo.html', {
+        'segment': 'gastos',
+        'recibo_form': recibo_form,
+        'motivo_recibo_formset': motivo_recibo_formset,
+        'comunidad': comunidad,
+        'motivos_recibo': motivos_recibo,
+    })
+
+
+@login_required(login_url="/login/login/")
+def crear_motivo(request, comunidad_seleccionada):
+    comunidad = Comunidad.objects.get(pk=comunidad_seleccionada)
+
+    # Obtener el recibo más reciente creado
+    recibo = Recibo.objects.filter(comunidad=comunidad).order_by('-id').first()
+
+    if request.method == 'POST':
+        motivo_form = MotivoReciboForm(request.POST)
+        if motivo_form.is_valid():
+            motivo = motivo_form.save(commit=False)
+            if recibo is None:
+                # Si no hay recibo existente, crea uno nuevo
+                recibo = Recibo.objects.create(comunidad=comunidad)
+            motivo.recibo = recibo
+            motivo.save()
+            # Redirigir al formulario de ese recibo para seguir editándolo
+            return redirect('home:editar_recibo', recibo_id=recibo.id)
+    else:
+        motivo_form = MotivoReciboForm()
+    return render(request, 'home/crear_motivo.html', {'segment': 'gastos', 'motivo_form': motivo_form, 'recibo': recibo})
+
+
+@login_required(login_url="/login/login/")
+def editar_recibo(request, recibo_id):
+    recibo = get_object_or_404(Recibo, pk=recibo_id)
+    comunidad_id = recibo.comunidad_id
+    if request.method == 'POST':
+        recibo_form = ReciboForm(request.POST, instance=recibo)
+        motivo_recibo_formset = MotivoReciboFormSet(request.POST, instance=recibo)
+        if recibo_form.is_valid() and motivo_recibo_formset.is_valid():
+            recibo_form.save()
+            motivo_recibo_formset.save()
+            return redirect('home:gastos', comunidad_seleccionada=comunidad_id) 
+    else:
+        recibo_form = ReciboForm(instance=recibo)
+        motivo_recibo_formset = MotivoReciboFormSet(instance=recibo)
+    return render(request, 'home/editar_recibo.html', {'segment': 'gastos', 'recibo': recibo, 'recibo_form': recibo_form, 'motivo_recibo_formset': motivo_recibo_formset, 'comunidad_id': comunidad_id})
 
 
 

@@ -1,0 +1,27 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %} Detalle del Movimiento | LUME {% endblock %} 
+
+{% block content %}
+<a href="{% url 'home:gastos' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<br>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-info">
+                <h1>Detalle del Movimiento</h1>
+            </div>
+            <div class="card-body">
+                <p><strong>Fecha:</strong> {{ movimiento.fecha_tope }}</p>
+                <p><strong>Título:</strong> {{ movimiento.titulo }}</p>
+                <p><strong>Descripción:</strong> {{ movimiento.descripcion }}</p>
+                <p><strong>Cantidad Total:</strong> {{ movimiento.cantidad_total }}</p>
+                <p><strong>Estado:</strong>{{ movimiento.estado }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

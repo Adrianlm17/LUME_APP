@@ -1,0 +1,63 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %}Editar Recibo | CHAT | LUME{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header card-header-success">
+                <h2>{{ recibo.titulo }}</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" id="recibo_form"> 
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Titulo:</label>
+                        <input type="text" class="form-control" value="{{ recibo.titulo }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción:</label><br>
+                        <textarea class="form-control" rows="4" readonly>{{ recibo.descripcion }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Tope:</label>
+                        <input type="text" class="form-control" value="{{ recibo.fecha_tope }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad Total:</label>
+                        <input type="text" class="form-control" value="{{ recibo.cantidad_total }}" readonly>
+                    </div>
+
+                    {{ motivo_recibo_formset.management_form }}
+                    <div class="card-body">
+                        <div class="card-body table-responsive">
+                            <table class="table table-hover">
+                              <thead class="text-dark">
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for form in motivo_recibo_formset %}
+                                        <tr>
+                                            <td>{{ form.tipo.value }}</td>
+                                            <td>{{ form.cantidad.value }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <button type="button" onclick="location.href='{% url 'home:crear_motivo' comunidad_id %}'">Agregar Motivo</button>
+                            <button type="button" onclick="location.href='{% url 'home:gastos' comunidad_id %}'">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

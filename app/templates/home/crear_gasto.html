@@ -3,27 +3,57 @@
 {% block title %}Crear Gastos | CHAT | LUME{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4">Crear Gastos</h2>
+<a href="{% url 'home:gastos' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Volver</a>
 
-    <!-- Formulario para crear recibos mensuales -->
-    <form method="post">
-        {% csrf_token %}
-        {{ recibo_formset.management_form }}
-        <table>
-            {% for form in recibo_formset %}
-                {{ form.as_table }}
-            {% endfor %}
-        </table>
-        <button type="submit">Guardar Recibos Mensuales</button>
-    </form>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header card-header-success">
+                <h2 class="text-center">Crear Gasto de la comunidad {{ comunidad.nombre }}</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Titulo:</label>
+                                {{ gasto_form.titulo }}
+                                <span class="text-danger">{{ gasto_form.titulo.errors }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Descripción:</label><br>
+                                {{ gasto_form.descripcion }}
+                                <span class="text-danger">{{ gasto_form.descripcion.errors }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Cantidad Total:</label><br>
+                                {{ gasto_form.cantidad_total }}
+                                <span class="text-danger">{{ gasto_form.cantidad_total.errors }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Fecha Tope:</label><br>
+                                {{ gasto_form.fecha_tope }}
+                                <span class="text-danger">{{ gasto_form.fecha_tope.errors }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Usuario:</label><br>
+                                {{ gasto_form.usuario }}
+                                <span class="text-danger">{{ gasto_form.usuario.errors }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <br>
 
-    <!-- Formulario para crear gastos individuales -->
-    <form method="post">
-        {% csrf_token %}
-        {{ gasto_form.as_p }}
-        {{ motivo_form.as_p }}
-        <button type="submit">Guardar Gasto Individual</button>
-    </form>
+                    <div class="row justify-content-center">
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-warning btn-block">Crear Gasto</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

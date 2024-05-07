@@ -91,7 +91,7 @@ class MotivoReciboForm(forms.ModelForm):
         fields = ['tipo', 'cantidad']
 
 MotivoReciboFormSet = forms.inlineformset_factory(
-    Recibo, Motivo, form=MotivoReciboForm, extra=1, can_delete=True
+    Recibo, Motivo, form=MotivoReciboForm, extra=1
 )
 
 class ReciboForm(forms.ModelForm):

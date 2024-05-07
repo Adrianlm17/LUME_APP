@@ -188,8 +188,8 @@ class Anuncio(models.Model):
 class Recibo(models.Model):
     titulo = models.CharField(max_length=100)
     descripcion = models.TextField()
-    fecha_tope = models.DateField()
-    cantidad_total = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha_tope = models.DateField(null=True)
+    cantidad_total = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
 
     def __str__(self):
@@ -202,13 +202,13 @@ class Motivo(models.Model):
         ('gas', 'Gas'),
         ('piscina', 'Piscina'),
         ('jardineria', 'Jardinería'),
-        ('personal_comunidad', 'Personal de comunidad'),
+        ('personal', 'Personal de comunidad'),
         ('limpieza', 'Limpieza'),
         ('extras', 'Extras'),
     ]
 
-    tipo = models.CharField(max_length=100, choices=TIPO_CHOICES)
-    cantidad = models.DecimalField(max_digits=10, decimal_places=2)
+    tipo = models.CharField(max_length=100, choices=TIPO_CHOICES, null=True)
+    cantidad = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     recibo = models.ForeignKey(Recibo, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -221,6 +221,12 @@ class Gasto(models.Model):
     fecha_tope = models.DateField()
     comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    ESTADO_CHOICES = [
+        ('pagado', 'Pagado'),
+        ('pendiente', 'Pendiente')
+    ]
+    
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, null=True)
 
     def __str__(self):
         return f"Gasto: {self.titulo} - {self.fecha_tope}"
@@ -239,19 +245,21 @@ class Transaccion(models.Model):
     fecha = models.DateField(auto_now_add=True)
     descripcion = models.CharField(max_length=100, null=True)
 
-class UltimosMovimientos(models.Model):
+class PagosUsuario(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
-
-class ProximosPagos(models.Model):
-    comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
-
-class PagosHechos(models.Model):
-    comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
-
-class Historial(models.Model):
+    titulo = models.CharField(max_length=100, null=True)
+    descripcion = models.TextField(null=True)
+    fecha = models.DateField()
     cantidad = models.DecimalField(max_digits=10, decimal_places=2)
-    mes = models.CharField(max_length=100)
+    ESTADO_CHOICES = [
+        ('pagado', 'Pagado'),
+        ('pendiente', 'Pendiente')
+    ]
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES)
 
+    def __str__(self):
+        return f"Pago: {self.cantidad} - {self.fecha}"
 
 
 class SeguroComunidad(models.Model):
