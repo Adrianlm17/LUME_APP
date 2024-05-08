@@ -26,6 +26,15 @@ def home_index(request):
     chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
     num_mensajes_no_leidos = chats_no_leidos.count()
 
+    admin = False
+
+    if hasattr(request.user, 'userprofile'):
+        admin = request.user.userprofile.user_rol if request.user.userprofile.user_rol == 'lume' else False
+
+    usuario_comunidad = False
+
+    usuario_comunidad = Vivienda.objects.filter(usuario=request.user).exists()
+
     context = {
         'segment': 'index',
         'notas': notas,
@@ -33,6 +42,8 @@ def home_index(request):
         'anuncios': anuncios,
         'chats_no_leidos': chats_no_leidos,
         'num_mensajes_no_leidos': num_mensajes_no_leidos,
+        'admin': admin,
+        'usuario_comunidad': usuario_comunidad,
     }
 
     return render(request, 'home/index.html', context)

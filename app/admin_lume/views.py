@@ -82,7 +82,7 @@ def create_user(request):
         form = SignUpForm()
         form_profile = CrearUserProfileForm()
 
-    return render(request, "admin_lume/create_user.html", {"form": form, "form_profile" : form_profile, "msg": msg, "success": success})
+    return render(request, "admin_lume/create_user.html", {'segment': 'create_user', "form": form, "form_profile" : form_profile, "msg": msg, "success": success})
 
 
 @login_required(login_url="/login/login_admin/")
@@ -107,7 +107,7 @@ def edit_user(request, user_id):
         user_form = UpdateProfileForm(instance=user)
         profile_form = CrearUserProfileForm(instance=profile_instance)
 
-    return render(request, "admin_lume/edit_user.html", {"user_form": user_form, "profile_form" : profile_form, "msg": msg, "success": success})
+    return render(request, "admin_lume/edit_user.html", {'segment': 'ver_usuario', "user_form": user_form, "profile_form" : profile_form, "msg": msg, "success": success})
 
 
 @login_required(login_url="/login/login_admin/")
@@ -118,7 +118,7 @@ def delete_user(request, user_id):
         user.delete()
     
     users = User.objects.all()
-    return render(request, 'admin_lume/users.html', {'users': users})
+    return render(request, 'admin_lume/users.html', {'segment': 'ver_usuario', 'users': users})
 
 
 
@@ -128,7 +128,7 @@ def delete_user(request, user_id):
 @login_required(login_url="/login/login_admin/")
 def community_list(request):
     communitys = Comunidad.objects.all()
-    return render(request, 'admin_lume/communitys.html', {'communitys': communitys})
+    return render(request, 'admin_lume/communitys.html', {'segment': 'ver_comunidad', 'communitys': communitys})
 
 
 @login_required(login_url="/login/login_admin/")
@@ -151,7 +151,7 @@ def create_community(request):
     else:
         form = CrearComunidadForm()
 
-    return render(request, 'admin_lume/create_community.html', {"form": form, "msg": msg, "success": success})
+    return render(request, 'admin_lume/create_community.html', {'segment': 'crear_comunidad', "form": form, "msg": msg, "success": success})
 
 
 @login_required(login_url="/login/login_admin/")
@@ -172,7 +172,7 @@ def edit_community(request, communitys_id):
     else:
         communitys_form = CrearComunidadForm(instance=communitys)
 
-    return render(request, "admin_lume/edit_community.html", {"communitys_form": communitys_form, "msg": msg, "success": success})
+    return render(request, "admin_lume/edit_community.html", {'segment': 'ver_comunidad', "communitys_form": communitys_form, "msg": msg, "success": success})
 
 
 @login_required(login_url="/login/login_admin/")
@@ -183,7 +183,7 @@ def delete_community(request, community_id):
         community.delete()
     
     communitys = Comunidad.objects.all()
-    return render(request, 'admin_lume/communitys.html', {'communitys': communitys})
+    return render(request, 'admin_lume/communitys.html', {'segment': 'ver_comunidad', 'communitys': communitys})
 
 
 
@@ -194,7 +194,7 @@ def delete_community(request, community_id):
 @login_required(login_url="/login/login_admin/")
 def company_list(request):
     companys = Empresa.objects.all()
-    return render(request, 'admin_lume/companys.html', {'companys': companys})
+    return render(request, 'admin_lume/companys.html', {'segment': 'ver_empresa', 'companys': companys})
 
 
 @login_required(login_url="/login/login_admin/")
@@ -217,7 +217,7 @@ def create_company(request):
     else:
         company = CrearCompanyForm()
 
-    return render(request, 'admin_lume/create_company.html', {"company": company, "msg": msg, "success": success})
+    return render(request, 'admin_lume/create_company.html', {'segment': 'crear_empresa', "company": company, "msg": msg, "success": success})
 
 
 @login_required(login_url="/login/login_admin/")
@@ -238,7 +238,7 @@ def edit_company(request, companys_id):
     else:
         companys_form = CrearCompanyForm(instance=companys)
 
-    return render(request, "admin_lume/edit_company.html", {"companys_form": companys_form, "msg": msg, "success": success})
+    return render(request, "admin_lume/edit_company.html", {'segment': 'ver_comunidad', "companys_form": companys_form, "msg": msg, "success": success})
 
 
 @login_required(login_url="/login/login_admin/")
@@ -249,7 +249,7 @@ def delete_company(request, companys_id):
         company.delete()
     
     companys = Empresa.objects.all()
-    return render(request, 'admin_lume/companys.html', {'companys': companys})
+    return render(request, 'admin_lume/companys.html', {'segment': 'ver_comunidad', 'companys': companys})
 
 
 
@@ -259,7 +259,7 @@ def delete_company(request, companys_id):
 @login_required(login_url="/login/login_admin/")
 def vivienda_list(request):
     viviendas = Vivienda.objects.all()
-    return render(request, 'admin_lume/viviendas.html', {'viviendas': viviendas})
+    return render(request, 'admin_lume/viviendas.html', {'segment': 'asignar_vivienda', 'viviendas': viviendas})
 
 
 @login_required(login_url="/login/login_admin/")
@@ -280,7 +280,7 @@ def crear_vivienda(request):
     else:
         living_place = CrearViviendaForm()
 
-    return render(request, 'admin_lume/create_viviendas.html', {'living_place': living_place, "msg": msg, "success": success})
+    return render(request, 'admin_lume/create_viviendas.html', {'segment': 'asignar_vivienda', 'living_place': living_place, "msg": msg, "success": success})
 
 
 @login_required(login_url="/login/login_admin/")
@@ -301,7 +301,7 @@ def edit_vivienda(request, viviendas_id):
     else:
         viviendas_form = CrearViviendaForm(instance=viviendas)
 
-    return render(request, "admin_lume/edit_vivienda.html", {"viviendas_form": viviendas_form, "msg": msg, "success": success})
+    return render(request, "admin_lume/edit_vivienda.html", {'segment': 'asignar_vivienda', "viviendas_form": viviendas_form, "msg": msg, "success": success})
 
 
 @login_required(login_url="/login/login_admin/")
@@ -312,7 +312,9 @@ def delete_vivienda(request, vivienda_id):
         vivienda.delete()
     
     viviendas = Vivienda.objects.all()
-    return render(request, 'admin_lume/viviendas.html', {'viviendas': viviendas})
+    return render(request, 'admin_lume/viviendas.html', {'segment': 'asignar_vivienda', 'viviendas': viviendas})
+
+
 
 
 
@@ -320,7 +322,8 @@ def delete_vivienda(request, vivienda_id):
 @login_required(login_url="/login/login_admin/")
 def trabajador_list(request):
     trabajadors = Trabajador.objects.all()
-    return render(request, 'admin_lume/trabajadores.html', {'trabajadors': trabajadors})
+    return render(request, 'admin_lume/trabajadores.html', {'segment': 'ver_trabajador', 'trabajadors': trabajadors})
+
 
 @login_required(login_url="/login/login_admin/")
 def crear_trabajador(request):
@@ -340,7 +343,7 @@ def crear_trabajador(request):
     else:
         worker = CrearTrabajadorForm()
 
-    return render(request, 'admin_lume/create_worker.html', {'worker': worker, "msg": msg, "success": success})
+    return render(request, 'admin_lume/create_worker.html', {'segment': 'asignar_trabajador', 'worker': worker, "msg": msg, "success": success})
 
 
 @login_required(login_url="/login/login_admin/")
@@ -361,7 +364,7 @@ def edit_trabajador(request, trabajadors_id):
     else:
         trabajadors_form = CrearTrabajadorForm(instance=trabajadors)
 
-    return render(request, "admin_lume/edit_trabajador.html", {"trabajadors_form": trabajadors_form, "msg": msg, "success": success})
+    return render(request, "admin_lume/edit_trabajador.html", {'segment': 'ver_trabajador', "trabajadors_form": trabajadors_form, "msg": msg, "success": success})
 
 
 @login_required(login_url="/login/login_admin/")
@@ -372,4 +375,4 @@ def delete_trabajador(request, trabajador_id):
         trabajador.delete()
     
     trabajadors = trabajador.objects.all()
-    return render(request, 'admin_lume/trabajadores.html', {'trabajadors': trabajadors})
+    return render(request, 'admin_lume/trabajadores.html', {'segment': 'ver_trabajador', 'trabajadors': trabajadors})
