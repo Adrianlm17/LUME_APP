@@ -27,8 +27,10 @@ urlpatterns = [
 
     # ------------------------------- ACTAS -------------------------------
     path('actas.html', home_views.actas, name='actas'),
-    path('crear_acta', home_views.crear_acta, name='crear_acta'),
+    path('<int:comunidad_seleccionada>/actas', home_views.actas, name='actas'),
+    path('<int:comunidad_seleccionada_id>/crear_acta', home_views.crear_acta, name='crear_acta'),
     path('ver_acta/<int:acta_id>/', home_views.ver_acta, name='ver_acta'),
+    path('cambiar_comunidad_acta/<int:comunidad_id>/', home_views.cambiar_comunidad_acta, name='cambiar_comunidad_acta'),
 
     # ------------------------------- CALENDAR ------------------------------
     path('calendario.html', home_views.calendario, name='calendario_actual'),

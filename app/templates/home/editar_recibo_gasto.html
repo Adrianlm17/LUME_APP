@@ -15,73 +15,50 @@
                 <form method="post">
                     {% csrf_token %}
                     <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="form-group">
-                                    <label for="titulo">Título:</label>
-                                    <input type="text" class="form-control" id="titulo" name="titulo" value="{{ recibo.titulo }}">
-                                </div>
-
-                                <br>
-
-                                <div class="form-group">
-                                    <label for="descripcion">Descripción:</label><br>
-                                    <textarea class="form-control" id="descripcion" name="descripcion" rows="5" style="resize: vertical;">{{ recibo.descripcion }}</textarea>
-                                </div>
-                                
-                                
-
-                                {% if tipo == 'gasto_personal' %}
-                                    <br>
-
-                                    <div class="form-group">
-                                        <label for="fecha">Fecha ({{ recibo.fecha}}):</label>
-                                        <input type="date" class="form-control" id="fecha" name="fecha" value="{{ recibo.fecha}}">
-                                    </div>
-
-                                    <br>
-
-                                    <div class="form-group">
-                                        <label for="cantidad">Cantidad ({{ recibo.cantidad}} €):</label>
-                                        <input type="number" class="form-control" id="cantidad" name="cantidad" value="{{ recibo.cantidad }}">
-                                    </div>
-                                {% else %}
-                                    <br>
-
-                                    <div class="form-group">
-                                        <label for="fecha_tope">Fecha ({{ recibo.fecha_tope}}):</label>
-                                        <input type="date" class="form-control" id="fecha_tope" name="fecha_tope" value="{{ recibo.fecha_tope}}">
-                                    </div>
-
-                                    <br>
-
-                                    <div class="form-group">
-                                        <label for="cantidad_total">Cantidad Total ({{ recibo.cantidad_total}} €):</label>
-                                        <input type="number" class="form-control" id="cantidad_total" name="cantidad_total" value="{{ recibo.cantidad_total }}">
-                                    </div>
-                                {% endif %}
-
-                                <br>
-
-                                <div class="form-group">
-                                    <label for="estado">Estado:</label>
-                                    <select class="form-control" id="estado" name="estado">
-                                        <option value="pendiente" {% if recibo.estado == 'pendiente' %} selected {% endif %}>Pendiente</option>
-                                        <option value="pagado" {% if recibo.estado == 'pagado' %} selected {% endif %}>Pagado</option>
-                                    </select>
-                                </div>
-
-                                <br>
-
-                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                            </div>
-                        </div>
+                        <label for="titulo">Título:</label>
+                        <input type="text" class="form-control" id="titulo" name="titulo" value="{{ recibo.titulo }}">
                     </div>
+
+                    <div class="form-group">
+                        <label for="descripcion">Descripción:</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="5" style="resize: vertical;">{{ recibo.descripcion }}</textarea>
+                    </div>
+                    
+                    {% if tipo == 'gasto_personal' %}
+                        <div class="form-group">
+                            <label for="fecha">Fecha ({{ recibo.fecha}}):</label>
+                            <input type="date" class="form-control" id="fecha" name="fecha" value="{{ recibo.fecha}}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cantidad">Cantidad ({{ recibo.cantidad}} €):</label>
+                            <input type="number" class="form-control" id="cantidad" name="cantidad" value="{{ recibo.cantidad }}">
+                        </div>
+                    {% else %}
+                        <div class="form-group">
+                            <label for="fecha_tope">Fecha ({{ recibo.fecha_tope}}):</label>
+                            <input type="date" class="form-control" id="fecha_tope" name="fecha_tope" value="{{ recibo.fecha_tope}}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cantidad_total">Cantidad Total ({{ recibo.cantidad_total}} €):</label>
+                            <input type="number" class="form-control" id="cantidad_total" name="cantidad_total" value="{{ recibo.cantidad_total }}">
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <label for="estado">Estado:</label>
+                        <select class="form-control" id="estado" name="estado">
+                            <option value="pendiente" {% if recibo.estado == 'pendiente' %} selected {% endif %}>Pendiente</option>
+                            <option value="pagado" {% if recibo.estado == 'pagado' %} selected {% endif %}>Pagado</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
 
 {% endblock %}

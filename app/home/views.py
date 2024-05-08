@@ -7,9 +7,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateDoesNotExist, loader
 from django.urls import reverse
 from app.admin_lume.forms import CrearUserProfileForm
-from app.home.forms import ActaForm, ChatForm, ExtendsChatForm, GastoForm, MotivoReciboForm, MotivoReciboFormSet, NotaForm, ReciboForm, UpdateProfileForm
+from app.home.forms import ActaForm, ChatForm, ExtendsChatForm, GastoForm, MotivoReciboForm, MotivoReciboFormSet, NotaForm, PagosUsuarioForm, ReciboForm, UpdateProfileForm
 from app.home.models import Nota, User
-from django.db.models import Q, F
+from django.db.models import Q
 from .models import Acta, Anuncio, Calendario, Chat, ChatReadBy, Comunidad, ExtendsChat, Gasto, Motivo, Nota, PagosUsuario, Recibo, Transaccion, UserProfile, Vivienda  
 
 
@@ -26,15 +26,6 @@ def home_index(request):
     chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
     num_mensajes_no_leidos = chats_no_leidos.count()
 
-    admin = False
-
-    if hasattr(request.user, 'userprofile'):
-        admin = request.user.userprofile.user_rol if request.user.userprofile.user_rol == 'lume' else False
-
-    usuario_comunidad = False
-
-    usuario_comunidad = Vivienda.objects.filter(usuario=request.user).exists()
-
     context = {
         'segment': 'index',
         'notas': notas,
@@ -42,8 +33,6 @@ def home_index(request):
         'anuncios': anuncios,
         'chats_no_leidos': chats_no_leidos,
         'num_mensajes_no_leidos': num_mensajes_no_leidos,
-        'admin': admin,
-        'usuario_comunidad': usuario_comunidad,
     }
 
     return render(request, 'home/index.html', context)
@@ -273,10 +262,24 @@ def chat_detail(request, chat_id):
 
 # ---------------------------------------------------------- ACTAS ---------------------------------------------------------- 
 @login_required(login_url="/login/login/")
-def actas(request):
+def actas(request, comunidad_seleccionada=False):
+    viviendas_usuario = Vivienda.objects.filter(usuario=request.user)
+    comunidades = [vivienda.comunidad for vivienda in viviendas_usuario]
+
+    if not comunidad_seleccionada:
+        if comunidades:
+            primera_comunidad = comunidades[0]
+            return redirect('home:actas', comunidad_seleccionada=primera_comunidad.pk)
+    else:
+        comunidad_seleccionada = Comunidad.objects.get(pk=comunidad_seleccionada) 
+
+    if request.method == 'POST':
+        request.session['comunidad_id'] = comunidad_seleccionada.pk
+        return redirect('home:actas')
+    
     viviendas = Vivienda.objects.filter(usuario=request.user)
     comunidades_usuario = [vivienda.comunidad for vivienda in viviendas]
-    actas_usuario = Acta.objects.filter(comunidad__in=comunidades_usuario)
+    actas_usuario = Acta.objects.filter(comunidad=comunidad_seleccionada)
 
     es_presidente_o_vicepresidente = any(
         vivienda.rol_comunidad in ['community_president', 'community_vicepresident'] for vivienda in viviendas
@@ -285,28 +288,39 @@ def actas(request):
     chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
     num_mensajes_no_leidos = chats_no_leidos.count()
 
-    return render(request, 'home/actas.html', {'segment': 'actas', 'actas_usuario': actas_usuario, 'es_presidente_o_vicepresidente': es_presidente_o_vicepresidente, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
+    return render(request, 'home/actas.html', {'segment': 'actas', 'comunidades': comunidades, 'comunidad_seleccionada': comunidad_seleccionada, 'actas_usuario': actas_usuario, 'es_presidente_o_vicepresidente': es_presidente_o_vicepresidente, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
+
+
+@login_required(login_url="/login/login/")
+def cambiar_comunidad_acta(request, comunidad_id):
+    if request.method == 'POST':
+        nueva_comunidad_id = request.POST.get('comunidad_id')
+        request.session['comunidad_id'] = nueva_comunidad_id
+        return redirect('home:actas', comunidad_seleccionada=nueva_comunidad_id)
+    else:
+        return redirect('home:actas')
 
 
 
 @login_required(login_url="/login/login/")
-def crear_acta(request):
+def crear_acta(request, comunidad_seleccionada_id):
+    comunidad = get_object_or_404(Comunidad, pk=comunidad_seleccionada_id)
     if request.method == 'POST':
-        acta_form = ActaForm(request.POST, user=request.user)
+        acta_form = ActaForm(request.POST)
         if acta_form.is_valid():
             acta = acta_form.save(commit=False)
             acta.firmada = request.user
             acta.fecha = timezone.now()
+            acta.comunidad = comunidad
             acta.save()
             return redirect('home:actas')
     else:
-        acta_form = ActaForm(user=request.user)
+        acta_form = ActaForm()
 
     chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
     num_mensajes_no_leidos = chats_no_leidos.count()
 
     return render(request, 'home/crear_acta.html', {'segment': 'actas', 'acta_form': acta_form, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
-
 
 @login_required(login_url="/login/login/")
 def ver_acta(request, acta_id):
@@ -504,7 +518,7 @@ def obtener_historial_dinero_comunidad(comunidad, usuario):
         })
 
     # Obtener todos los gastos personales del usuario para el año actual
-    gastos_personales = PagosUsuario.objects.filter(usuario=usuario).order_by('-id')[:2]
+    gastos_personales = PagosUsuario.objects.filter(usuario=usuario, comunidad=comunidad).order_by('-id')[:2]
     
     # Iterar sobre cada gasto personal del usuario
     for gasto_personal in gastos_personales:
@@ -870,47 +884,32 @@ def eliminar_recibo_gasto(request, comunidad_seleccionada, tipo, recibo_id):
 def editar_recibo_gasto(request, comunidad_seleccionada, tipo, recibo_id):
     comunidad = get_object_or_404(Comunidad, pk=comunidad_seleccionada)
     recibo = None
-    pagos_usuarios = None
     form = None
     
     if tipo == 'gasto':
         gasto = get_object_or_404(Gasto, pk=recibo_id, comunidad=comunidad)
-        form = GastoForm(instance=gasto)
+        form = GastoForm(request.POST or None, instance=gasto)
     elif tipo == 'recibo':
         recibo = get_object_or_404(Recibo, pk=recibo_id, comunidad=comunidad)
-        form = ReciboForm(instance=recibo)
+        form = ReciboForm(request.POST or None, instance=recibo)
     elif tipo == 'gasto_personal':
         recibo = get_object_or_404(PagosUsuario, pk=recibo_id, comunidad=comunidad)
-        form = PagosUsuario()
+        form = PagosUsuarioForm(request.POST or None, instance=recibo)
 
     if request.method == 'POST':
-        if tipo == 'gasto':
-            form = GastoForm(request.POST, instance=gasto)
-        elif tipo == 'recibo':
-            form = ReciboForm(request.POST, instance=recibo)
-        elif tipo == 'gasto_personal':
-            form = GastoForm(request.POST, instance=recibo)
-            
-        
         if form.is_valid():
             edited_recibo = form.save(commit=False)
+
+            # Guardar los cambios en el recibo o gasto
             edited_recibo.save()
 
-            # Actualizar el dinero de la comunidad si se modifica la cantidad de un recibo o gasto
-            if not edited_recibo.usuario:
-                diferencia_cantidad = edited_recibo.cantidad_previa - edited_recibo.cantidad
-                
-                if tipo == 'gasto':
-                    pagos_usuarios = PagosUsuario.objects.filter(comunidad=comunidad, titulo=gasto.titulo, descripcion=gasto.descripcion, fecha=gasto.fecha_tope)
-                    pagos_usuarios.update(cantidad=F('cantidad') + diferencia_cantidad)
-                elif tipo == 'recibo':
-                    pagos_usuarios = PagosUsuario.objects.filter(comunidad=comunidad, titulo=recibo.titulo, descripcion=recibo.descripcion, fecha=recibo.fecha_tope)
-                    pagos_usuarios.update(cantidad=F('cantidad') + diferencia_cantidad)
+            # Verificar si el estado ha cambiado a "pagado"
+            if edited_recibo.estado == 'pagado':
+                # Actualizar el dinero de la comunidad
+                if tipo == 'gasto' or tipo == 'recibo':
+                    comunidad.dinero += edited_recibo.cantidad
                 elif tipo == 'gasto_personal':
-                    pagos_usuarios = PagosUsuario.objects.filter(comunidad=comunidad, titulo=recibo.titulo, descripcion=recibo.descripcion, fecha=recibo.fecha_tope)
-                    pagos_usuarios.update(cantidad=F('cantidad') + diferencia_cantidad)
-
-                comunidad.dinero += diferencia_cantidad
+                    comunidad.dinero += edited_recibo.cantidad_total
                 comunidad.save()
 
             return redirect('home:gastos')
@@ -923,6 +922,7 @@ def editar_recibo_gasto(request, comunidad_seleccionada, tipo, recibo_id):
         'recibo': recibo,
     }
     return render(request, 'home/editar_recibo_gasto.html', context)
+
 
 
 

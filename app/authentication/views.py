@@ -82,7 +82,7 @@ def register_user(request):
                 msg = '¡El correo electrónico ya está en uso!'
             else:
                 user = form.save()
-                profile = UserProfile.objects.create(user=user)
+                profile = UserProfile.objects.create(user=user, user_rol=user_rol)  # Asignar el valor de user_rol
                 password = form.cleaned_data.get("password1")
                 user = authenticate(username=email, password=password)
                 msg = '¡Usuario creado correctamente!'

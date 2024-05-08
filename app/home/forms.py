@@ -64,18 +64,7 @@ class ExtendsChatForm(forms.ModelForm):
 class ActaForm(forms.ModelForm):
     class Meta:
         model = Acta
-        fields = ['titulo', 'comunidad', 'texto']
-
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
-        if user:
-            self.fields['comunidad'].queryset = Comunidad.objects.filter(
-                vivienda__usuario=user,
-                vivienda__rol_comunidad__in=['community_president', 'community_vicepresident']
-            )
-        else:
-            self.fields['comunidad'].queryset = Comunidad.objects.none()
+        fields = ['titulo', 'texto']
 
 
 
@@ -100,3 +89,8 @@ class ReciboForm(forms.ModelForm):
         fields = ['titulo', 'descripcion', 'fecha_tope', 'cantidad_total']
         widgets = {'fecha_tope': forms.DateInput(attrs={'type': 'date'})}
 
+
+class PagosUsuarioForm(forms.ModelForm):
+    class Meta:
+        model = PagosUsuario
+        fields = ['titulo', 'descripcion', 'fecha', 'cantidad', 'estado']

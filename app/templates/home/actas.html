@@ -6,6 +6,24 @@
 
 <!-- CAMBIAR COMUNIDAD-->
 
+{% if comunidad_seleccionada %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>{{ comunidad_seleccionada.nombre }}</h2>
+        <form method="post" action="{% url 'home:cambiar_comunidad_acta' comunidad_seleccionada.id %}">
+            {% csrf_token %}
+            <select name="comunidad_id">
+                {% for comunidad in comunidades %}
+                    <option value="{{ comunidad.id }}" {% if comunidad.id == comunidad_seleccionada.id %}selected{% endif %}>{{ comunidad.nombre }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-info">Cambiar comunidad</button>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -49,7 +67,7 @@
 {% if es_presidente_o_vicepresidente %}
 <div class="row justify-content-center">
     <div class="col-md-6 text-center">
-        <a href="{% url 'home:crear_acta' %}" class="btn btn-success btn-lg">Crear Actas</a>
+        <a href="{% url 'home:crear_acta' comunidad_seleccionada.id %}" class="btn btn-success btn-lg">Crear Actas</a>
     </div>
 </div>
 {% endif %}

@@ -26,32 +26,34 @@
               <p>Calendario</p>
             </a>
           </li>
-          {% if usuario_comunidad %}
-            <li class="nav-item {% if 'actas' in segment %} active {% endif %}">
-              <a class="nav-link" href="/home/actas.html">
-                <i class="material-icons">library_books</i>
-                <p>Actas</p>
-              </a>
-            </li>
-            <li class="nav-item {% if 'incidencias' in segment %} active {% endif %}">
-              <a class="nav-link" href="/home/incidencias.html">
+          <li class="nav-item {% if 'incidencias' in segment %} active {% endif %}">
+            <a class="nav-link" href="/home/incidencias.html">
                 <i class="material-icons">warning</i>
                 <p>Incidencias</p>
-              </a>
+            </a>
+          </li>
+          {% if request.user.userprofile.user_rol == 'community_user' or request.user.userprofile.user_rol == 'lume' %}
+            <li class="nav-item {% if 'actas' in segment %} active {% endif %}">
+                <a class="nav-link" href="/home/actas.html">
+                    <i class="material-icons">library_books</i>
+                    <p>Actas</p>
+                </a>
             </li>
+            
             <li class="nav-item {% if 'eventos' in segment %} active {% endif %}">
-              <a class="nav-link" href="/home/eventos.html">
-                <i class="material-icons">celebration</i>
-                <p>Eventos</p>
-              </a>
+                <a class="nav-link" href="/home/eventos.html">
+                    <i class="material-icons">celebration</i>
+                    <p>Eventos</p>
+                </a>
             </li>
             <li class="nav-item {% if 'gastos' in segment %} active {% endif %}">
-              <a class="nav-link" href="{% url 'home:gastos' %}">
-                <i class="material-icons">insert_chart_outline</i>
-                <p>Gastos</p>
-              </a>
+                <a class="nav-link" href="{% url 'home:gastos' %}">
+                    <i class="material-icons">insert_chart_outline</i>
+                    <p>Gastos</p>
+                </a>
             </li>
           {% endif %}
+      
           <li class="nav-item {% if 'config' in segment %} active {% endif %}">
             <a class="nav-link" href="/home/config.html">
               <i class="material-icons">settings</i>
@@ -59,10 +61,10 @@
             </a>
           </li>
 
-          {% if admin %}
+          {% if request.user.userprofile.user_rol == 'lume' %}
           <li class="nav-item {% if 'admin_lume' in segment %} active {% endif %}">
             <a class="nav-link" href="/admin_lume/index.html">
-              <i class="material-icons">settings</i>
+              <i class="material-icons">admin_panel_settings</i>
               <p>Panel Admin</p>
             </a>
           </li>
