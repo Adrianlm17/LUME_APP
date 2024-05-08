@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Acta, Chat, Comunidad, ExtendsChat, Gasto, Motivo, Nota, Recibo
+from .models import Acta, Chat, Comunidad, ExtendsChat, Gasto, Motivo, Nota, PagosUsuario, Recibo
 
 
 
@@ -99,3 +99,4 @@ class ReciboForm(forms.ModelForm):
         model = Recibo
         fields = ['titulo', 'descripcion', 'fecha_tope', 'cantidad_total']
         widgets = {'fecha_tope': forms.DateInput(attrs={'type': 'date'})}
+

@@ -1,0 +1,49 @@
+{% extends "layouts/base_app.html" %}
+{% block title %}Modificar Gastos y Recibos | CHAT | LUME{% endblock %}
+{% block content %}
+
+<div class="container">
+  <h2 class="mt-4 mb-3">Modificar Gastos y Recibos - Comunidad {{ comunidad }}</h2>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th>Tipo</th>
+          <th>Fecha</th>
+          <th>Título</th>
+          <th>Descripción</th>
+          <th>Cantidad</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in historial_completo %}
+        <tr>
+          <td>{{ item.tipo }}</td>
+          <td>{{ item.fecha }}</td>
+          <td>{{ item.titulo }}</td>
+          <td>{{ item.descripcion }}</td>
+          <td>{{ item.cantidad_total }}</td>
+          <td>{{ item.estado }}</td>
+          <td>
+            {% if item.tipo == 'Gasto' %}
+            <a href="{% url 'home:editar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='gasto' recibo_id=item.id %}" class="btn btn-primary btn-sm">Editar</a>
+            <a href="{% url 'home:eliminar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='gasto' recibo_id=item.id %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este gasto?')">Eliminar</a>
+            {% elif item.tipo == 'Gasto Personal' %}
+            <a href="{% url 'home:editar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='gasto_personal' recibo_id=item.id %}" class="btn btn-primary btn-sm">Editar</a>
+            <a href="{% url 'home:eliminar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='gasto_personal' recibo_id=item.id %}" class="btn btn-danger btn-sm"  onclick="return confirm('¿Estás seguro de que deseas eliminar este gasto personal?')">Eliminar</a>
+            {% elif item.tipo == 'Recibo' %}
+            <a href="{% url 'home:editar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='recibo' recibo_id=item.id %}" class="btn btn-primary btn-sm">Editar</a>
+            <a href="{% url 'home:eliminar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='recibo' recibo_id=item.id %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este recibo?')">Eliminar</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

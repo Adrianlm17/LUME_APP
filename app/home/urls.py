@@ -50,6 +50,9 @@ urlpatterns = [
     path('<int:recibo_id>/editar_recibo/', home_views.editar_recibo, name='editar_recibo'),
     path('historial_completo/<int:comunidad_id>/', home_views.historial_completo, name='historial_completo'),
     path('ver_historial_individual/<str:tipo>/<int:movimiento_id>/', home_views.ver_historial_individual, name='ver_historial_individual'),
+    path('<int:comunidad_seleccionada>/mostrar_modificar_gastos_recibos/', home_views.mostrar_modificar_gastos_recibos, name='mostrar_modificar_gastos_recibos'),
+    path('<int:comunidad_seleccionada>/editar_recibo_gasto/<str:tipo>/<int:recibo_id>/', home_views.editar_recibo_gasto, name='editar_recibo_gasto'),
+    path('<int:comunidad_seleccionada>/eliminar_recibo_gasto/<str:tipo>/<int:recibo_id>/', home_views.eliminar_recibo_gasto, name='eliminar_recibo_gasto'),
 
 
     # ------------------------------- EXTRA -------------------------------
