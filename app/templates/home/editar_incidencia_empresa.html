@@ -1,0 +1,74 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %} Editar Incidencia | LUME {% endblock %} 
+
+{% block content %}
+<a href="{% url 'home:ver_incidencias' %}" class="btn btn-light bg-dark"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<br>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-light bg-dark">
+                <h4 class="card-title mt-0"><i class="material-icons">edit</i> Editar Incidencia</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% if incidencia_form.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Error:</strong> Por favor, corrija los siguientes errores.
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="titulo">Título:</label><br>
+                        {{ incidencia_form.titulo }}
+                        {% if incidencia_form.titulo.errors %}
+                            <ul class="errors">
+                                {% for error in incidencia_form.titulo.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripción:</label><br>
+                        {{ incidencia_form.descripcion }}
+                        {% if incidencia_form.descripcion.errors %}
+                            <ul class="errors">
+                                {% for error in incidencia_form.descripcion.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado:</label><br>
+                        {{ incidencia_form.estado }}
+                        {% if incidencia_form.estado.errors %}
+                            <ul class="errors">
+                                {% for error in incidencia_form.estado.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="gasto">Gasto:</label><br>
+                        {{ incidencia_form.gasto }}
+                        {% if incidencia_form.gasto.errors %}
+                            <ul class="errors">
+                                {% for error in incidencia_form.gasto.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-light bg-dark">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

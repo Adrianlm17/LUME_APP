@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Acta, Anuncio, Chat, Comunidad, ExtendsChat, Gasto, Motivo, Nota, PagosUsuario, Recibo, SeguroComunidad, UserProfile, Vivienda
+from .models import Acta, Anuncio, Chat, Comunidad, Empresa, ExtendsChat, Gasto, Incidencia, Motivo, Nota, PagosUsuario, Recibo, SeguroComunidad, UserProfile, Vivienda
 
 
 
@@ -40,6 +40,12 @@ class UpdateProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']
+
+
+class UpdateIMGForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['IMG_profile']
 
 
 class NotaForm(forms.ModelForm):
@@ -163,4 +169,56 @@ class SeguroComunidadForm(forms.ModelForm):
             'fecha_vencimiento': forms.DateInput(attrs={'type': 'date'}),
         }
 
-        
+
+class IncidenciaForm(forms.ModelForm):
+    class Meta:
+        model = Incidencia
+        fields = ['titulo', 'descripcion', 'archivo', 'prioridad']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['descripcion'].widget = forms.Textarea(attrs={'rows': 5})
+
+
+class IncidenciaAdminForm(forms.ModelForm):
+    class Meta:
+        model = Incidencia
+        fields = ['titulo', 'descripcion', 'archivo', 'prioridad', 'estado', 'empresa', 'gasto', 'valoracion', 'fecha_cierre']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['descripcion'].widget = forms.Textarea(attrs={'rows': 5})
+
+
+class IncidenciaEmpresaForm(forms.ModelForm):
+    ESTADO_CHOICES = [
+        ('Aceptada', 'Aceptada'),
+        ('Cancelada', 'Cancelada'),
+        ('Trabajando', 'Trabajando'),
+        ('Terminada', 'Terminada'),
+    ]
+
+    estado = forms.ChoiceField(
+        choices=ESTADO_CHOICES,
+        required=False,
+        )
+    
+    class Meta:
+        model = Incidencia
+        fields = ['titulo', 'descripcion', 'estado', 'gasto', ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['descripcion'].widget = forms.Textarea(attrs={'rows': 5})
+
+
+class EditarEmpresaForm(forms.ModelForm):
+    class Meta:
+        model = Empresa
+        fields = ['nombre', 'descripcion', 'telefono', 'correo', 'pais', 'provincia', 'municipio', 'direccion']
+
+class UpdateIMGEmpresaForm(forms.ModelForm):
+    class Meta:
+        model = Empresa
+        fields = ['IMG_profile']
+

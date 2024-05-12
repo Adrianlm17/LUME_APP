@@ -1,5 +1,7 @@
 from django.urls import path, re_path
 from . import views as home_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 app_name = 'home'
@@ -22,12 +24,23 @@ urlpatterns = [
     path('open_chat', home_views.open_chat, name='open_chat'),
     path('chat/<int:chat_id>/', home_views.chat_detail, name='chat_detail'),
 
+    # ------------------------------- INCIDENCIAS -------------------------------
+    path('ver_incidencias', home_views.ver_incidencias, name='ver_incidencias'),
+    path('<int:comunidad_seleccionada>/ver_incidencias', home_views.ver_incidencias, name='ver_incidencias'),
+    path('cambiar_comunidad_incidencias/<int:comunidad_id>/', home_views.cambiar_comunidad_incidencias, name='cambiar_comunidad_incidencias'),
+    path('<int:comunidad_seleccionada>/crear_incidencia', home_views.crear_incidencia, name='crear_incidencia'),
+    path('<int:incidencia_id>/editar_incidencia', home_views.editar_incidencia, name='editar_incidencia'),
+    path('<int:incidencia_id>/editar_incidencia_empresa', home_views.editar_incidencia_empresa, name='editar_incidencia_empresa'),
+    path('<int:incidencia_id>/ver_incidencia', home_views.ver_incidencia, name='ver_incidencia'),
+    path('ver_empresas', home_views.ver_empresas, name='ver_empresas'),
+    path('detalle_empresa/<int:empresa_id>', home_views.detalle_empresa, name='detalle_empresa'),
+
     # ------------------------------- ACTAS -------------------------------
-    path('actas.html', home_views.actas, name='actas'),
+    path('actas', home_views.actas, name='actas'),
     path('<int:comunidad_seleccionada>/actas', home_views.actas, name='actas'),
+    path('cambiar_comunidad_actas/<int:comunidad_id>/', home_views.cambiar_comunidad_actas, name='cambiar_comunidad_actas'),
     path('<int:comunidad_seleccionada_id>/crear_acta', home_views.crear_acta, name='crear_acta'),
     path('ver_acta/<int:acta_id>/', home_views.ver_acta, name='ver_acta'),
-    path('cambiar_comunidad_acta/<int:comunidad_id>/', home_views.cambiar_comunidad_acta, name='cambiar_comunidad_acta'),
 
     # ------------------------------- CALENDAR ------------------------------
     path('calendario.html', home_views.calendario, name='calendario_actual'),
@@ -42,7 +55,7 @@ urlpatterns = [
     # ------------------------------- GASTOS ------------------------------
     path('gastos', home_views.gastos, name='gastos'),
     path('<int:comunidad_seleccionada>/gastos', home_views.gastos, name='gastos'),
-    path('cambiar_comunidad/<int:comunidad_id>/', home_views.cambiar_comunidad, name='cambiar_comunidad'),
+    path('cambiar_comunidad_gastos/<int:comunidad_id>/', home_views.cambiar_comunidad_gastos, name='cambiar_comunidad_gastos'),
     path('<int:comunidad_seleccionada>/crear_gasto/', home_views.crear_gasto, name='crear_gasto'),
     path('<int:comunidad_seleccionada>/crear_recibo/', home_views.crear_recibo, name='crear_recibo'),
     path('<int:comunidad_seleccionada>/crear_motivo/', home_views.crear_motivo, name='crear_motivo'),
@@ -64,6 +77,10 @@ urlpatterns = [
     path('<int:comunidad_id>/<int:viviendas_id>/eliminar_vivienda', home_views.eliminar_vivienda, name='eliminar_vivienda'),
     path('<int:comunidad_id>/<int:viviendas_id>/editar_vivienda_comunidad', home_views.editar_vivienda_comunidad, name='editar_vivienda_comunidad'),
 
+    # ------------------------------- EMPRESA CONFIG -------------------------------
+    path('config_empresa', home_views.edit_empresa_profile, name='config_empresa'),
+
     # ------------------------------- EXTRA -------------------------------
     re_path(r'^.*\.*', home_views.pages, name='pages'),
-]
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

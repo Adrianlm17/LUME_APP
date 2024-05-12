@@ -12,7 +12,7 @@
   
   <h2>{{ comunidad_seleccionada.nombre }}</h2>
 
-  <form method="post" action="{% url 'home:cambiar_comunidad_acta' comunidad_seleccionada.id %}">
+  <form method="post" action="{% url 'home:cambiar_comunidad_gastos' comunidad_seleccionada.id %}">
       {% csrf_token %}
       <select name="comunidad_id">
           {% for comunidad in comunidades %}

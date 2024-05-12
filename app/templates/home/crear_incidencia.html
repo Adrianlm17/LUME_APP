@@ -1,0 +1,56 @@
+<!-- crear_incidencia.html -->
+
+{% extends "layouts/base_app.html" %}
+
+{% block title %} Crear Incidencia | LUME {% endblock %} 
+
+{% block content %}
+<a href="{% url 'home:ver_incidencias' %}" class="btn btn-light bg-dark"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<br>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-light bg-dark">
+                <h4 class="card-title mt-0"><i class="material-icons">add</i> Crear Incidencia</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="titulo">Título</label>
+                        {{ incidencia_form.titulo }}
+                        {% if incidencia_form.errors.titulo %}
+                            <span class="text-danger">{{ incidencia_form.errors.titulo }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripción</label><br>
+                        {{ incidencia_form.descripcion }}
+                        {% if incidencia_form.errors.descripcion %}
+                            <span class="text-danger">{{ incidencia_form.errors.descripcion }}</span>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="archivo">Archivo adjunto</label><br>
+                        {{ incidencia_form.archivo }}
+                        {% if incidencia_form.errors.archivo %}
+                            <span class="text-danger">{{ incidencia_form.errors.archivo }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="prioridad">Prioridad</label>
+                        <select class="form-control" id="prioridad" name="prioridad">
+                            <option value="1">Baja</option>
+                            <option value="2">Media</option>
+                            <option value="3">Alta</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-light bg-dark">Crear Incidencia</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,32 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} Ver Empresas | LUME {% endblock %} 
+
+{% block content %}
+<a href="{% url 'home:ver_incidencias' %}" class="btn btn-light bg-dark"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<div class="container mt-4">
+    <div class="row">
+        {% for empresa in empresas %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{% static 'app_files/' %}{{ empresa.IMG_profile }}" class="card-img-top" alt="IMG Empresa">
+                <div class="card-body">
+                    <h5 class="card-title">{{ empresa.nombre }}</h5>
+                    <p class="card-text">{{ empresa.descripcion }}</p>
+                    <p class="card-text">Valoración: {{ empresa.valoracion_media }}</p>
+                    <p class="card-text">Contacto: {{ empresa.telefono }} | {{ empresa.correo }}</p>
+                    <a href="{% url 'home:detalle_empresa' empresa.id %}" class="btn btn-dark btn-block">Ver Empresa</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-md-12">
+            <p class="text-center">No hay empresas disponibles.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}

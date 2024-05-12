@@ -27,14 +27,14 @@
             </a>
           </li>
           <li class="nav-item {% if 'incidencias' in segment %} active {% endif %}">
-            <a class="nav-link" href="/home/incidencias.html">
+            <a class="nav-link" href="{% url 'home:ver_incidencias' %}">
                 <i class="material-icons">warning</i>
                 <p>Incidencias</p>
             </a>
           </li>
           {% if request.user.userprofile.user_rol == 'community_user' or request.user.userprofile.user_rol == 'lume' or request.user.userprofile.user_rol == 'community_admin' %}
             <li class="nav-item {% if 'actas' in segment %} active {% endif %}">
-                <a class="nav-link" href="/home/actas.html">
+                <a class="nav-link" href="{% url 'home:actas' %}">
                     <i class="material-icons">library_books</i>
                     <p>Actas</p>
                 </a>
@@ -66,6 +66,15 @@
               <a class="nav-link" href="{% url 'home:comunidades_configuracion' %}">
                 <i class="material-icons">home_work</i>
                 <p>Configuración Comunidad</p>
+              </a>
+            </li>
+          {% endif %}
+
+          {% if request.user.userprofile.user_rol == 'company_boss' or request.user.userprofile.user_rol == 'lume' %}
+            <li class="nav-item {% if 'empresa' in segment %} active {% endif %}">
+              <a class="nav-link" href="{% url 'home:config_empresa' %}">
+                <i class="material-icons">villa</i>
+                <p>Configuración Empresa</p>
               </a>
             </li>
           {% endif %}

@@ -1,5 +1,6 @@
 <!-- chat.html -->
 {% extends "layouts/base_app.html" %}
+{% load static %}
 
 {% block title %} CHAT | LUME {% endblock %} 
 
@@ -15,6 +16,7 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
+                                <th>Imagen</th>
                                 <th>Usuario</th>
                                 <th>Titulo</th>
                                 <th>Último mensaje</th>
@@ -26,8 +28,10 @@
                             {% for chat in user_chats %}
                             <tr>
                                 {% if chat.user == request.user %}
+                                    <td><img src="{% static 'app_files/' %}{{ chat.mensaje_user.userprofile.IMG_profile }}" alt="Profile Image" class="rounded-circle" style="width: 32px; height: 32px;"></td>
                                     <td>{{ chat.mensaje_user.email }}</td>
                                 {% else %}
+                                    <td><img src="{% static 'app_files/' %}{{ chat.user.userprofile.IMG_profile }}" alt="Profile Image" class="rounded-circle" style="width: 32px; height: 32px;"></td>
                                     <td>{{ chat.user.email }}</td>
                                 {% endif %}
                                 <td>{{ chat.titulo }}</td>

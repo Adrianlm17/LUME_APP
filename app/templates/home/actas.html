@@ -3,23 +3,21 @@
 {% block title %} ACTAS | LUME {% endblock %} 
 
 {% block content %}
-{% if comunidad_seleccionada %}
-<div class="row">
-    <div class="col-md-12">
-        <h2>{{ comunidad_seleccionada.nombre }}</h2>
-        <form method="post" action="{% url 'home:cambiar_comunidad_acta' comunidad_seleccionada.id %}">
-            {% csrf_token %}
-            <select name="comunidad_id">
-                {% for comunidad in comunidades %}
-                    <option value="{{ comunidad.id }}" {% if comunidad.id == comunidad_seleccionada.id %}selected{% endif %}>{{ comunidad.nombre }}</option>
-                {% endfor %}
-            </select>
-            <button type="submit" class="btn btn-info">Cambiar comunidad</button>
-        </form>
-    </div>
-</div>
-{% endif %}
 
+{% if comunidades|length > 1 %}
+  <h2>{{ comunidad_seleccionada.nombre }}</h2>
+
+  <form method="post" action="{% url 'home:cambiar_comunidad_actas' comunidad_seleccionada.id %}">
+      {% csrf_token %}
+      <select name="comunidad_id">
+          {% for comunidad in comunidades %}
+              <option value="{{ comunidad.id }}" {% if comunidad.id == comunidad_seleccionada.id %}selected{% endif %}>{{ comunidad.nombre }}</option>
+          {% endfor %}
+      </select>
+      
+      <button type="submit" class="btn btn-info">Cambiar comunidad</button>
+  </form>
+  {% endif %}
 
 <div class="row">
     <div class="col-md-12">

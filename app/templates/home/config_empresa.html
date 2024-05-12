@@ -1,0 +1,119 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} Configuración de Empresa {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-8">
+      <div class="card">
+          <div class="card-header card-header-primary">
+              <h4 class="card-title">Configuración de Empresa</h4>
+          </div>
+          <div class="card-body">
+              <form method="post">
+                  {% csrf_token %}
+                  {% if msg %}
+                  <div class="alert alert-danger" role="alert">
+                      {{ msg }}
+                  </div>
+                  {% endif %}
+
+                  <div class="row">
+                      <div class="col-sm-6">
+                          <div class="form-group">
+                              <label for="nombre">Nombre</label>
+                              {{ form_empresa.nombre }}
+                          </div>
+                          <div class="form-group">
+                              <label for="descripcion">Descripción</label><br>
+                              {{ form_empresa.descripcion }}
+                          </div>
+                          <div class="form-group">
+                              <label for="telefono">Teléfono</label>
+                              {{ form_empresa.telefono }}
+                          </div>
+                          <div class="form-group">
+                              <label for="correo">Correo Electrónico</label>
+                              {{ form_empresa.correo }}
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="form-group">
+                              <label for="pais">País</label>
+                              {{ form_empresa.pais }}
+                          </div>
+                          <div class="form-group">
+                              <label for="provincia">Provincia</label>
+                              {{ form_empresa.provincia }}
+                          </div>
+                          <div class="form-group">
+                              <label for="municipio">Municipio</label>
+                              {{ form_empresa.municipio }}
+                          </div>
+                          <div class="form-group">
+                              <label for="direccion">Dirección</label>
+                              {{ form_empresa.direccion }}
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="row">
+                      <div class="col-sm-12 text-center">
+                          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                      </div>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card card-profile">
+      <div class="card-avatar">
+        <!-- Mostrar la imagen actual del perfil -->
+        <img class="img" src="{% static 'app_files/' %}{{ form_imagen.instance.IMG_profile }}" />
+      </div>
+      <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form_imagen.as_p }}
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header card-header-primary">
+        <h3>Trabajadores de la Empresa</h3>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              {% csrf_token %}
+              {% for trabajador in trabajadores %}
+                <tr>
+                  <th>{{ trabajador.usuario.email }}</th>
+                  <th>
+                    <form method="post" class="eliminar-form">
+                      <input type="hidden" name="trabajador_id" value="{{ trabajador.pk }}">
+                      <button type="submit" class="eliminar-btn">Eliminar</button></th>
+                    </form>
+                  </th>
+                </tr>
+              {% endfor %}
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

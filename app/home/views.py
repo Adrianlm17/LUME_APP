@@ -1,6 +1,9 @@
 import calendar
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
+from decimal import Decimal
 import locale
+from django.db.models import Avg
+import mimetypes
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -8,10 +11,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateDoesNotExist, loader
 from django.urls import reverse
 from app.admin_lume.forms import CrearUserProfileForm
-from app.home.forms import ActaForm, AsignarUsuarioComunidadForm, ChatForm, CrearAnuncioForm, EditarComunidadForm, ExtendsChatForm, GastoForm, MotivoReciboForm, MotivoReciboFormSet, NotaForm, PagosUsuarioForm, ReciboForm, SeguroComunidadForm, UpdateProfileForm
+from app.home.forms import ActaForm, AsignarUsuarioComunidadForm, ChatForm, CrearAnuncioForm, EditarComunidadForm, EditarEmpresaForm, ExtendsChatForm, GastoForm, IncidenciaAdminForm, IncidenciaEmpresaForm, IncidenciaForm, MotivoReciboForm, MotivoReciboFormSet, NotaForm, PagosUsuarioForm, ReciboForm, SeguroComunidadForm, UpdateIMGEmpresaForm, UpdateIMGForm, UpdateProfileForm
 from app.home.models import Nota, User
 from django.db.models import Q
-from .models import Acta, Anuncio, Calendario, Chat, ChatReadBy, Comunidad, ExtendsChat, Gasto, Motivo, Nota, PagosUsuario, Recibo, SeguroComunidad, Transaccion, UserProfile, Vivienda  
+from .models import Acta, Anuncio, Calendario, Chat, ChatReadBy, Comunidad, Empresa, ExtendsChat, Gasto, Incidencia, Motivo, Nota, PagosUsuario, Recibo, SeguroComunidad, Trabajador, Transaccion, UserProfile, Vivienda  
 
 
 
@@ -264,7 +267,191 @@ def chat_detail(request, chat_id):
     return render(request, 'home/chat_detail.html', {'segment': 'chat', 'chat': chat, 'messages': messages, 'form': form, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos, 'title_form': title_form})
 
 
+
+
+
+# ---------------------------------------------------------- Incidencias ---------------------------------------------------------- 
+@login_required(login_url="/login/login/")
+def ver_incidencias(request, comunidad_seleccionada=False):
+    user_rol = request.user.userprofile.user_rol
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+
+    # Obtener las comunidades o incidencias según el rol del usuario
+    if user_rol in ['community_admin', 'community_user', 'lume']:
+        viviendas_usuario = Vivienda.objects.filter(usuario=request.user)
+        comunidades = [vivienda.comunidad for vivienda in viviendas_usuario]
     
+        if not comunidad_seleccionada:
+            if comunidades:
+                primera_comunidad = comunidades[0]
+                return redirect('home:ver_incidencias', comunidad_seleccionada=primera_comunidad.pk)
+        
+        else:
+            comunidad_seleccionada = Comunidad.objects.get(pk=comunidad_seleccionada)
+    
+        incidencias = Incidencia.objects.filter(comunidad=comunidad_seleccionada).order_by('-fecha_apertura')
+        
+        
+        return render(request, 'home/incidencias.html', {'segment': 'incidencias', 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos': num_mensajes_no_leidos, 'incidencias': incidencias, 'comunidades': comunidades, 'comunidad_seleccionada': comunidad_seleccionada})
+
+    else:
+        user_trabajador = Trabajador.objects.get(usuario=request.user)
+        # Si el usuario es de otro rol, mostrar todas las incidencias asociadas a su empresa
+        incidencias = Incidencia.objects.filter(empresa=user_trabajador.empresa).order_by('-fecha_apertura')
+        return render(request, 'home/incidencias.html', {'segment': 'incidencias', 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos': num_mensajes_no_leidos, 'incidencias': incidencias})
+
+
+@login_required(login_url="/login/login/")
+def cambiar_comunidad_incidencias(request, comunidad_id):
+    if request.method == 'POST':
+        nueva_comunidad_id = request.POST.get('comunidad_id')
+        request.session['comunidad_id'] = nueva_comunidad_id
+        return redirect('home:ver_incidencias', comunidad_seleccionada=nueva_comunidad_id)
+    else:
+        return redirect(reverse('home:ver_incidencias'))
+
+    
+@login_required(login_url="/login/login/")
+def crear_incidencia(request, comunidad_seleccionada):
+    comunidad = get_object_or_404(Comunidad, pk=comunidad_seleccionada)
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+
+    if request.method == 'POST':
+        incidencia_form = IncidenciaForm(request.POST, request.FILES)
+        if incidencia_form.is_valid():
+            incidencia = incidencia_form.save(commit=False)
+            incidencia.usuario = request.user
+            incidencia.comunidad = comunidad
+            incidencia.save()
+            return redirect('home:ver_incidencias', comunidad_seleccionada=comunidad_seleccionada)
+    else:
+        incidencia_form = IncidenciaForm()
+
+    return render(request, 'home/crear_incidencia.html', {'segment': 'incidencias', 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos': num_mensajes_no_leidos, 'incidencia_form': incidencia_form})
+
+
+@login_required(login_url="/login/login/")
+def editar_incidencia(request, incidencia_id):
+    # Obtener la incidencia que se va a editar
+    incidencia = get_object_or_404(Incidencia, pk=incidencia_id)
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+    
+    
+    if request.method == 'POST':
+        # Crear un formulario de incidencia con los datos recibidos y la instancia de la incidencia actual
+        incidencia_form = IncidenciaAdminForm(request.POST, request.FILES, instance=incidencia)
+        
+        if incidencia_form.is_valid():
+            # Guardar los cambios en la incidencia en la base de datos
+            incidencia = incidencia_form.save()
+
+            # Si el estado es "Finalizada", calcular la valoración media de la empresa
+            if incidencia.estado == 'Finalizada':
+                empresa = incidencia.empresa
+                # Obtener la valoración media actual de la empresa
+                valoracion_media_actual = empresa.valoracion_media
+                # Calcular la valoración media de la empresa
+                valoracion_media_nueva = Incidencia.objects.filter(empresa=empresa, estado='Finalizada').aggregate(avg_valoracion=Avg('valoracion'))['avg_valoracion']
+                # Si hay una valoración media actual, sumar la nueva valoración media y la actual y dividir entre dos
+                if valoracion_media_actual is not None:
+                    valoracion_media_nueva = (valoracion_media_nueva + valoracion_media_actual) / 2
+                # Convertir el valoración_media en un Decimal válido
+                if valoracion_media_nueva is not None:
+                    valoracion_media_decimal = Decimal(str(valoracion_media_nueva))
+                    empresa.valoracion_media = valoracion_media_decimal
+                    empresa.save()
+                
+                incidencia.fecha_cierre = date.today()
+                incidencia.save()
+            
+            # Redirigir al usuario a la página de ver incidencias
+            return redirect('home:ver_incidencias')
+    else:
+        # Crear un formulario con los datos actuales de la incidencia para editar
+        incidencia_form = IncidenciaAdminForm(instance=incidencia)
+    
+    # Renderizar la plantilla con el formulario de edición de incidencia
+    return render(request, 'home/editar_incidencia.html', {'segment': 'incidencias', 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos': num_mensajes_no_leidos, 'incidencia_form': incidencia_form})
+
+
+@login_required(login_url="/login/login/")
+def editar_incidencia_empresa(request, incidencia_id):
+    # Obtener la incidencia que se va a editar
+    incidencia = get_object_or_404(Incidencia, pk=incidencia_id)
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+    
+    if request.method == 'POST':
+        # Crear un formulario de incidencia con los datos recibidos y la instancia de la incidencia actual
+        incidencia_form = IncidenciaEmpresaForm(request.POST, request.FILES, instance=incidencia)
+        
+        if incidencia_form.is_valid():
+            # Guardar los cambios en la incidencia en la base de datos
+            incidencia = incidencia_form.save(commit=False)
+            # No permitir la edición de empresa, valoración y prioridad
+            incidencia.empresa = incidencia.empresa
+            incidencia.valoracion = incidencia.valoracion
+            incidencia.prioridad = incidencia.prioridad
+            incidencia.save()
+            # Redirigir al usuario a la página de ver incidencias
+            return redirect('home:ver_incidencias')
+    else:
+        # Si la solicitud no es POST, crear el formulario con los datos actuales de la incidencia para editar
+        incidencia_form = IncidenciaEmpresaForm(instance=incidencia)
+    
+    # Renderizar la plantilla con el formulario de edición de incidencia
+    return render(request, 'home/editar_incidencia_empresa.html', {'segment': 'incidencias', 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos': num_mensajes_no_leidos, 'incidencia_form': incidencia_form})
+
+
+
+@login_required(login_url="/login/login/")
+def ver_incidencia(request, incidencia_id):
+    # Obtener la incidencia específica por su ID
+    incidencia = get_object_or_404(Incidencia, pk=incidencia_id)
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+    
+    
+    # Verificar si hay un archivo adjunto
+    if incidencia.archivo and request.GET.get('download') == 'true':
+        # Abrir el archivo en modo binario
+        with open(incidencia.archivo.path, 'rb') as file:
+            contenido = file.read()
+
+        # Obtener el tipo MIME del archivo
+        tipo_contenido, _ = mimetypes.guess_type(incidencia.archivo.path)
+
+        # Configurar la respuesta HTTP
+        response = HttpResponse(contenido, content_type=tipo_contenido)
+        response['Content-Disposition'] = f'attachment; filename="{incidencia.archivo.name}"'
+
+        # Devolver la respuesta
+        return response
+    else:
+        # Si no hay archivo o no se solicita la descarga, simplemente renderiza la plantilla con los detalles de la incidencia
+        return render(request, 'home/ver_incidencia.html', {'segment': 'incidencias', 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos': num_mensajes_no_leidos, 'incidencia': incidencia})
+
+
+@login_required(login_url="/login/login/")
+def ver_empresas(request):
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+    empresas = Empresa.objects.all()
+    return render(request, 'home/ver_empresas.html', {'segment': 'incidencias', 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos': num_mensajes_no_leidos, 'empresas': empresas})
+
+
+def detalle_empresa(request, empresa_id):
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+    
+    empresa = get_object_or_404(Empresa, pk=empresa_id)
+    incidencias = Incidencia.objects.filter(empresa=empresa)
+    return render(request, 'home/detalle_empresa.html', {'segment': 'incidencias', 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos': num_mensajes_no_leidos, 'empresa': empresa, 'incidencias': incidencias})
+
+
 
 
 
@@ -273,24 +460,22 @@ def chat_detail(request, chat_id):
 def actas(request, comunidad_seleccionada=False):
     viviendas_usuario = Vivienda.objects.filter(usuario=request.user)
     comunidades = [vivienda.comunidad for vivienda in viviendas_usuario]
-
+    
     if not comunidad_seleccionada:
         if comunidades:
             primera_comunidad = comunidades[0]
             return redirect('home:actas', comunidad_seleccionada=primera_comunidad.pk)
+        else:
+            # Si no hay comunidades disponibles, puedes manejar este caso aquí
+            # Por ejemplo, renderizar un mensaje de error o redirigir a otra vista.
+            pass
     else:
-        comunidad_seleccionada = Comunidad.objects.get(pk=comunidad_seleccionada) 
-
-    if request.method == 'POST':
-        request.session['comunidad_id'] = comunidad_seleccionada.pk
-        return redirect('home:actas')
+        comunidad_seleccionada = Comunidad.objects.get(pk=comunidad_seleccionada)
     
-    viviendas = Vivienda.objects.filter(usuario=request.user)
-    comunidades_usuario = [vivienda.comunidad for vivienda in viviendas]
     actas_usuario = Acta.objects.filter(comunidad=comunidad_seleccionada)
 
     es_presidente_o_vicepresidente = any(
-        vivienda.rol_comunidad in ['community_president', 'community_vicepresident'] for vivienda in viviendas
+        vivienda.rol_comunidad in ['community_president', 'community_vicepresident'] for vivienda in viviendas_usuario
     )
 
     chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
@@ -300,14 +485,13 @@ def actas(request, comunidad_seleccionada=False):
 
 
 @login_required(login_url="/login/login/")
-def cambiar_comunidad_acta(request, comunidad_id):
+def cambiar_comunidad_actas(request, comunidad_id):
     if request.method == 'POST':
         nueva_comunidad_id = request.POST.get('comunidad_id')
         request.session['comunidad_id'] = nueva_comunidad_id
         return redirect('home:actas', comunidad_seleccionada=nueva_comunidad_id)
     else:
-        return redirect('home:actas')
-
+        return redirect(reverse('home:actas'))
 
 
 @login_required(login_url="/login/login/")
@@ -642,7 +826,7 @@ def ver_historial_individual(request, tipo, movimiento_id):
 
 
 @login_required(login_url="/login/login/")
-def cambiar_comunidad(request, comunidad_id):
+def cambiar_comunidad_gastos(request, comunidad_id):
     if request.method == 'POST':
         nueva_comunidad_id = request.POST.get('comunidad_id')
         request.session['comunidad_id'] = nueva_comunidad_id
@@ -1029,6 +1213,7 @@ def edit_profile(request):
     profile_instance = user_instance.userprofile
 
     if request.method == "POST":
+        # Manejar el formulario de perfil
         user_form = UpdateProfileForm(request.POST, instance=user_instance)
         profile_form = CrearUserProfileForm(request.POST, instance=profile_instance)
         
@@ -1036,18 +1221,29 @@ def edit_profile(request):
             user_form.save()
             profile_form.save()
             success = True
-            
         else:
             msg = '¡Formulario no válido!'
     else:
         user_form = UpdateProfileForm(instance=user_instance)
         profile_form = CrearUserProfileForm(instance=profile_instance)
     
+    # Manejar la actualización de la imagen de perfil
+    if request.method == "POST" and 'profile_img_submit' in request.POST:
+        profile_IMG = UpdateIMGForm(request.POST, request.FILES, instance=profile_instance)
+        
+        if profile_IMG.is_valid():
+            profile_instance.IMG_profile = profile_IMG.cleaned_data['IMG_profile']
+            profile_instance.save()
+            return redirect('home:config')
+        else:
+            msg = '¡Formulario de imagen no válido!'
+    else:
+        profile_IMG = UpdateIMGForm()
+
     chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
     num_mensajes_no_leidos = chats_no_leidos.count()
 
-    return render(request, "home/config.html", {'segment': 'config', "user_form": user_form, "profile_form" : profile_form, "msg": msg, "success": success, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
-
+    return render(request, "home/config.html", {'segment': 'config', "user_form": user_form, "profile_form" : profile_form, "profile_IMG": profile_IMG, "msg": msg, "success": success, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
 
 
 
@@ -1199,3 +1395,42 @@ def editar_vivienda_comunidad(request, comunidad_id, viviendas_id):
 
     return render(request, "home/editar_vivienda.html", {'segment': 'communidad', "chats_no_leidos": chats_no_leidos, "num_mensajes_no_leidos": num_mensajes_no_leidos, "comunidad_id": comunidad_id, "viviendas_form": viviendas_form, "msg": msg, "success": success})
 
+
+
+
+
+# ---------------------------------------------------------- EDITAR EMPRESA ---------------------------------------------------------- 
+@login_required(login_url="/login/login/")
+def edit_empresa_profile(request):
+    # Obtener la empresa seleccionada para la cual el usuario es trabajador
+    empresa = Empresa.objects.filter(trabajador__usuario=request.user).first()
+
+    if request.method == 'POST':
+        # Procesar el formulario para editar los campos de la empresa
+        form_empresa = EditarEmpresaForm(request.POST, instance=empresa)
+        if form_empresa.is_valid():
+            form_empresa.save()
+            # Redirigir a alguna página de confirmación o éxito
+            return redirect('home/config_empresa')
+        
+        # Procesar el formulario para actualizar la imagen de perfil de la empresa
+        form_imagen = UpdateIMGEmpresaForm(request.POST, request.FILES, instance=empresa)
+        if form_imagen.is_valid():
+            form_imagen.save()
+            # Redirigir a alguna página de confirmación o éxito
+            return redirect('home/config_empresa')
+
+        # Procesar el formulario para eliminar trabajador
+        if 'trabajador_id' in request.POST:
+            trabajador_id = request.POST.get('trabajador_id')
+            trabajador = Trabajador.objects.get(pk=trabajador_id)
+            trabajador.delete()
+            return redirect('home/config_empresa')
+    else:
+        form_empresa = EditarEmpresaForm(instance=empresa)
+        form_imagen = UpdateIMGEmpresaForm(instance=empresa)
+
+    # Obtener todos los trabajadores de la empresa
+    trabajadores = Trabajador.objects.filter(empresa=empresa)
+
+    return render(request, 'home/config_empresa.html', {'segment': 'empresa', 'form_empresa': form_empresa, 'form_imagen': form_imagen, 'empresa': empresa, 'trabajadores': trabajadores})
