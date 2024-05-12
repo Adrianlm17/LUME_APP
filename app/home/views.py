@@ -1,5 +1,6 @@
 import calendar
 from datetime import datetime, timedelta
+import locale
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -7,10 +8,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateDoesNotExist, loader
 from django.urls import reverse
 from app.admin_lume.forms import CrearUserProfileForm
-from app.home.forms import ActaForm, ChatForm, ExtendsChatForm, GastoForm, MotivoReciboForm, MotivoReciboFormSet, NotaForm, PagosUsuarioForm, ReciboForm, UpdateProfileForm
+from app.home.forms import ActaForm, AsignarUsuarioComunidadForm, ChatForm, CrearAnuncioForm, EditarComunidadForm, ExtendsChatForm, GastoForm, MotivoReciboForm, MotivoReciboFormSet, NotaForm, PagosUsuarioForm, ReciboForm, SeguroComunidadForm, UpdateProfileForm
 from app.home.models import Nota, User
 from django.db.models import Q
-from .models import Acta, Anuncio, Calendario, Chat, ChatReadBy, Comunidad, ExtendsChat, Gasto, Motivo, Nota, PagosUsuario, Recibo, Transaccion, UserProfile, Vivienda  
+from .models import Acta, Anuncio, Calendario, Chat, ChatReadBy, Comunidad, ExtendsChat, Gasto, Motivo, Nota, PagosUsuario, Recibo, SeguroComunidad, Transaccion, UserProfile, Vivienda  
 
 
 
@@ -22,7 +23,7 @@ def home_index(request):
     notas = Nota.objects.filter(usuario=request.user)
     viviendas_usuario = Vivienda.objects.filter(usuario=request.user)
     comunidades_usuario = [vivienda.comunidad for vivienda in viviendas_usuario]
-    anuncios = Anuncio.objects.filter(comunidad__in=comunidades_usuario)
+    anuncios = Anuncio.objects.filter(comunidad__in=comunidades_usuario, fecha_anuncio__range=[hoy, fecha_limite])
     chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
     num_mensajes_no_leidos = chats_no_leidos.count()
 
@@ -41,6 +42,7 @@ def home_index(request):
 
 
 
+
 @login_required(login_url="/login/login/")
 def content(request):
     notas = Nota.objects.filter(usuario=request.user)
@@ -49,7 +51,7 @@ def content(request):
     proximos_eventos = Calendario.objects.filter(usuario=request.user, fecha__range=[hoy, fecha_limite]).order_by('fecha')
     viviendas_usuario = Vivienda.objects.filter(usuario=request.user)
     comunidades_usuario = [vivienda.comunidad for vivienda in viviendas_usuario]
-    anuncios = Anuncio.objects.filter(comunidad__in=comunidades_usuario)
+    anuncios = Anuncio.objects.filter(comunidad__in=comunidades_usuario, fecha_anuncio__range=[hoy, fecha_limite])
     chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
     num_mensajes_no_leidos = chats_no_leidos.count()
 
@@ -60,6 +62,7 @@ def content(request):
 def detalles_anuncio(request, anuncio_id):
     anuncio = get_object_or_404(Anuncio, id=anuncio_id)
     context = {
+        'segment': 'index',
         'anuncio': anuncio,
     }
     return render(request, 'home/detalles_anuncio.html', context)
@@ -98,6 +101,8 @@ def pages(request):
 def nota(request):
     msg = None
     success = False
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
 
     if request.method == 'POST':
         nota_form = NotaForm(request.POST)
@@ -112,13 +117,15 @@ def nota(request):
     else:
         nota_form = NotaForm()
 
-    return render(request, 'home/notas.html', {'segment': 'index', 'nota_form': nota_form, "msg": msg, "success": success})
+    return render(request, 'home/notas.html', {'segment': 'index', 'nota_form': nota_form, "msg": msg, "success": success, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
 
 
-def edit_nota(request, nota_id):
+def ver_notas(request, nota_id):
     msg = None
     success = False
     notas = get_object_or_404(Nota, id=nota_id)
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
 
     if request.method == 'POST':
         nota_form = NotaForm(request.POST, instance=notas)
@@ -133,7 +140,7 @@ def edit_nota(request, nota_id):
     else:
         nota_form = NotaForm(instance=notas)
 
-    return render(request, 'home/edit_nota.html', {'segment': 'index', 'nota_form': nota_form, "msg": msg, "success": success})
+    return render(request, 'home/ver_notas.html', {'segment': 'index', 'nota_form': nota_form, "msg": msg, "success": success, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
 
 
 @login_required(login_url="/login/login/")
@@ -149,7 +156,7 @@ def delete_nota(request, nota_id):
     notas_usuario = Nota.objects.filter(usuario=request.user)
     viviendas_usuario = Vivienda.objects.filter(usuario=request.user)
     comunidades_usuario = [vivienda.comunidad for vivienda in viviendas_usuario]
-    anuncios = Anuncio.objects.filter(comunidad__in=comunidades_usuario)
+    anuncios = Anuncio.objects.filter(comunidad__in=comunidades_usuario, fecha_anuncio__range=[hoy, fecha_limite])
     chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
     num_mensajes_no_leidos = chats_no_leidos.count()
 
@@ -184,6 +191,7 @@ def chat(request):
 
 @login_required(login_url="/login/login/")
 def open_chat(request):
+    
     if request.method == 'POST':
         user_id = request.POST.get('usuario')
         recipient = get_object_or_404(User, id=user_id)
@@ -349,8 +357,8 @@ def calendario(request, año=None, mes=None):
         1: "enero", 2: "febrero", 3: "marzo", 4: "abril", 5: "mayo", 6: "junio",
         7: "julio", 8: "agosto", 9: "septiembre", 10: "octubre", 11: "noviembre", 12: "diciembre"
     }
-
-    titulo = f"{meses_espanol[mes].capitalize()} | {año}"
+    
+    titulo = f"{(meses_espanol[mes]).capitalize()} | {año}"
     eventos_mes_actual = Calendario.objects.filter(fecha__year=año, fecha__month=mes)
     
     calendario_mes = []
@@ -371,6 +379,8 @@ def calendario(request, año=None, mes=None):
     url_mes_anterior = reverse('home:calendario', kwargs={'año': año_anterior, 'mes': mes_anterior})
     url_mes_siguiente = reverse('home:calendario', kwargs={'año': año_siguiente, 'mes': mes_siguiente})
 
+    dias_de_la_semana = [('Lunes'), ('Martes'), ('Miércoles'), ('Jueves'), ('Viernes'), ('Sábado'), ('Domingo')]
+
     chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
     num_mensajes_no_leidos = chats_no_leidos.count()
 
@@ -378,7 +388,7 @@ def calendario(request, año=None, mes=None):
         'segment': 'calendario',
         'titulo': titulo,
         'calendario_mes': calendario_mes,
-        'dias_de_la_semana': calendar.day_name,
+        'dias_de_la_semana': dias_de_la_semana,
         'url_mes_anterior': url_mes_anterior,
         'url_mes_siguiente': url_mes_siguiente, 
         'chats_no_leidos': chats_no_leidos, 
@@ -447,6 +457,8 @@ def gastos(request, comunidad_seleccionada=False):
     user_profile = UserProfile.objects.get(user=request.user)
     viviendas_usuario = Vivienda.objects.filter(usuario=request.user)
     comunidades = [vivienda.comunidad for vivienda in viviendas_usuario]
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
 
     es_presidente_o_vicepresidente = False
 
@@ -459,9 +471,6 @@ def gastos(request, comunidad_seleccionada=False):
 
         # Obtener la comunidad seleccionada
         comunidad_seleccionada = Comunidad.objects.get(pk=comunidad_seleccionada)
-
-        # Obtener el último movimiento de la comunidad
-        ultimo_movimiento = obtener_ultimo_movimiento(comunidad_seleccionada)
 
         # Obtener el dinero actual de la comunidad
         dinero_actual_comunidad = comunidad_seleccionada.dinero
@@ -480,21 +489,27 @@ def gastos(request, comunidad_seleccionada=False):
         
         mis_pagos = obtener_mis_pagos_usuario(request.user, comunidad_seleccionada)
 
-        return render(request, 'home/gastos.html', {'segment': 'gastos', 'user_profile': user_profile, 'comunidades': comunidades, 'comunidad_seleccionada': comunidad_seleccionada, 'ultimo_movimiento': ultimo_movimiento, 'dinero_actual_comunidad': dinero_actual_comunidad, 'proximo_recibo_pendiente': proximo_recibo_pendiente, 'historial_dinero_mensual_comunidad': historial_dinero_mensual_comunidad, 'historial_dinero_comunidad': historial_dinero_comunidad, 'distribucion_gastos_ultimo_recibo': distribucion_gastos_ultimo_recibo, 'proximos_pagos': proximos_pagos, 'mis_pagos': mis_pagos, 'es_presidente_o_vicepresidente': es_presidente_o_vicepresidente})
+        seguro_comunidad = SeguroComunidad.objects.filter(comunidad=comunidad_seleccionada).first()
+        
+        return render(request, 'home/gastos.html', {'segment': 'gastos', 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos, 'user_profile': user_profile, 'comunidades': comunidades, 'comunidad_seleccionada': comunidad_seleccionada, 'dinero_actual_comunidad': dinero_actual_comunidad, 'proximo_recibo_pendiente': proximo_recibo_pendiente, 'historial_dinero_mensual_comunidad': historial_dinero_mensual_comunidad, 'historial_dinero_comunidad': historial_dinero_comunidad, 'distribucion_gastos_ultimo_recibo': distribucion_gastos_ultimo_recibo, 'proximos_pagos': proximos_pagos, 'mis_pagos': mis_pagos, 'es_presidente_o_vicepresidente': es_presidente_o_vicepresidente, "seguro_comunidad": seguro_comunidad})
 
 
 def obtener_historial_mensual_dinero_comunidad(comunidad):
     historial = []
 
+    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+    
     # Obtener todos los recibos de la comunidad para el año actual
-    recibos = Recibo.objects.filter(comunidad=comunidad, fecha_tope__year=timezone.now().year)
+    recibos = Recibo.objects.filter(comunidad=comunidad, fecha__year=timezone.now().year)
     
     # Iterar sobre cada recibo para obtener la información relevante
     for recibo in recibos:
+        mes = calendar.month_name[recibo.fecha.month]
         historial.append({
+            'mes': mes,
             'tipo': 'Recibo',
             'titulo': recibo.titulo,
-            'fecha': recibo.fecha_tope,
+            'fecha': recibo.fecha,
             'cantidad': recibo.cantidad_total
         })
     
@@ -505,14 +520,14 @@ def obtener_historial_dinero_comunidad(comunidad, usuario):
     historial = []
 
     # Obtener todos los gastos de la comunidad para el año actual
-    gastos_comunidad = Gasto.objects.filter(comunidad=comunidad, fecha_tope__year=timezone.now().year, usuario=None).order_by('-id')[:2]
+    gastos_comunidad = Gasto.objects.filter(comunidad=comunidad, fecha__year=timezone.now().year, usuario=None).order_by('-id')[:2]
     
     # Iterar sobre cada gasto de la comunidad
     for gasto in gastos_comunidad:
         historial.append({
             'tipo': 'Gasto Comunidad',
             'titulo': gasto.titulo,
-            'fecha': gasto.fecha_tope,
+            'fecha': gasto.fecha,
             'cantidad': gasto.cantidad_total,
             'estado': gasto.estado
         })
@@ -533,19 +548,6 @@ def obtener_historial_dinero_comunidad(comunidad, usuario):
     return historial
 
 
-def obtener_ultimo_movimiento(comunidad):
-    try:
-        ultimo_gasto = Gasto.objects.filter(comunidad=comunidad).latest('fecha_tope')
-        ultimo_transaccion = Transaccion.objects.filter(comunidad=comunidad).latest('fecha')
-
-        if ultimo_gasto.fecha > ultimo_transaccion.fecha:
-            return f"Gasto: ${ultimo_gasto.cantidad_total} - {ultimo_gasto.fecha}"
-        else:
-            return f"Transacción: ${ultimo_transaccion.monto} - {ultimo_transaccion.fecha}"
-    except:
-        return "No hay movimientos"
-
-
 def obtener_proximo_recibo_pendiente(comunidad):
     try:
         ultimo_recibo = Recibo.objects.filter(comunidad=comunidad).latest('fecha_tope')
@@ -558,7 +560,7 @@ def obtener_proximo_recibo_pendiente(comunidad):
 def obtener_distribucion_gastos_ultimo_recibo(comunidad):
     try:
         # Obtener el último recibo
-        ultimo_recibo = Recibo.objects.filter(comunidad=comunidad).latest('fecha_tope')
+        ultimo_recibo = Recibo.objects.filter(comunidad=comunidad).latest('fecha')
         
         # Obtener todos los tipos de gastos posibles
         tipos_gastos = ['luz', 'agua', 'gas', 'piscina', 'jardineria', 'personal', 'limpieza', 'extras']
@@ -613,24 +615,30 @@ def obtener_historial_completo(comunidad, usuario):
 
 @login_required(login_url="/login/login/")
 def historial_completo(request, comunidad_id):
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+    
     # Obtener la comunidad
     comunidad = Comunidad.objects.get(pk=comunidad_id)
     
     # Obtener el historial completo de la comunidad
     historial_completo = obtener_historial_completo(comunidad, request.user)
 
-    return render(request, 'home/historial_completo.html', {'segment': 'gastos', 'comunidad': comunidad, 'historial_completo': historial_completo})
+    return render(request, 'home/historial_completo.html', {'segment': 'gastos', 'comunidad': comunidad, 'historial_completo': historial_completo, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
 
 
 @login_required(login_url="/login/login/")
 def ver_historial_individual(request, tipo, movimiento_id):
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+
     if tipo == 'gasto':
         movimiento = get_object_or_404(Gasto, pk=movimiento_id)
     elif tipo == 'gasto_personal':
         movimiento = get_object_or_404(PagosUsuario, pk=movimiento_id)
     else:
         pass
-    return render(request, 'home/ver_historial_individual.html', {'segment': 'gastos', 'movimiento': movimiento})
+    return render(request, 'home/ver_historial_individual.html', {'segment': 'gastos', 'movimiento': movimiento, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
 
 
 @login_required(login_url="/login/login/")
@@ -647,9 +655,14 @@ def cambiar_comunidad(request, comunidad_id):
 @login_required(login_url="/login/login/")
 def crear_gasto(request, comunidad_seleccionada):
     comunidad = Comunidad.objects.get(pk=comunidad_seleccionada)
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
     
+    # Obtener los usuarios que tienen viviendas en la comunidad seleccionada
+    usuarios_comunidad = User.objects.filter(vivienda__comunidad=comunidad)
+
     if request.method == 'POST':
-        gasto_form = GastoForm(request.POST)
+        gasto_form = GastoForm(request.POST, usuarios_comunidad=usuarios_comunidad)
         
         if gasto_form.is_valid():
             gasto = gasto_form.save(commit=False)
@@ -657,11 +670,29 @@ def crear_gasto(request, comunidad_seleccionada):
             gasto.save()
 
             # Obtener el usuario asignado si tiene
-            usuario = request.POST.get('usuario')
+            usuario_id = request.POST.get('usuario')
             
-            if usuario:
-                gasto.usuario = request.user
+            if usuario_id:
+                usuario = User.objects.get(pk=usuario_id)
+                gasto.usuario = usuario
                 gasto.save()
+                
+                pago_usuario_asignado = PagosUsuario.objects.create(
+                    usuario=usuario,
+                    comunidad=comunidad,
+                    titulo=gasto.titulo,
+                    descripcion=gasto.descripcion,
+                    fecha=gasto.fecha_tope,
+                    cantidad=gasto.cantidad_total,
+                    estado='pendiente'
+                )
+
+                Calendario.objects.create(
+                    usuario=usuario,
+                    titulo=f"Gasto: {gasto.titulo}",
+                    descripcion=gasto.descripcion,
+                    fecha=gasto.fecha_tope
+                )
                 
             else:
                 # Calcular la cantidad que cada miembro de la comunidad debe pagar
@@ -682,6 +713,13 @@ def crear_gasto(request, comunidad_seleccionada):
                         estado='pendiente'
                     )
 
+                    Calendario.objects.create(
+                        usuario=vivienda.usuario,
+                        titulo=f"Gasto: {gasto.titulo}",
+                        descripcion=gasto.descripcion,
+                        fecha=gasto.fecha_tope
+                    )
+
                 comunidad.dinero_actual -= total_gasto
                 comunidad.save()
 
@@ -690,15 +728,17 @@ def crear_gasto(request, comunidad_seleccionada):
                     monto=-total_gasto,
                     descripcion=f"Gasto: {gasto.titulo}"
                 )
-
+            
             return redirect('home:gastos')
     else:
-        gasto_form = GastoForm()
+        gasto_form = GastoForm(usuarios_comunidad=usuarios_comunidad)
 
     return render(request, 'home/crear_gasto.html', {
         'segment': 'gastos',
         'gasto_form': gasto_form,
-        'comunidad': comunidad,
+        'comunidad': comunidad, 
+        'chats_no_leidos': chats_no_leidos, 
+        'num_mensajes_no_leidos':num_mensajes_no_leidos
     })
 
 
@@ -745,6 +785,14 @@ def crear_recibo(request, comunidad_seleccionada):
                 descripcion=f"Recibo: {recibo.titulo}"
             )
 
+            # Crear un evento en el calendario
+            Calendario.objects.create(
+                usuario=request.user,
+                titulo=f"Recibo: {recibo.titulo}",
+                descripcion=recibo.descripcion,
+                fecha=recibo.fecha_tope
+            )
+
             # Después de guardar el recibo y los pagos, redirigir a gastos
             return redirect('home:crear_motivo', comunidad_seleccionada=comunidad_seleccionada)
 
@@ -754,12 +802,17 @@ def crear_recibo(request, comunidad_seleccionada):
 
     motivos_recibo = Recibo.objects.filter(comunidad=comunidad).order_by('-id').first().motivos.all() if Recibo.objects.filter(comunidad=comunidad) else None
 
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+
     return render(request, 'home/crear_recibo.html', {
         'segment': 'gastos',
         'recibo_form': recibo_form,
         'motivo_recibo_formset': motivo_recibo_formset,
         'comunidad': comunidad,
-        'motivos_recibo': motivos_recibo,
+        'motivos_recibo': motivos_recibo, 
+        'chats_no_leidos': chats_no_leidos, 
+        'num_mensajes_no_leidos':num_mensajes_no_leidos
     })
 
 
@@ -783,7 +836,11 @@ def crear_motivo(request, comunidad_seleccionada):
             return redirect('home:editar_recibo', recibo_id=recibo.id)
     else:
         motivo_form = MotivoReciboForm()
-    return render(request, 'home/crear_motivo.html', {'segment': 'gastos', 'motivo_form': motivo_form, 'recibo': recibo})
+    
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+
+    return render(request, 'home/crear_motivo.html', {'segment': 'gastos', 'motivo_form': motivo_form, 'recibo': recibo, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
 
 
 @login_required(login_url="/login/login/")
@@ -796,11 +853,24 @@ def editar_recibo(request, recibo_id):
         if recibo_form.is_valid() and motivo_recibo_formset.is_valid():
             recibo_form.save()
             motivo_recibo_formset.save()
+
+            try:
+                evento_calendario = Calendario.objects.get(titulo=f"Recibo: {recibo.titulo}")
+                evento_calendario.descripcion = recibo.descripcion
+                evento_calendario.fecha = recibo.fecha_tope
+                evento_calendario.save()
+            except Calendario.DoesNotExist:
+                pass
+
             return redirect('home:gastos', comunidad_seleccionada=comunidad_id) 
     else:
         recibo_form = ReciboForm(instance=recibo)
         motivo_recibo_formset = MotivoReciboFormSet(instance=recibo)
-    return render(request, 'home/editar_recibo.html', {'segment': 'gastos', 'recibo': recibo, 'recibo_form': recibo_form, 'motivo_recibo_formset': motivo_recibo_formset, 'comunidad_id': comunidad_id})
+    
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+
+    return render(request, 'home/editar_recibo.html', {'segment': 'gastos', 'recibo': recibo, 'recibo_form': recibo_form, 'motivo_recibo_formset': motivo_recibo_formset, 'comunidad_id': comunidad_id, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
 
 
 @login_required(login_url="/login/login/")
@@ -810,7 +880,7 @@ def mostrar_modificar_gastos_recibos(request, comunidad_seleccionada):
     # Obtener todos los gastos de la comunidad
     gastos_comunidad = Gasto.objects.filter(comunidad=comunidad_seleccionada)
     for gasto in gastos_comunidad:
-        historial_completo.append({'tipo': 'Gasto', 'id': gasto.id, 'fecha': gasto.fecha_tope, 'titulo': gasto.titulo, 'descripcion': gasto.descripcion, 'cantidad_total': gasto.cantidad_total, 'estado':gasto.estado})
+        historial_completo.append({'tipo': 'Gasto', 'id': gasto.id, 'fecha_tope': gasto.fecha_tope, 'fecha': gasto.fecha, 'titulo': gasto.titulo, 'descripcion': gasto.descripcion, 'cantidad_total': gasto.cantidad_total, 'estado':gasto.estado})
 
     # Obtener todos los gastos personales del usuario
     gastos_personales = PagosUsuario.objects.filter(comunidad=comunidad_seleccionada)
@@ -821,14 +891,16 @@ def mostrar_modificar_gastos_recibos(request, comunidad_seleccionada):
     # Obtener todos los recibos de una comunidad
     recibos = Recibo.objects.filter(comunidad=comunidad_seleccionada)
     for recibo in recibos:
-        historial_completo.append({'tipo': 'Recibo', 'id': recibo.id, 'fecha': recibo.fecha_tope, 'titulo': recibo.titulo, 'descripcion': recibo.descripcion, 'cantidad_total': recibo.cantidad_total, 'estado':''})
+        historial_completo.append({'tipo': 'Recibo', 'id': recibo.id, 'fecha_tope': recibo.fecha_tope, 'fecha': recibo.fecha, 'titulo': recibo.titulo, 'descripcion': recibo.descripcion, 'cantidad_total': recibo.cantidad_total, 'estado':''})
 
 
     # Ordenar el historial por fecha en orden descendente
     historial_completo.sort(key=lambda x: x['fecha'], reverse=True)
 
-    
-    return render(request, 'home/modificar_gastos_recibos.html', {'segment': 'gastos', 'comunidad_seleccionada': comunidad_seleccionada, 'historial_completo': historial_completo})
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+
+    return render(request, 'home/modificar_gastos_recibos.html', {'segment': 'gastos', 'comunidad_seleccionada': comunidad_seleccionada, 'historial_completo': historial_completo, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
 
 
 @login_required(login_url="/login/login/")
@@ -850,6 +922,9 @@ def eliminar_recibo_gasto(request, comunidad_seleccionada, tipo, recibo_id):
                 comunidad.dinero += gasto.cantidad_total
                 comunidad.save()
 
+        # Eliminar el evento del calenadrio
+        Calendario.objects.filter(usuario=request.user, titulo=f"Gasto: {gasto.titulo}", descripcion=gasto.descripcion, fecha=gasto.fecha_tope).delete()
+
         # Eliminar el gasto
         gasto.delete()
 
@@ -866,12 +941,18 @@ def eliminar_recibo_gasto(request, comunidad_seleccionada, tipo, recibo_id):
         comunidad.dinero += recibo.cantidad_total
         comunidad.save()
 
+        # Eliminar el evento del calenadrio
+        Calendario.objects.filter(usuario=request.user, titulo=f"Recibo: {recibo.titulo}", descripcion=recibo.descripcion, fecha=recibo.fecha_tope).delete()
+
         # Eliminar el recibo
         recibo.delete()
 
     elif tipo == 'gasto_personal':
         gasto_personal = get_object_or_404(PagosUsuario, pk=recibo_id, comunidad=comunidad)
         
+        # Eliminar el evento del calenadrio
+        Calendario.objects.filter(usuario=gasto_personal.usuario, titulo=f"Gasto Personal: {gasto_personal.titulo}", descripcion=gasto_personal.descripcion, fecha=gasto_personal.fecha).delete()
+
         # Eliminar el gasto personal
         gasto_personal.delete()
 
@@ -902,6 +983,14 @@ def editar_recibo_gasto(request, comunidad_seleccionada, tipo, recibo_id):
 
             # Guardar los cambios en el recibo o gasto
             edited_recibo.save()
+            
+            try:
+                evento_calendario = Calendario.objects.get(titulo=f"{tipo.capitalize()}: {recibo.titulo}")
+                evento_calendario.descripcion = recibo.descripcion
+                evento_calendario.fecha = recibo.fecha_tope
+                evento_calendario.save()
+            except Calendario.DoesNotExist:
+                pass
 
             # Verificar si el estado ha cambiado a "pagado"
             if edited_recibo.estado == 'pagado':
@@ -914,12 +1003,17 @@ def editar_recibo_gasto(request, comunidad_seleccionada, tipo, recibo_id):
 
             return redirect('home:gastos')
     
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+
     context = {
         'segment': 'gastos',
         'form': form,
         'comunidad_seleccionada': comunidad_seleccionada,
         'tipo': tipo,
-        'recibo': recibo,
+        'recibo': recibo, 
+        'chats_no_leidos': chats_no_leidos, 
+        'num_mensajes_no_leidos':num_mensajes_no_leidos
     }
     return render(request, 'home/editar_recibo_gasto.html', context)
 
@@ -954,4 +1048,154 @@ def edit_profile(request):
 
     return render(request, "home/config.html", {'segment': 'config', "user_form": user_form, "profile_form" : profile_form, "msg": msg, "success": success, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
 
+
+
+
+
+
+# ---------------------------------------------------------- EDITAR COMUNIDAD ---------------------------------------------------------- 
+@login_required(login_url="/login/login/")
+def comunidades_configuracion(request, comunidad_seleccionada=False):
+    viviendas_usuario = Vivienda.objects.filter(usuario=request.user)
+    comunidades = [vivienda.comunidad for vivienda in viviendas_usuario]
+    comunidades_usuario = Comunidad.objects.filter(vivienda__usuario=request.user).distinct()
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+
+    if not comunidad_seleccionada:
+        if comunidades:
+            primera_comunidad = comunidades[0]
+            return redirect('home:comunidades_configuracion', comunidad_seleccionada=primera_comunidad.pk)
+
+    # Obtener la comunidad seleccionada
+    comunidad_seleccionada = get_object_or_404(Comunidad, pk=comunidad_seleccionada)
+
+    if request.method == 'POST':
+        # Procesar el formulario para editar la comunidad
+        form = EditarComunidadForm(request.POST, instance=comunidad_seleccionada)
+        if form.is_valid():
+            form.save()
+
+        # Procesar el formulario para crear un nuevo anuncio
+        crear_anuncio_form = CrearAnuncioForm(request.POST)
+        if crear_anuncio_form.is_valid():
+            titulo = crear_anuncio_form.cleaned_data['titulo']
+            descripcion = crear_anuncio_form.cleaned_data['descripcion']
+            fecha_anuncio = crear_anuncio_form.cleaned_data['fecha_anuncio']            
+            Anuncio.objects.create(comunidad=comunidad_seleccionada, titulo=titulo, descripcion=descripcion, fecha_anuncio=fecha_anuncio)
+
+        # Procesar el formulario para el seguro de la comunidad
+        seguro_comunidad_form = SeguroComunidadForm(request.POST)
+        if seguro_comunidad_form.is_valid():
+            seguro_comunidad = seguro_comunidad_form.save(commit=False)
+            seguro_comunidad.comunidad = comunidad_seleccionada
+            seguro_comunidad.save()
+
+        if not comunidad_seleccionada:
+            if comunidades:
+                primera_comunidad = comunidades[0]
+                return redirect('home:comunidades_configuracion', comunidad_seleccionada=primera_comunidad.pk)
+
+        return redirect('home:comunidades_configuracion', comunidad_seleccionada=comunidad_seleccionada.pk)
+
+    form = EditarComunidadForm(instance=comunidad_seleccionada)
+    crear_anuncio_form = CrearAnuncioForm()
+    seguro_comunidad_form = SeguroComunidadForm()
+
+    usuarios = Vivienda.objects.filter(comunidad=comunidad_seleccionada).exclude(usuario=request.user).values_list('usuario', flat=True).distinct()
+
+    return render(request, 'home/configuracion_comunidades.html', {
+        'comunidades_usuario': comunidades_usuario,
+        'comunidad_seleccionada': comunidad_seleccionada,
+        'segment': 'communidad',
+        'comunidades': comunidades,
+        'form': form,
+        'usuarios': usuarios,
+        'crear_anuncio_form': crear_anuncio_form,
+        'seguro_comunidad_form': seguro_comunidad_form,
+        "chats_no_leidos": chats_no_leidos, 
+        "num_mensajes_no_leidos": num_mensajes_no_leidos, 
+    })
+
+
+@login_required(login_url="/login/login/")
+def administrar_viviendas(request, comunidad_seleccionada):
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+    comunidad = get_object_or_404(Comunidad, id=comunidad_seleccionada)
+    viviendas = Vivienda.objects.filter(comunidad=comunidad)
+
+    return render(request, 'home/administrar_viviendas.html', {
+        'segment': 'communidad',
+        'comunidad': comunidad,
+        'viviendas': viviendas,
+        "chats_no_leidos": chats_no_leidos, 
+        "num_mensajes_no_leidos": num_mensajes_no_leidos,
+    })
+
+@login_required(login_url="/login/login/")
+def eliminar_vivienda(request, comunidad_id, viviendas_id):
+    vivienda = get_object_or_404(Vivienda, id=viviendas_id)
+    if request.method == 'POST':
+        vivienda.delete()
+        return redirect('home:administrar_viviendas', comunidad_seleccionada=comunidad_id)
+    return redirect('home:administrar_viviendas', comunidad_seleccionada=comunidad_id)
+
+
+@login_required(login_url="/login/login/")
+def asignar_usuario_comunidad(request, comunidad_id):
+    comunidad = Comunidad.objects.get(pk=comunidad_id)
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+
+    if request.method == 'POST':
+        form = AsignarUsuarioComunidadForm(request.POST)
+        if form.is_valid():
+            vivienda = form.save(commit=False)
+            vivienda.comunidad = comunidad
+            vivienda.save()
+            return redirect('home:administrar_viviendas', comunidad_seleccionada=comunidad_id)
+    else:
+        form = AsignarUsuarioComunidadForm()
+
+    return render(request, 'home/añadir_usuario_comunidad.html', {'segment': 'communidad', "chats_no_leidos": chats_no_leidos, "num_mensajes_no_leidos": num_mensajes_no_leidos, 'form': form, 'comunidad': comunidad})
+
+
+@login_required(login_url="/login/login/")
+def editar_vivienda_comunidad(request, comunidad_id, viviendas_id):
+    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
+    num_mensajes_no_leidos = chats_no_leidos.count()
+    msg = None
+    success = False
+    vivienda = get_object_or_404(Vivienda, id=viviendas_id)
+
+    if request.method == "POST":
+        viviendas_form = AsignarUsuarioComunidadForm(request.POST, instance=vivienda)
+        
+        if viviendas_form.is_valid():
+            viviendas_form.save()
+            success = True
+
+            # Obtener el usuario de la vivienda
+            usuario_vivienda = vivienda.usuario
+
+            # Verificar el cambio de rol
+            if vivienda.rol_comunidad == 'community_president' or vivienda.rol_comunidad == 'community_vicepresident':
+                if usuario_vivienda.userprofile.user_rol != 'lume':
+                    # Cambiar el user_rol a community_admin
+                    usuario_vivienda.userprofile.user_rol = 'community_admin'
+                    usuario_vivienda.userprofile.save()
+            elif vivienda.rol_comunidad == 'community_user':
+                if usuario_vivienda.userprofile.user_rol != 'lume':
+                    # Cambiar el user_rol a community_user
+                    usuario_vivienda.userprofile.user_rol = 'community_user'
+                    usuario_vivienda.userprofile.save()
+
+        else:
+            msg = '¡Formulario no válido!'
+
+    else:
+        viviendas_form = AsignarUsuarioComunidadForm(instance=vivienda)
+
+    return render(request, "home/editar_vivienda.html", {'segment': 'communidad', "chats_no_leidos": chats_no_leidos, "num_mensajes_no_leidos": num_mensajes_no_leidos, "comunidad_id": comunidad_id, "viviendas_form": viviendas_form, "msg": msg, "success": success})
 

@@ -27,18 +27,7 @@
 <br>
 
 <div class="row">
-  <div class="col-lg-4 col-md-6 col-sm-6">
-      <div class="card card-stats">
-          <div class="card-header card-header-warning card-header-icon">
-              <div class="card-icon">
-                  <i class="material-icons">timeline</i>
-              </div>
-              <p class="card-category">Último Movimiento</p>
-              <h3 class="card-title">{{ ultimo_movimiento }}</h3>
-          </div>
-      </div>
-  </div>
-  <div class="col-lg-4 col-md-6 col-sm-6">
+  <div class="col-lg-6 col-md-7 col-sm-7">
       <div class="card card-stats">
           <div class="card-header card-header-success card-header-icon">
               <div class="card-icon">
@@ -49,7 +38,7 @@
           </div>
       </div>
   </div>
-  <div class="col-lg-4 col-md-6 col-sm-6">
+  <div class="col-lg-6 col-md-7 col-sm-7">
       <div class="card card-stats">
           <div class="card-header card-header-info card-header-icon">
               <div class="card-icon">
@@ -199,29 +188,29 @@
     </div>
   </div>
   <div class="col-lg-6 col-md-12">
-      <div class="card">
-          <div class="card-header card-header-warning">
-              <h4 class="card-title">Seguro de la comunidad</h4>
-              <p class="card-category">Información acerca del seguro de la comunidad</p>
-          </div>
-          <div class="card-body table-responsive">
+    <div class="card">
+        <div class="card-header card-header-warning">
+            <h4 class="card-title">Seguro de la comunidad | {{ seguro_comunidad.empresa }}</h4>
+            <p class="card-category">Información acerca del seguro de la comunidad</p>
+        </div>
+        <div class="card-body table-responsive">
             {% if seguro_comunidad %}
-              <table class="table table-hover">
-                  <thead class="text-warning">
-                      <th>Qué cubre</th>
-                  </thead>
-                  <tbody>
-                      <tr>
-                          <td>{{ seguro_comunidad.cubre }}</td>
-                      </tr>
-                  </tbody>
-              </table>
-              <h5>Pago anual de: {{ seguro_comunidad.cantidad }} | {% if seguro_comunidad.pagado %}Pagado{% else %}Pendiente{% endif %}</h5>
+                <table class="table table-hover">
+                    <thead class="text-warning">
+                        <th>Qué cubre</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ seguro_comunidad.cubre }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h5>Pago anual de: {{ seguro_comunidad.cantidad }}€ | {% if seguro_comunidad.pagado %}Pagado | Fecha Vencimiento:{{ seguro_comunidad.fecha_vencimiento}}{% else %}Pendiente | Fecha Pago:{{ seguro_comunidad.fecha_pago}} {% endif %}</h5>
             {% else %}
-              <h4>¡La comunidad no tiene seguro!</h4>
+                <h4>¡La comunidad no tiene seguro!</h4>
             {% endif %}
-          </div>
-      </div>
+        </div>
+    </div>
   </div>
 </div>
 

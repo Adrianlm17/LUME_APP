@@ -13,12 +13,9 @@ urlpatterns = [
     # ------------------------------- NOTAS -------------------------------
     path('', home_views.content, name='home'),
     path('index.html', home_views.content, name='home'),
-    path('<int:nota_id>/edit_nota.html', home_views.edit_nota, name='edit_nota'),
+    path('<int:nota_id>/ver_notas', home_views.ver_notas, name='ver_notas'),
     path('<int:nota_id>/delete_nota', home_views.delete_nota, name='delete_nota'),
     path('notas.html', home_views.nota, name='notas'),
-
-    # ------------------------------- USER CONFIG -------------------------------
-    path('config.html', home_views.edit_profile, name='config'),
     
     # ------------------------------- CHATS -------------------------------
     path('chat.html', home_views.chat, name='chat'),
@@ -56,6 +53,16 @@ urlpatterns = [
     path('<int:comunidad_seleccionada>/editar_recibo_gasto/<str:tipo>/<int:recibo_id>/', home_views.editar_recibo_gasto, name='editar_recibo_gasto'),
     path('<int:comunidad_seleccionada>/eliminar_recibo_gasto/<str:tipo>/<int:recibo_id>/', home_views.eliminar_recibo_gasto, name='eliminar_recibo_gasto'),
 
+    # ------------------------------- USER CONFIG -------------------------------
+    path('config.html', home_views.edit_profile, name='config'),
+
+    # ------------------------------- COMMUNITY CONFIG -------------------------------
+    path('comunidades_configuracion', home_views.comunidades_configuracion, name='comunidades_configuracion'),
+    path('<int:comunidad_seleccionada>/comunidades_configuracion', home_views.comunidades_configuracion, name='comunidades_configuracion'),
+    path('<int:comunidad_seleccionada>/administrar_viviendas', home_views.administrar_viviendas, name='administrar_viviendas'),
+    path('<int:comunidad_id>/asignar_usuario_comunidad', home_views.asignar_usuario_comunidad, name='asignar_usuario_comunidad'),
+    path('<int:comunidad_id>/<int:viviendas_id>/eliminar_vivienda', home_views.eliminar_vivienda, name='eliminar_vivienda'),
+    path('<int:comunidad_id>/<int:viviendas_id>/editar_vivienda_comunidad', home_views.editar_vivienda_comunidad, name='editar_vivienda_comunidad'),
 
     # ------------------------------- EXTRA -------------------------------
     re_path(r'^.*\.*', home_views.pages, name='pages'),

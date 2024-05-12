@@ -34,7 +34,12 @@ class Comunidad(models.Model):
 class Vivienda(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE)
-    rol_comunidad = models.CharField(max_length=100, blank=True)
+    ROL_COMUNIDAD = [
+        ('community_president', 'Community President'),
+        ('community_vicepresident', 'Community Vice President'),
+        ('community_user', 'Community User'),
+    ]
+    rol_comunidad = models.CharField(max_length=100, choices=ROL_COMUNIDAD, default='community_user')
     piso = models.CharField(max_length=100)
     puerta = models.CharField(max_length=100)
 
@@ -177,7 +182,7 @@ class Anuncio(models.Model):
     comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=100)
     descripcion = models.TextField()
-    fecha_anuncio = models.DateTimeField(auto_now_add=True)
+    fecha_anuncio = models.DateField(blank=True)
 
     def __str__(self):
         return self.titulo
@@ -188,8 +193,9 @@ class Anuncio(models.Model):
 class Recibo(models.Model):
     titulo = models.CharField(max_length=100)
     descripcion = models.TextField()
-    fecha_tope = models.DateField(null=True)
-    cantidad_total = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    fecha = models.DateField()
+    fecha_tope = models.DateField()
+    cantidad_total = models.DecimalField(max_digits=10, decimal_places=2)
     comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
 
     def __str__(self):
@@ -219,6 +225,7 @@ class Gasto(models.Model):
     descripcion = models.TextField()
     cantidad_total = models.DecimalField(max_digits=10, decimal_places=2)
     fecha_tope = models.DateField()
+    fecha = models.DateField()
     comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     ESTADO_CHOICES = [
@@ -226,7 +233,7 @@ class Gasto(models.Model):
         ('pendiente', 'Pendiente')
     ]
     
-    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, null=True)
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default="pendiente", null=True)
 
     def __str__(self):
         return f"Gasto: {self.titulo} - {self.fecha_tope}"
@@ -248,8 +255,8 @@ class Transaccion(models.Model):
 class PagosUsuario(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
-    titulo = models.CharField(max_length=100, null=True)
-    descripcion = models.TextField(null=True)
+    titulo = models.CharField(max_length=100)
+    descripcion = models.TextField()
     fecha = models.DateField()
     cantidad = models.DecimalField(max_digits=10, decimal_places=2)
     ESTADO_CHOICES = [
@@ -263,11 +270,12 @@ class PagosUsuario(models.Model):
 
 
 class SeguroComunidad(models.Model):
+    empresa = models.CharField(max_length=200, null=True)
     comunidad = models.OneToOneField('Comunidad', on_delete=models.CASCADE)
-    cubre = models.CharField(max_length=200)
+    cubre = models.TextField()
     cantidad = models.DecimalField(max_digits=10, decimal_places=2)
     pagado = models.BooleanField(default=False)
-    fecha_pago = models.DateField(null=True)
+    fecha_pago = models.DateField()
     fecha_vencimiento = models.DateField()
 
     def __str__(self):

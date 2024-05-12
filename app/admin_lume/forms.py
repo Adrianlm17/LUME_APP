@@ -13,6 +13,7 @@ class CrearUserProfileForm(forms.ModelForm):
     ]
     USER_ROL_CHOICES = [
         ('lume', 'LUME WORKER'),
+        ('community_admin', 'Community Admin'),
         ('community_user', 'Community User'),
         ('community_worker', 'Comunity Worker'),
         ('company_boss', 'Company Boss'),

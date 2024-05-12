@@ -52,7 +52,7 @@ def pages(request):
 @login_required(login_url="/login/login_admin/")
 def user_list(request):
     users = User.objects.all()
-    return render(request, 'admin_lume/users.html', {'users': users})
+    return render(request, 'admin_lume/users.html', {'segment': 'ver_usuario', 'users': users})
 
 
 @login_required(login_url="/login/login_admin/")
@@ -176,8 +176,8 @@ def edit_community(request, communitys_id):
 
 
 @login_required(login_url="/login/login_admin/")
-def delete_community(request, community_id):
-    community = get_object_or_404(Comunidad, id=community_id)
+def delete_community(request, communitys_id):
+    community = get_object_or_404(Comunidad, id=communitys_id)
 
     if request.method == 'POST':
         community.delete()
@@ -259,7 +259,7 @@ def delete_company(request, companys_id):
 @login_required(login_url="/login/login_admin/")
 def vivienda_list(request):
     viviendas = Vivienda.objects.all()
-    return render(request, 'admin_lume/viviendas.html', {'segment': 'asignar_vivienda', 'viviendas': viviendas})
+    return render(request, 'admin_lume/viviendas.html', {'segment': 'ver_vivienda', 'viviendas': viviendas})
 
 
 @login_required(login_url="/login/login_admin/")
@@ -301,18 +301,18 @@ def edit_vivienda(request, viviendas_id):
     else:
         viviendas_form = CrearViviendaForm(instance=viviendas)
 
-    return render(request, "admin_lume/edit_vivienda.html", {'segment': 'asignar_vivienda', "viviendas_form": viviendas_form, "msg": msg, "success": success})
+    return render(request, "admin_lume/edit_vivienda.html", {'segment': 'ver_vivienda', "viviendas_form": viviendas_form, "msg": msg, "success": success})
 
 
 @login_required(login_url="/login/login_admin/")
-def delete_vivienda(request, vivienda_id):
-    vivienda = get_object_or_404(Vivienda, id=vivienda_id)
+def delete_vivienda(request, viviendas_id):
+    vivienda = get_object_or_404(Vivienda, id=viviendas_id)
 
     if request.method == 'POST':
         vivienda.delete()
     
     viviendas = Vivienda.objects.all()
-    return render(request, 'admin_lume/viviendas.html', {'segment': 'asignar_vivienda', 'viviendas': viviendas})
+    return render(request, 'admin_lume/viviendas.html', {'segment': 'ver_vivienda', 'viviendas': viviendas})
 
 
 
@@ -368,8 +368,8 @@ def edit_trabajador(request, trabajadors_id):
 
 
 @login_required(login_url="/login/login_admin/")
-def delete_trabajador(request, trabajador_id):
-    trabajador = get_object_or_404(Trabajador, id=trabajador_id)
+def delete_trabajador(request, trabajadors_id):
+    trabajador = get_object_or_404(Trabajador, id=trabajadors_id)
 
     if request.method == 'POST':
         trabajador.delete()

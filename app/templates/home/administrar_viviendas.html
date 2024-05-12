@@ -1,0 +1,49 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %} Administrar Viviendas | LUME {% endblock %} 
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <a href="{% url 'home:comunidades_configuracion' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Volver</a>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="{% url 'home:asignar_usuario_comunidad' comunidad_id=comunidad.id %}" class="btn btn-success"><i class="fa fa-plus"></i> Añadir Usuario</a>
+        </div>
+    </div>
+
+    <h2 class="mt-4">Administrar Viviendas | {{ comunidad.nombre }}</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Piso</th>
+                    <th>Puerta</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vivienda in viviendas %}
+                <tr>
+                    <td>{{ vivienda.usuario.email }}</td>
+                    <td>{{ vivienda.piso }}</td>
+                    <td>{{ vivienda.puerta }}</td>
+                    <td>{{ vivienda.rol_comunidad }}</td>
+                    <td>
+                        <a href="{% url 'home:editar_vivienda_comunidad' comunidad_id=comunidad.id viviendas_id=vivienda.id %}" class="btn btn-info"><i class="fa fa-edit"></i> Editar</a>
+                        <form method="post" action="{% url 'home:eliminar_vivienda' comunidad_id=comunidad.id viviendas_id=vivienda.id %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

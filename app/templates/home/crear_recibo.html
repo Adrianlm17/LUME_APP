@@ -29,6 +29,11 @@
                     </div>
                     <div class="form-group">
                         <label>Fecha Mes:</label>
+                        {{ recibo_form.fecha }}
+                        <span class="text-danger">{{ recibo_form.fecha.errors }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Tope:</label>
                         {{ recibo_form.fecha_tope }}
                         <span class="text-danger">{{ recibo_form.fecha_tope.errors }}</span>
                     </div>

@@ -1,64 +1,82 @@
 {% extends "layouts/base_app.html" %}
 
-{% block title %} NOTAS | LUME {% endblock %} 
+{% block title %} CHAT | LUME {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
+
+<a href="{% url 'home:home' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Volver</a>
+
+{% if success %}
+  <div class="alert alert-success alert-dismissible">
+    <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>¡ACTUALIZADA!</strong> Nota actualizada correctamente
+  </div> 
+{% endif %} 
+
 <div class="row">
-  <div class="col-md-12">
-    <div class="card">
-      <div class="card-header card-header-success">
-        <h4 class="card-title mt-0"><i class="material-icons">house_siding</i> Listado de Viviendas </h4>
+  <div class="col-md-8">
+      <div class="card">
+        <div class="card-header card-header-warning">
+            <h4 class="card-title"><i class="material-icons">note_alt</i> NOTA</h4>
+        </div>
+        <div class="card-body">
+
+          {% if msg %}
+            <br>
+            <h6 class="card-category">
+              <span class="text-danger">{{ msg | safe }}</span>
+            </h6>
+          {% endif %}  
+
+          <br>
+
+          <form method="post" enctype="multipart/form-data">
+            
+            {% csrf_token %}
+
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group titulo">
+                  <label>Titulo:</label>
+                  {{ nota_form.titulo }}
+                  <span class="text-danger">{{ nota_form.titulo.errors }}</span>
+                </div>
+                <div class="form-group descripcion">
+                  <label>Descripción:</label><br>
+                  {{ nota_form.descripcion }}
+                  <span class="text-danger">{{ nota_form.descripcion.errors }}</span>
+                </div>
+              </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+              <div class="col-sm-12 text-center">
+                <button type="submit" class="btn btn-warning">Guardar Nota</button>
+              </div>
+            </div>
+          </form>
+        </div>        
       </div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <tbody>
-              <tr>
-                <th>
-                  USUARIO
-                </th>
-                <th>
-                  COMUNIDAD
-                </th>
-                <th>
-                  PISO
-                </th>
-                <th>
-                  PUERTA
-                </th>
-                <th>
-                  EDITAR
-                </th>
-                <th>
-                  ELIMINAR
-                </th>
-              </tr>
-              
-              {% for nota in notas %}
-              
-              <tr>
-                <td>
-                  {{ nota.usuario }}
-                </td>
-                <td>
-                  {{ nota.titulo }}
-                </td>
-                <td>
-                  {{ nota.descripcion }}
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>  
+  </div> 
 </div>
 
+
+<style>
+  .titulo input{
+    width: 100%; 
+    cols: 50; 
+  }
+
+  .descripcion textarea{
+    width: 100%; 
+    cols: 50; 
+  }
+</style>
 
 {% endblock content %}
 

@@ -28,6 +28,9 @@
           <td>{{ item.descripcion }}</td>
           <td>{{ item.cantidad_total }}</td>
           <td>{{ item.estado }}</td>
+          {% if item.tipo == 'Gasto' or item.tipo == 'Recibo' %}
+          <td>{{ item.fecha_tope }}</td>
+          {% endif %}
           <td>
             {% if item.tipo == 'Gasto' %}
             <a href="{% url 'home:editar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='gasto' recibo_id=item.id %}" class="btn btn-primary btn-sm">Ver</a>

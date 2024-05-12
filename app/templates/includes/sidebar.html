@@ -32,7 +32,7 @@
                 <p>Incidencias</p>
             </a>
           </li>
-          {% if request.user.userprofile.user_rol == 'community_user' or request.user.userprofile.user_rol == 'lume' %}
+          {% if request.user.userprofile.user_rol == 'community_user' or request.user.userprofile.user_rol == 'lume' or request.user.userprofile.user_rol == 'community_admin' %}
             <li class="nav-item {% if 'actas' in segment %} active {% endif %}">
                 <a class="nav-link" href="/home/actas.html">
                     <i class="material-icons">library_books</i>
@@ -53,21 +53,31 @@
                 </a>
             </li>
           {% endif %}
-      
+          
           <li class="nav-item {% if 'config' in segment %} active {% endif %}">
             <a class="nav-link" href="/home/config.html">
               <i class="material-icons">settings</i>
               <p>Config</p>
             </a>
           </li>
+          
+          {% if request.user.userprofile.user_rol == 'community_admin' or request.user.userprofile.user_rol == 'lume' %}
+            <li class="nav-item {% if 'communidad' in segment %} active {% endif %}">
+              <a class="nav-link" href="{% url 'home:comunidades_configuracion' %}">
+                <i class="material-icons">home_work</i>
+                <p>Configuración Comunidad</p>
+              </a>
+            </li>
+          {% endif %}
+
 
           {% if request.user.userprofile.user_rol == 'lume' %}
-          <li class="nav-item {% if 'admin_lume' in segment %} active {% endif %}">
-            <a class="nav-link" href="/admin_lume/index.html">
-              <i class="material-icons">admin_panel_settings</i>
-              <p>Panel Admin</p>
-            </a>
-          </li>
+            <li class="nav-item {% if 'admin_lume' in segment %} active {% endif %}">
+              <a class="nav-link" href="/admin_lume/index.html">
+                <i class="material-icons">admin_panel_settings</i>
+                <p>Panel Admin</p>
+              </a>
+            </li>
           {% endif %}
 
           <li class="nav-item ">
@@ -75,7 +85,7 @@
               <i class="material-icons">logout</i>
               <p>Logout</p>
             </a>
-          </li>       
+          </li>
         {% endif %}
         </ul>
       </div>

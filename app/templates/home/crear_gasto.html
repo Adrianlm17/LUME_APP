@@ -32,6 +32,11 @@
                                 <span class="text-danger">{{ gasto_form.cantidad_total.errors }}</span>
                             </div>
                             <div class="form-group">
+                                <label>Fecha:</label><br>
+                                {{ gasto_form.fecha }}
+                                <span class="text-danger">{{ gasto_form.fecha.errors }}</span>
+                            </div>
+                            <div class="form-group">
                                 <label>Fecha Tope:</label><br>
                                 {{ gasto_form.fecha_tope }}
                                 <span class="text-danger">{{ gasto_form.fecha_tope.errors }}</span>

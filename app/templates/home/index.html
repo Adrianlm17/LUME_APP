@@ -7,51 +7,49 @@
 
 {% block content %}
   <div class="row">
-    <div class="col-lg-6 col-md-12">
-      <div class="card">
-          <div class="card-header card-header-tabs card-header-danger ">
-              <div class="nav-tabs-navigation">
-                  <div class="nav-tabs-wrapper">
-                      <ul class="nav nav-tabs" data-tabs="tabs">
-                          <li class="nav-item">
-                              <a data-toggle="tab">
-                                  <i class="material-icons">new_releases</i> ANUNCIOS
-                                  <div class="ripple-container"></div>
-                              </a>
-                          </li>
-                      </ul>
-                  </div>
-              </div>
-          </div>
-          <div class="card-body">
-              <div class="tab-content">
-                  <div class="tab-pane active" id="profile">
-                    {% if anuncios %}
-                      <table class="table">
-                          <tbody>
-                              {% for anuncio in anuncios %}
-                              <tr>
-                                  <td>{{ anuncio.titulo|slice:":150" }}</td>
-                                  <td>{{ anuncio.fecha_anuncio|date:'d/m/Y' }}</td>
-                                  <td class="td-actions text-right">
-                                      <a href="{% url 'home:detalles_anuncio' anuncio.id %}" class="btn btn-primary btn-link btn-sm" title="Ver anuncio">
-                                          <i class="material-icons">open_in_full</i>
-                                      </a>
-                                      <button type="button" rel="tooltip" title="Eliminar" class="btn btn-danger btn-link btn-sm">
-                                          <i class="material-icons">close</i>
-                                      </button>
-                                  </td>
-                              </tr>
-                              {% endfor %}
-                          </tbody>
-                      </table>
-                    {% else %}
-                        <p>¡No hay anuncios!</p>
-                    {% endif %}
-                  </div>
-              </div>
-          </div>
-      </div>
+  <div class="col-lg-6 col-md-12">
+    <div class="card">
+        <div class="card-header card-header-tabs card-header-danger ">
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper">
+                    <ul class="nav nav-tabs" data-tabs="tabs">
+                        <li class="nav-item">
+                            <a data-toggle="tab">
+                                <i class="material-icons">new_releases</i> ANUNCIOS
+                                <div class="ripple-container"></div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="tab-content">
+                <div class="tab-pane active" id="profile">
+                  {% if anuncios %}
+                    <table class="table">
+                        <tbody>
+                            {% for anuncio in anuncios %}
+                            <tr>
+                                <td>{{ anuncio.comunidad }}</td>
+                                <td>{{ anuncio.titulo|slice:":150" }}</td>
+                                <td>{{ anuncio.fecha_anuncio|date:'d/m/Y' }}</td>
+                                <td class="td-actions text-right">
+                                  <a href="{% url 'home:detalles_anuncio' anuncio.id %}" class="btn btn-primary btn-link btn-sm" title="Ver anuncio">
+                                      <i class="material-icons">open_in_full</i>
+                                  </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                  {% else %}
+                      <p>¡No hay anuncios!</p>
+                  {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
   </div>  
     <div class="col-lg-6 col-md-12">
       <div class="card">
@@ -78,7 +76,7 @@
                         {{ nota.descripcion|slice:":25" }}
                       </td>
                       <td>
-                        <a href="{% url 'home:edit_nota' nota.id %}">Editar</a>
+                        <a href="{% url 'home:ver_notas' nota.id %}">Editar</a>
                       </td>
                       <td>
                         <form action="{% url 'home:delete_nota' nota.id %}" method="post">

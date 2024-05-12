@@ -1,0 +1,40 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %} Añadir Usuario a la Comunidad | LUME {% endblock %} 
+
+{% block content %}
+<a href="{% url 'home:administrar_viviendas' comunidad.id %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Añadir Usuario a la Comunidad | {{ comunidad.nombre }}</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_usuario" class="form-label">Usuario:</label>
+                    {{ form.usuario }}
+                    <div class="invalid-feedback">{{ form.usuario.errors }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="id_rol_comunidad" class="form-label">Rol en la Comunidad:</label>
+                    {{ form.rol_comunidad }}
+                    <div class="invalid-feedback">{{ form.rol_comunidad.errors }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="id_piso" class="form-label">Piso:</label>
+                    {{ form.piso }}
+                    <div class="invalid-feedback">{{ form.piso.errors }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="id_puerta" class="form-label">Puerta:</label>
+                    {{ form.puerta }}
+                    <div class="invalid-feedback">{{ form.puerta.errors }}</div>
+                </div>
+                <button type="submit" class="btn btn-success">Añadir Usuario</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
