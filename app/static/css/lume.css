@@ -1,31 +1,49 @@
 /************************************************************ NAVBAR ************************************************************/
 #lume-navbar {
     background-color: #6990a8;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3); /* Sombra negra suave */
     z-index: 1;
     text-align: center;
 }
 
 .navbar-nav .nav-item .nav-link {
-    font-size: 20px;
-    border: 1px solid #272626;
-    border-radius: 8px;
-    background-color: rgb(172, 200, 216);
-    color: #272626;
-    margin: 0 5px;
-    font-family: serif;
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 50px;
+    background-color: #3c5a75;
+    color: #fff;
+    transition: all 0.3s ease;
+    font-family: 'Open Sans', sans-serif;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-nav .nav-item .nav-link:hover {
-    background-color: #3c5a75;
-    border-color: #3c5a75;
+    background-color: #517fa4;
     color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .language-toggle {
-    padding: 0.5rem 1rem;
-    color: #000;
-    text-decoration: none;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    background-color: #3c5a75;
+    color: #fff;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-size: 18px;
+    font-family: 'Open Sans', sans-serif;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.language-toggle:hover {
+    background-color: #517fa4;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .language-menu {
@@ -33,21 +51,30 @@
     right: 5px;
     left: auto;
     margin-top: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .language-button {
     display: block;
     width: 100%;
-    padding: 0.5rem 1rem;
+    padding: 10px 20px;
     text-align: left;
-    color: #000;
+    color: #272626;
     border: none;
+    background: none;
     cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .language-button:hover {
     background-color: #cdd5de;
+    color: #272626;
 }
+
 
 
 

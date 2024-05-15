@@ -1,0 +1,68 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} EVENTOS | LUME {% endblock %} 
+
+{% block content %}
+
+{% if messages %}
+  {% for message in messages %}
+    {% if message.tags == "error" or message.tags == "danger" %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {% elif message.tags == "success" %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+    {% else %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+    {% endif %}
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div class="text-center">
+    <h1>EVENTOS</h1>
+</div>
+
+<br>
+
+<div class="text-center">
+    <a href="{% url 'home:crear_evento' %}" class="btn btn-info">Crear Evento</a>
+</div>
+
+<br>
+
+<div class="container">
+    <div class="row">
+        {% for evento, is_attending in eventos_with_attendance.items %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                {% if evento.image %}
+                    <img src="{% static 'app_files/' %}{{ evento.image }}" alt="{{ evento.title }}">
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ evento.title }}</h5>
+                    <p class="card-text">{{ evento.descripcion }}</p>
+                    <p class="card-text"><small class="text-muted">{{ evento.date }}</small></p>
+                    <p class="card-text"><strong>{{ evento.current_attendees }} / {{ evento.max_attendees }}</strong></p>
+                    {% if is_attending %}
+                        <form method="post" action="{% url 'home:desapuntarse_evento' evento.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger mt-auto">Desapuntarse</button>
+                        </form>
+                    {% else %}
+                        <form method="post" action="{% url 'home:unirse_evento' evento.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success mt-auto">Apuntarse</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

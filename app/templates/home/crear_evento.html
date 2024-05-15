@@ -1,0 +1,69 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %}Crear Evento | LUME{% endblock %}
+
+{% block content %}
+<a href="{% url 'home:eventos' %}" class="btn btn-info"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header card-header-info">
+                <h2 class="text-center">Crear Evento</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Título:</label>
+                                {{ form.title }}
+                                <span class="text-danger">{{ form.title.errors }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Descripción:</label><br>
+                                {{ form.descripcion }}
+                                <span class="text-danger">{{ form.descripcion.errors }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Fecha:</label><br>
+                                {{ form.date }}
+                                <span class="text-danger">{{ form.date.errors }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Máximo de Asistentes:</label><br>
+                                {{ form.max_attendees }}
+                                <span class="text-danger">{{ form.max_attendees.errors }}</span>
+                            </div>
+                            <div>
+                                <label>Imagen:</label><br>
+                                {{ form.image }}
+                                <span class="text-danger">{{ form.image.errors }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Visibilidad:</label><br>
+                                {{ form.visibility }}
+                                <span class="text-danger">{{ form.visibility.errors }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Comunidad:</label><br>
+                                {{ form.comunidad }}
+                                <span class="text-danger">{{ form.comunidad.errors }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <br>
+
+                    <div class="row justify-content-center">
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-info btn-block">Crear Evento</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from app.home.models import Comunidad, Empresa, User, UserProfile
 from .forms import LoginForm, SignUpForm, TokenForm
+from django.contrib.auth.forms import PasswordResetForm
 
 
 def login_view(request):

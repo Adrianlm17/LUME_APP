@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Acta, Anuncio, Chat, Comunidad, Empresa, ExtendsChat, Gasto, Incidencia, Motivo, Nota, PagosUsuario, Recibo, SeguroComunidad, UserProfile, Vivienda
+from .models import Acta, Anuncio, Chat, Comunidad, Empresa, Evento, ExtendsChat, Gasto, Incidencia, Motivo, Nota, PagosUsuario, Recibo, SeguroComunidad, UserProfile, Vivienda
 
 
 
@@ -221,4 +221,18 @@ class UpdateIMGEmpresaForm(forms.ModelForm):
     class Meta:
         model = Empresa
         fields = ['IMG_profile']
+
+
+class EventoForm(forms.ModelForm):
+    class Meta:
+        model = Evento
+        fields = ['title', 'descripcion', 'date', 'max_attendees', 'image', 'visibility', 'comunidad']
+        widgets = {'date': forms.DateInput(attrs={'type': 'date'})}
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(EventoForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['comunidad'].queryset = Comunidad.objects.filter(vivienda__usuario=user).distinct()
+        
 

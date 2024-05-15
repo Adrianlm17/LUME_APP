@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
@@ -104,13 +105,34 @@ class Trabajador(models.Model):
 
 
 class Evento(models.Model):
-    comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE)
-    titulo = models.CharField(max_length=100)
-    descripcion = models.TextField()
-    fecha_hora = models.DateTimeField()
+    PUBLIC = 'publico'
+    PRIVATE = 'privado'
+    VISIBILITY_CHOICES = [
+        (PUBLIC, 'Publico'),
+        (PRIVATE, 'Privado'),
+    ]
+
+    title = models.CharField(max_length=255, null=True)
+    descripcion = models.TextField(null=True)
+    date = models.DateField(blank=True, null=True)
+    max_attendees = models.PositiveIntegerField(null=True)
+    current_attendees = models.PositiveIntegerField(default=0)
+    image = models.ImageField(upload_to='eventos/', blank=True, null=True)
+    visibility = models.CharField(max_length=10, choices=VISIBILITY_CHOICES, default=PUBLIC)
+    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.titulo
+        return self.title
+
+
+class Attendance(models.Model):
+    evento = models.ForeignKey(Evento, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    joined_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = ('evento', 'usuario')
 
 
 

@@ -1,6 +1,7 @@
 import calendar
 from datetime import date, datetime, timedelta
 from decimal import Decimal
+from django.contrib import messages
 import locale
 from django.db.models import Avg
 import mimetypes
@@ -11,10 +12,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateDoesNotExist, loader
 from django.urls import reverse
 from app.admin_lume.forms import CrearUserProfileForm
-from app.home.forms import ActaForm, AsignarUsuarioComunidadForm, ChatForm, CrearAnuncioForm, EditarComunidadForm, EditarEmpresaForm, ExtendsChatForm, GastoForm, IncidenciaAdminForm, IncidenciaEmpresaForm, IncidenciaForm, MotivoReciboForm, MotivoReciboFormSet, NotaForm, PagosUsuarioForm, ReciboForm, SeguroComunidadForm, UpdateIMGEmpresaForm, UpdateIMGForm, UpdateProfileForm
+from app.home.forms import ActaForm, AsignarUsuarioComunidadForm, ChatForm, CrearAnuncioForm, EditarComunidadForm, EditarEmpresaForm, EventoForm, ExtendsChatForm, GastoForm, IncidenciaAdminForm, IncidenciaEmpresaForm, IncidenciaForm, MotivoReciboForm, MotivoReciboFormSet, NotaForm, PagosUsuarioForm, ReciboForm, SeguroComunidadForm, UpdateIMGEmpresaForm, UpdateIMGForm, UpdateProfileForm
 from app.home.models import Nota, User
 from django.db.models import Q
-from .models import Acta, Anuncio, Calendario, Chat, ChatReadBy, Comunidad, Empresa, ExtendsChat, Gasto, Incidencia, Motivo, Nota, PagosUsuario, Recibo, SeguroComunidad, Trabajador, Transaccion, UserProfile, Vivienda  
+from .models import Acta, Anuncio, Attendance, Calendario, Chat, ChatReadBy, Comunidad, Empresa, Evento, ExtendsChat, Gasto, Incidencia, Motivo, Nota, PagosUsuario, Recibo, SeguroComunidad, Trabajador, Transaccion, UserProfile, Vivienda
+from app.home import models  
 
 
 
@@ -466,8 +468,6 @@ def actas(request, comunidad_seleccionada=False):
             primera_comunidad = comunidades[0]
             return redirect('home:actas', comunidad_seleccionada=primera_comunidad.pk)
         else:
-            # Si no hay comunidades disponibles, puedes manejar este caso aquí
-            # Por ejemplo, renderizar un mensaje de error o redirigir a otra vista.
             pass
     else:
         comunidad_seleccionada = Comunidad.objects.get(pk=comunidad_seleccionada)
@@ -631,6 +631,90 @@ def delete_calendario(request, recordatorio_id):
     return redirect('home:calendario', año=año, mes=mes)
 
 
+
+
+
+
+# ---------------------------------------------------------- EVENTOS ---------------------------------------------------------- 
+@login_required(login_url="/login/login/")
+def eventos(request):
+    now = timezone.now()
+    user_communities = Comunidad.objects.filter(vivienda__usuario=request.user).distinct()
+    eventos = Evento.objects.filter(
+        Q(visibility=Evento.PUBLIC, date__gte=now) | 
+        Q(visibility=Evento.PRIVATE, comunidad__in=user_communities, date__gte=now)
+    ).distinct()
+
+    eventos_with_attendance = {}
+    for evento in eventos:
+        is_attending = Attendance.objects.filter(evento=evento, usuario=request.user).exists()
+        eventos_with_attendance[evento] = is_attending
+
+    return render(request, 'home/eventos.html', {'segment': 'eventos', 'eventos_with_attendance': eventos_with_attendance})
+
+
+
+
+
+
+@login_required(login_url="/login/login/")
+def crear_evento(request):
+    if request.method == 'POST':
+        form = EventoForm(request.POST, request.FILES, user=request.user)
+        if form.is_valid():
+            evento = form.save(commit=False)
+            evento.usuario = request.user
+            evento.save()
+            return redirect('home:eventos')
+    else:
+        form = EventoForm(user=request.user)
+    return render(request, 'home/crear_evento.html', {'segment': 'eventos', 'form': form})
+
+
+@login_required(login_url="/login/login/")
+def unirse_evento(request, event_id):
+    evento = get_object_or_404(Evento, id=event_id)
+    if evento.current_attendees < evento.max_attendees:
+
+        if Attendance.objects.filter(evento=evento, usuario=request.user).exists():
+            messages.error(request, 'Ya estás inscrito en este evento!')
+        else:
+            Attendance.objects.create(evento=evento, usuario=request.user)
+            evento.current_attendees += 1
+            evento.save()
+
+            Calendario.objects.create(
+                usuario=request.user,
+                titulo=evento.title,
+                descripcion=evento.descripcion,
+                fecha=evento.date
+            )
+
+            messages.success(request, 'Fuiste apuntad@ correctamente al evento!')
+    else:
+        messages.error(request, 'El evento está completo...')
+
+    return redirect('home:eventos')
+
+
+@login_required(login_url="/login/login/")
+def desapuntarse_evento(request, event_id):
+    evento = get_object_or_404(Evento, id=event_id)
+    attendance = Attendance.objects.filter(evento=evento, usuario=request.user)
+    
+    if attendance.exists():
+        attendance.delete()  # Eliminar la asistencia del usuario al evento
+        evento.current_attendees -= 1  # Reducir el número de personas apuntadas al evento
+        evento.save()
+
+        # Eliminar el evento del calendario del usuario si existe
+        Calendario.objects.filter(usuario=request.user, titulo=evento.title, fecha=evento.date).delete()
+        
+        messages.success(request, '¡Te has desapuntado del evento!')
+    else:
+        messages.error(request, 'No estabas apuntado a este evento...')
+
+    return redirect('home:eventos')
 
 
 
@@ -1277,8 +1361,19 @@ def comunidades_configuracion(request, comunidad_seleccionada=False):
         if crear_anuncio_form.is_valid():
             titulo = crear_anuncio_form.cleaned_data['titulo']
             descripcion = crear_anuncio_form.cleaned_data['descripcion']
-            fecha_anuncio = crear_anuncio_form.cleaned_data['fecha_anuncio']            
-            Anuncio.objects.create(comunidad=comunidad_seleccionada, titulo=titulo, descripcion=descripcion, fecha_anuncio=fecha_anuncio)
+            fecha_anuncio = crear_anuncio_form.cleaned_data['fecha_anuncio']
+            anuncio = Anuncio.objects.create(comunidad=comunidad_seleccionada, titulo=titulo, descripcion=descripcion, fecha_anuncio=fecha_anuncio)
+            
+            # Añadir el anuncio al calendario de todos los usuarios de la comunidad
+            usuarios = Vivienda.objects.filter(comunidad=comunidad_seleccionada).values_list('usuario', flat=True).distinct()
+            for usuario_id in usuarios:
+                usuario = User.objects.get(id=usuario_id)
+                Calendario.objects.create(
+                    usuario=usuario,
+                    titulo=f"Anuncio: {titulo}",
+                    descripcion=descripcion,
+                    fecha=fecha_anuncio
+                )
 
         # Procesar el formulario para el seguro de la comunidad
         seguro_comunidad_form = SeguroComunidadForm(request.POST)
@@ -1312,6 +1407,7 @@ def comunidades_configuracion(request, comunidad_seleccionada=False):
         "chats_no_leidos": chats_no_leidos, 
         "num_mensajes_no_leidos": num_mensajes_no_leidos, 
     })
+
 
 
 @login_required(login_url="/login/login/")
