@@ -12,11 +12,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateDoesNotExist, loader
 from django.urls import reverse
 from app.admin_lume.forms import CrearUserProfileForm
-from app.home.forms import ActaForm, AsignarUsuarioComunidadForm, ChatForm, CrearAnuncioForm, EditarComunidadForm, EditarEmpresaForm, EventoForm, ExtendsChatForm, GastoForm, IncidenciaAdminForm, IncidenciaEmpresaForm, IncidenciaForm, MotivoReciboForm, MotivoReciboFormSet, NotaForm, PagosUsuarioForm, ReciboForm, SeguroComunidadForm, UpdateIMGEmpresaForm, UpdateIMGForm, UpdateProfileForm
+from app.home.forms import ActaForm, AsignarUsuarioComunidadForm, ChatForm, CrearAnuncioForm, EditarComunidadForm, EditarEmpresaForm, EventoForm, ExtendsChatForm, GastoForm, IncidenciaAdminForm, IncidenciaEmpresaForm, IncidenciaForm, MetodoPagoForm, MotivoReciboForm, MotivoReciboFormSet, NotaForm, PagosUsuarioForm, PorcentajePagoForm, ReciboForm, SeguroComunidadForm, UpdateIMGEmpresaForm, UpdateIMGForm, UpdateProfileForm
 from app.home.models import Nota, User
 from django.db.models import Q
 from .models import Acta, Anuncio, Attendance, Calendario, Chat, ChatReadBy, Comunidad, Empresa, Evento, ExtendsChat, Gasto, Incidencia, Motivo, Nota, PagosUsuario, Recibo, SeguroComunidad, Trabajador, Transaccion, UserProfile, Vivienda
-from app.home import models  
 
 
 
@@ -1024,11 +1023,21 @@ def crear_recibo(request, comunidad_seleccionada):
             recibo.comunidad = comunidad
             recibo.save()
 
+            # Obtener el método de pago de la comunidad
+            metodo_pago = comunidad.metodo_pago
+
             # Calcular la cantidad que cada miembro de la comunidad debe pagar
             total_recibo = recibo.cantidad_total
             viviendas_comunidad = Vivienda.objects.filter(comunidad=comunidad)
             numero_viviendas = viviendas_comunidad.count()
-            cantidad_por_usuario = total_recibo / numero_viviendas
+
+            if metodo_pago == 'igual':
+                cantidad_por_usuario = total_recibo / numero_viviendas
+            else:  # método_pago == 'porcentajes'
+                # Calcular el total de porcentajes para distribuir equitativamente
+                total_porcentajes = sum(vivienda.porcentaje_pago for vivienda in viviendas_comunidad)
+                # Calcular la cantidad que cada vivienda debe pagar basada en su porcentaje
+                cantidad_por_usuario = {vivienda.usuario_id: (total_recibo * vivienda.porcentaje_pago / total_porcentajes) for vivienda in viviendas_comunidad}
 
             # Crear un registro de pago para cada usuario de cada vivienda en la comunidad
             for vivienda in viviendas_comunidad:
@@ -1038,7 +1047,7 @@ def crear_recibo(request, comunidad_seleccionada):
                     titulo=recibo.titulo,
                     descripcion=recibo.descripcion,
                     fecha=recibo.fecha_tope,
-                    cantidad=cantidad_por_usuario,
+                    cantidad=cantidad_por_usuario[vivienda.usuario_id],
                     estado='pendiente'
                 )
 
@@ -1115,30 +1124,63 @@ def crear_motivo(request, comunidad_seleccionada):
 def editar_recibo(request, recibo_id):
     recibo = get_object_or_404(Recibo, pk=recibo_id)
     comunidad_id = recibo.comunidad_id
+    total_gastos = 0
+
     if request.method == 'POST':
         recibo_form = ReciboForm(request.POST, instance=recibo)
         motivo_recibo_formset = MotivoReciboFormSet(request.POST, instance=recibo)
-        if recibo_form.is_valid() and motivo_recibo_formset.is_valid():
-            recibo_form.save()
-            motivo_recibo_formset.save()
+        
 
-            try:
-                evento_calendario = Calendario.objects.get(titulo=f"Recibo: {recibo.titulo}")
-                evento_calendario.descripcion = recibo.descripcion
-                evento_calendario.fecha = recibo.fecha_tope
-                evento_calendario.save()
-            except Calendario.DoesNotExist:
-                pass
+        total_gastos = sum([form.cleaned_data['cantidad'] for form in motivo_recibo_formset.cleaned_data])
+        if total_gastos != recibo.cantidad_total:
+            return redirect('editar_recibo', recibo_id=recibo_id)
+        
+        else:
+            if recibo_form.is_valid() and motivo_recibo_formset.is_valid():
+                recibo_form.save()
+                motivo_recibo_formset.save()
 
-            return redirect('home:gastos', comunidad_seleccionada=comunidad_id) 
+                try:
+                    evento_calendario = Calendario.objects.get(titulo=f"Recibo: {recibo.titulo}")
+                    evento_calendario.descripcion = recibo.descripcion
+                    evento_calendario.fecha = recibo.fecha_tope
+                    evento_calendario.save()
+                except Calendario.DoesNotExist:
+                    pass
+
+                return redirect('home:gastos', comunidad_seleccionada=comunidad_id) 
     else:
         recibo_form = ReciboForm(instance=recibo)
         motivo_recibo_formset = MotivoReciboFormSet(instance=recibo)
-    
+        motivo_recibo_formset = [form for form in motivo_recibo_formset.forms if form.instance.tipo and form.instance.cantidad]
+
+
+        
+        total_gastos = 0
+        for motivo in recibo.motivos.all():
+            total_gastos += motivo.cantidad
+
+
+
+
+
+
     chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
     num_mensajes_no_leidos = chats_no_leidos.count()
 
-    return render(request, 'home/editar_recibo.html', {'segment': 'gastos', 'recibo': recibo, 'recibo_form': recibo_form, 'motivo_recibo_formset': motivo_recibo_formset, 'comunidad_id': comunidad_id, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
+    return render(request, 'home/editar_recibo.html', {
+        'segment': 'gastos',
+        'recibo': recibo,
+        'recibo_form': recibo_form,
+        'motivo_recibo_formset': motivo_recibo_formset,
+        'comunidad_id': comunidad_id,
+        'chats_no_leidos': chats_no_leidos,
+        'total_gastos': total_gastos,
+        'num_mensajes_no_leidos': num_mensajes_no_leidos
+    })
+
+
+
 
 
 @login_required(login_url="/login/login/")
@@ -1281,9 +1323,10 @@ def editar_recibo_gasto(request, comunidad_seleccionada, tipo, recibo_id):
         'tipo': tipo,
         'recibo': recibo, 
         'chats_no_leidos': chats_no_leidos, 
-        'num_mensajes_no_leidos':num_mensajes_no_leidos
+        'num_mensajes_no_leidos': num_mensajes_no_leidos
     }
     return render(request, 'home/editar_recibo_gasto.html', context)
+
 
 
 
@@ -1376,11 +1419,9 @@ def comunidades_configuracion(request, comunidad_seleccionada=False):
                 )
 
         # Procesar el formulario para el seguro de la comunidad
-        seguro_comunidad_form = SeguroComunidadForm(request.POST)
+        seguro_comunidad_form = SeguroComunidadForm(request.POST, instance=comunidad_seleccionada.segurocomunidad)
         if seguro_comunidad_form.is_valid():
-            seguro_comunidad = seguro_comunidad_form.save(commit=False)
-            seguro_comunidad.comunidad = comunidad_seleccionada
-            seguro_comunidad.save()
+            seguro_comunidad_form.save()
 
         if not comunidad_seleccionada:
             if comunidades:
@@ -1391,7 +1432,8 @@ def comunidades_configuracion(request, comunidad_seleccionada=False):
 
     form = EditarComunidadForm(instance=comunidad_seleccionada)
     crear_anuncio_form = CrearAnuncioForm()
-    seguro_comunidad_form = SeguroComunidadForm()
+    seguro_comunidad_instance = comunidad_seleccionada.segurocomunidad if comunidad_seleccionada.segurocomunidad else None
+    seguro_comunidad_form = SeguroComunidadForm(instance=seguro_comunidad_instance)
 
     usuarios = Vivienda.objects.filter(comunidad=comunidad_seleccionada).exclude(usuario=request.user).values_list('usuario', flat=True).distinct()
 
@@ -1491,6 +1533,49 @@ def editar_vivienda_comunidad(request, comunidad_id, viviendas_id):
 
     return render(request, "home/editar_vivienda.html", {'segment': 'communidad', "chats_no_leidos": chats_no_leidos, "num_mensajes_no_leidos": num_mensajes_no_leidos, "comunidad_id": comunidad_id, "viviendas_form": viviendas_form, "msg": msg, "success": success})
 
+
+@login_required(login_url="/login/login/")
+def administrar_distribucion_gastos(request, comunidad_id):
+    comunidad = get_object_or_404(Comunidad, id=comunidad_id)
+    viviendas = Vivienda.objects.filter(comunidad=comunidad)
+    success = False
+    msg = None
+
+    if request.method == 'POST':
+        metodo_pago_form = MetodoPagoForm(request.POST, instance=comunidad)
+        porcentaje_forms = [PorcentajePagoForm(request.POST, prefix=str(vivienda.id), instance=vivienda) for vivienda in viviendas]
+        
+        if metodo_pago_form.is_valid():
+            metodo_pago_form.save()
+            valid_forms = all([form.is_valid() for form in porcentaje_forms])
+
+            total_porcentaje = sum([form.cleaned_data['porcentaje_pago'] for form in porcentaje_forms])
+
+            if valid_forms and total_porcentaje == 100:
+                for form in porcentaje_forms:
+                    form.save()
+                
+                if comunidad.metodo_pago == 'igual':
+                    for vivienda in viviendas:
+                        vivienda.porcentaje_pago = 0.00
+                        vivienda.save()
+
+                success = True
+            else:
+                msg = "El porcentaje total asignado debe ser igual a 100."
+
+    else:
+        metodo_pago_form = MetodoPagoForm(instance=comunidad)
+        porcentaje_forms = [PorcentajePagoForm(prefix=str(vivienda.id), instance=vivienda) for vivienda in viviendas]
+
+    return render(request, 'home/administrar_distribucion_gastos.html', {
+        'segment': 'communidad',
+        'comunidad': comunidad,
+        'metodo_pago_form': metodo_pago_form,
+        'porcentaje_forms': porcentaje_forms,
+        'msg': msg,
+        'success': success,
+    })
 
 
 

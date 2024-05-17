@@ -82,6 +82,7 @@ urlpatterns = [
     path('<int:comunidad_id>/asignar_usuario_comunidad', home_views.asignar_usuario_comunidad, name='asignar_usuario_comunidad'),
     path('<int:comunidad_id>/<int:viviendas_id>/eliminar_vivienda', home_views.eliminar_vivienda, name='eliminar_vivienda'),
     path('<int:comunidad_id>/<int:viviendas_id>/editar_vivienda_comunidad', home_views.editar_vivienda_comunidad, name='editar_vivienda_comunidad'),
+    path('<int:comunidad_id>/administrar_distribucion_gastos', home_views.administrar_distribucion_gastos, name='administrar_distribucion_gastos'),
 
     # ------------------------------- EMPRESA CONFIG -------------------------------
     path('config_empresa', home_views.edit_empresa_profile, name='config_empresa'),

@@ -1,4 +1,5 @@
 {% extends "layouts/base_app.html" %}
+{% load static %}
 
 {% block title %} CALENDARIO | LUME {% endblock %} 
 
@@ -9,7 +10,7 @@
     <a href="{{ url_mes_siguiente }}" class="btn btn-outline-dark">&gt;</a>
 </div>
 
-<table class="table table-bordered">
+<table class="table table-bordered calendario-alto">
     <thead class="thead-dark">
         <tr>
             {% for dia_semana in dias_de_la_semana %}
@@ -44,4 +45,13 @@
 <div class="text-center">
     <a href="{% url 'home:crear_recordatorio' %}" class="btn btn-primary">Agregar Evento/Recordatorio</a>
 </div>
+
+
+<style>
+    .calendario-alto td {
+        height: 100px;
+        vertical-align: top;
+        padding: 10px;
+}
+</style>
 {% endblock content %}

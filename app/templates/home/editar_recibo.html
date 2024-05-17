@@ -1,4 +1,5 @@
 {% extends "layouts/base_app.html" %}
+{% load static %}
 
 {% block title %}Editar Recibo | CHAT | LUME{% endblock %}
 
@@ -33,7 +34,7 @@
                     <div class="card-body">
                         <div class="card-body table-responsive">
                             <table class="table table-hover">
-                              <thead class="text-dark">
+                                <thead class="text-dark">
                                     <tr>
                                         <th>Tipo</th>
                                         <th>Cantidad</th>
@@ -46,12 +47,16 @@
                                             <td>{{ form.cantidad.value }}</td>
                                         </tr>
                                     {% endfor %}
+                                    <tr>
+                                        <td>Total</td>
+                                        <td>{{ total_gastos }}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="card-footer">
                             <button type="button" onclick="location.href='{% url 'home:crear_motivo' comunidad_id %}'">Agregar Motivo</button>
-                            <button type="button" onclick="location.href='{% url 'home:gastos' comunidad_id %}'">Guardar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
                         </div>
                     </div>
                 </form>

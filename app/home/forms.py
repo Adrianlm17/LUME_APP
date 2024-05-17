@@ -119,6 +119,18 @@ class EditarComunidadForm(forms.ModelForm):
         fields = ['nombre', 'pais', 'provincia', 'municipio', 'calle', 'portal', 'dinero']
 
 
+class MetodoPagoForm(forms.ModelForm):
+    class Meta:
+        model = Comunidad
+        fields = ['metodo_pago']
+
+
+class PorcentajePagoForm(forms.ModelForm):
+    class Meta:
+        model = Vivienda
+        fields = ['porcentaje_pago']
+
+
 class CrearAnuncioForm(forms.ModelForm):
     class Meta:
         model = Anuncio

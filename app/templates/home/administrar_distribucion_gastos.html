@@ -1,0 +1,88 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %}Administrar Distribución de Gastos{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        {% if success %}
+        <div class="alert alert-success alert-dismissible text-center">
+            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>¡ACTUALIZADO!</strong> Distribución de gastos actualizado!
+        </div>
+        {% endif %}
+
+        {% if msg %}
+        <div class="alert alert-danger alert-dismissible text-center">
+            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Error:</strong> {{ msg }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+
+<a href="{% url 'home:comunidades_configuracion' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<div class="row justify-content-center">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+          <div class="card-header card-header-info">
+              <h4 class="card-title"><i class="material-icons">leaderboard</i> Administrar Distribución gastos - {{ comunidad.nombre }}</h4>
+          </div>
+          <div class="card-body">
+            <form method="post" action="{% url 'home:administrar_distribucion_gastos' comunidad.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="metodo_pago">Método de Pago:</label>
+                    {{ metodo_pago_form.metodo_pago }}
+                </div>
+
+                {% if comunidad.metodo_pago == 'porcentajes' %}
+                <h3>Asignar Porcentajes</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Vivienda</th>
+                            <th>Porcentaje de Pago</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for form in porcentaje_forms %}
+                        <tr>
+                            <td>{{ form.instance.piso }} - {{ form.instance.puerta }}</td>
+                            <td>{{ form.porcentaje_pago }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <h3>Asignar Porcentajes</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Vivienda</th>
+                            <th>Porcentaje de Pago</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for form in porcentaje_forms %}
+                        <tr>
+                            <td>{{ form.instance.piso }} - {{ form.instance.puerta }}</td>
+                            <td><input type="text" class="form-control" value="0.00" readonly></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<br>
+
+{% endblock %}

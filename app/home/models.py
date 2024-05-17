@@ -27,6 +27,7 @@ class Comunidad(models.Model):
     token = models.CharField(max_length=16, unique=True)
     IMG_profile = models.ImageField(upload_to='perfiles/', default='perfiles/default.jpg')
     dinero = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    metodo_pago = models.CharField(max_length=50, choices=[('igual', 'Pagar por igual'), ('porcentajes', 'Pagar por porcentajes')], default='igual')
 
     def __str__(self):
         return self.nombre
@@ -44,6 +45,7 @@ class Vivienda(models.Model):
     rol_comunidad = models.CharField(max_length=100, choices=ROL_COMUNIDAD, default='community_user')
     piso = models.CharField(max_length=100)
     puerta = models.CharField(max_length=100)
+    porcentaje_pago = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 
     def __str__(self):
         return self.usuario.username
@@ -236,6 +238,8 @@ class Motivo(models.Model):
         ('jardineria', 'Jardinería'),
         ('personal', 'Personal de comunidad'),
         ('limpieza', 'Limpieza'),
+        ('seguro', 'Seguro Comunidad'),
+        ('fondos', 'Fondos para la Comunidad'),
         ('extras', 'Extras'),
     ]
 

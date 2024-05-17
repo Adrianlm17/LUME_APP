@@ -57,7 +57,7 @@
             
             <div class="form-group">
               <h4>Token</h4>
-              <input type="text" name="token" value="{% if comunidad_seleccionada %}{{ comunidad_seleccionada.token }}{% endif %}" class="form-control" readonly>
+              <input type="text" name="token" value="{% if comunidad_seleccionada %}{{ comunidad_seleccionada.token }}{% endif %}" class="form-control text-center" readonly>
             </div>
             
             <button type="submit">Guardar cambios</button>
@@ -101,44 +101,44 @@
         <h4 class="card-title">Administrar Viviendas</h4>
       </div>
       <div class="card-body">
+        <p>
+          Administra las viviendas de tu comunidad, permitiendo añadir, modificar o incluso expulsar a miembros de tu comunidad!
+        </p>
         <a href="{% url 'home:administrar_viviendas' comunidad_seleccionada.id %}" class="btn btn-primary">Administrar Viviendas</a>
       </div>
     </div>
+
+    <br>
+
+    <div class="card">
+      <div class="card-header card-header-primary">
+        <h4 class="card-title">Administrar Distribución de Gastos</h4>
+      </div>
+      <div class="card-body">
+        <p>
+          Administra la distribución de los gastos de tu comunidad, permitiendo pagar por iguales o pagar por porcentajes!
+        </p>
+        <a href="{% url 'home:administrar_distribucion_gastos' comunidad_seleccionada.id %}" class="btn btn-primary">Administrar Distribución de Gastos</a>
+      </div>
+    </div>
+
   </div>
+</div>
 
-  <br>
-
-  <div class="card">
+<div class="card">
     <div class="card-header card-header-primary">
       <h4 class="card-title">Seguro de la Comunidad</h4>
     </div>
     <div class="card-body">
       <form method="post" action="{% url 'home:comunidades_configuracion' comunidad_seleccionada.id %}">
         {% csrf_token %}
-        <div class="form-group descripcion">
-          <h4>Empresa:</h4>
-          {{ seguro_comunidad_form.empresa }}
-        </div>
-        <div class="form-group descripcion">
-          <h4>Cubre:</h4>
-          {{ seguro_comunidad_form.cubre }}
-        </div>
-        <div class="form-group">
-          <h4>Cantidad:</h4>
-          {{ seguro_comunidad_form.cantidad }}
-        </div>
-        <div class="form-group">
-          <h4>Pagado:</h4>
-          {{ seguro_comunidad_form.pagado }}
-        </div>
-        <div class="form-group">
-          <h4>Fecha Pago:</h4>
-          {{ seguro_comunidad_form.fecha_pago }}
-        </div>
-        <div class="form-group">
-          <h4>Fecha Vencimiento:</h4>
-          {{ seguro_comunidad_form.fecha_vencimiento }}
-        </div>
+        {% for field in seguro_comunidad_form %}
+          <div class="form-group">
+            <h4>{{ field.label }}</h4>
+            {{ field }}
+          </div>
+          <br>
+        {% endfor %}
         <button type="submit" class="btn btn-primary">Guardar Seguro</button>
       </form>
     </div>       
