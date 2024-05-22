@@ -15,11 +15,21 @@
                 <h1>Detalle del Movimiento</h1>
             </div>
             <div class="card-body">
-                <p><strong>Fecha:</strong> {{ movimiento.fecha_tope }}</p>
-                <p><strong>Título:</strong> {{ movimiento.titulo }}</p>
-                <p><strong>Descripción:</strong> {{ movimiento.descripcion }}</p>
-                <p><strong>Cantidad Total:</strong> {{ movimiento.cantidad_total }}</p>
-                <p><strong>Estado:</strong>{{ movimiento.estado }}</p>
+                <p><strong>Título: </strong> {{ movimiento.titulo }}</p>
+                <p><strong>Descripción: </strong> {{ movimiento.descripcion }}</p>
+                {% if tipo == 'gasto_personal' %}
+                    <p><strong>Cantidad Total: </strong> {{ movimiento.cantidad }}</p>
+                    <p><strong>Fecha:</strong> {{ movimiento.fecha }}</p>
+                {% else %}
+                    <p><strong>Cantidad Total: </strong> {{ movimiento.cantidad_total }}</p>
+                    <p><strong>Fecha: </strong> {{ movimiento.fecha_tope }}</p>
+                {% endif %}
+                <p><strong>Estado: </strong>{{ movimiento.estado }}</p>
+                {% if movimiento.archivo %}
+                    <p><b>Archivos adjuntos:</b> 
+                        <a href="?download=true"><i class="material-icons">file_download</i> DESCARGAR</a>
+                    </p>
+                {% endif %}
             </div>
         </div>
     </div>

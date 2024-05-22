@@ -8,15 +8,31 @@
 
 <div class="container mt-4">
     <div class="row">
+        <div class="col-md-8">
+            <h2>Empresas</h2>
+        </div>
+        <div class="col-md-4">
+            <form method="GET" action="{% url 'home:ver_empresas' %}" class="form-inline float-right">
+                <input name="q" type="text" class="form-control mr-2" placeholder="Buscar empresa" value="{{ query }}">
+                <button type="submit" class="btn btn-dark">Buscar</button>
+            </form>
+        </div>
+    </div>
+    <div class="row mt-4">
         {% for empresa in empresas %}
         <div class="col-md-4 mb-4">
-            <div class="card">
+            <div class="card shadow-sm h-100">
                 <img src="{% static 'app_files/' %}{{ empresa.IMG_profile }}" class="card-img-top" alt="IMG Empresa">
                 <div class="card-body">
                     <h5 class="card-title">{{ empresa.nombre }}</h5>
-                    <p class="card-text">{{ empresa.descripcion }}</p>
-                    <p class="card-text">Valoración: {{ empresa.valoracion_media }}</p>
-                    <p class="card-text">Contacto: {{ empresa.telefono }} | {{ empresa.correo }}</p>
+                    <p class="card-text">{{ empresa.descripcion|truncatewords:20 }}</p>
+                    <p class="card-text">{{ empresa.pais }} | {{ empresa.provincia }} | {{ empresa.municipio }}</p>
+                    {% if empresa.valoracion_media %}
+                        <p class="card-text"><strong>Valoración: </strong> {{ empresa.valoracion_media }} / 5</p>
+                    {% else %}
+                        <p class="card-text"><strong>Valoración: </strong>EMPRESA NUEVA</p>
+                    {% endif %}
+                    <p class="card-text"><strong>Contacto:</strong> {{ empresa.telefono }} | {{ empresa.correo }}</p>
                     <a href="{% url 'home:detalle_empresa' empresa.id %}" class="btn btn-dark btn-block">Ver Empresa</a>
                 </div>
             </div>

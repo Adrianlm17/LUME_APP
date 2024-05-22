@@ -1,10 +1,9 @@
 {% extends "layouts/base_app.html" %}
 {% load static %}
 
-{% block title %} EVENTOS | LUME {% endblock %} 
+{% block title %} EVENTOS | LUME {% endblock %}
 
 {% block content %}
-
 {% if messages %}
   {% for message in messages %}
     {% if message.tags == "error" or message.tags == "danger" %}
@@ -22,30 +21,28 @@
   {% endfor %}
 {% endif %}
 
-<div class="text-center">
+<div class="text-center mb-4">
     <h1>EVENTOS</h1>
 </div>
 
-<br>
-
-<div class="text-center">
+<div class="text-center mb-4">
     <a href="{% url 'home:crear_evento' %}" class="btn btn-info">Crear Evento</a>
 </div>
 
-<br>
-
 <div class="container">
+    <h2 class="mb-4">Eventos de tus comunidades</h2>
     <div class="row">
-        {% for evento, is_attending in eventos_with_attendance.items %}
-        <div class="col-md-3 mb-4">
-            <div class="card h-100">
+        {% for evento, is_attending in community_events_with_attendance.items %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
                 {% if evento.image %}
-                    <img src="{% static 'app_files/' %}{{ evento.image }}" alt="{{ evento.title }}">
+                    <img src="{% static 'app_files/' %}{{ evento.image }}" class="card-img-top" alt="{{ evento.title }}">
                 {% endif %}
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ evento.title }}</h5>
                     <p class="card-text">{{ evento.descripcion }}</p>
                     <p class="card-text"><small class="text-muted">{{ evento.date }}</small></p>
+                    <p class="card-text">{{ evento.direccion }}, {{ evento.pais }}</p>
                     <p class="card-text"><strong>{{ evento.current_attendees }} / {{ evento.max_attendees }}</strong></p>
                     {% if is_attending %}
                         <form method="post" action="{% url 'home:desapuntarse_evento' evento.id %}">
@@ -62,6 +59,47 @@
             </div>
         </div>
         {% endfor %}
+        {% if not community_events_with_attendance %}
+        <div class="col-12">
+            <p class="text-center">No hay eventos disponibles en tus comunidades.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <h2 class="mb-4">Otros eventos públicos</h2>
+    <div class="row">
+        {% for evento, is_attending in other_public_events_with_attendance.items %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if evento.image %}
+                    <img src="{% static 'app_files/' %}{{ evento.image }}" class="card-img-top" alt="{{ evento.title }}">
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ evento.title }}</h5>
+                    <p class="card-text">{{ evento.descripcion }}</p>
+                    <p class="card-text"><small class="text-muted">{{ evento.date }}</small></p>
+                    <p class="card-text">{{ evento.direccion }}, {{ evento.pais }}</p>
+                    <p class="card-text"><strong>{{ evento.current_attendees }} / {{ evento.max_attendees }}</strong></p>
+                    {% if is_attending %}
+                        <form method="post" action="{% url 'home:desapuntarse_evento' evento.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger mt-auto">Desapuntarse</button>
+                        </form>
+                    {% else %}
+                        <form method="post" action="{% url 'home:unirse_evento' evento.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success mt-auto">Apuntarse</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% if not other_public_events_with_attendance %}
+        <div class="col-12">
+            <p class="text-center">No hay otros eventos públicos disponibles.</p>
+        </div>
+        {% endif %}
     </div>
 </div>
 

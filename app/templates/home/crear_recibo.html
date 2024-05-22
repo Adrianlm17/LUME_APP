@@ -16,7 +16,7 @@
                 <h2 class="text-center">Crear Recibo | {{ comunidad.nombre }}</h2>
             </div>
             <div class="card-body">
-                <form method="post" id="recibo_form"> 
+                <form method="post" enctype="multipart/form-data" id="recibo_form">  <!-- Agrega enctype aquí -->
                     {% csrf_token %}
                     <div class="form-group">
                         <label>Titulo:</label>
@@ -43,13 +43,18 @@
                         {{ recibo_form.cantidad_total }}
                         <span class="text-danger">{{ recibo_form.cantidad_total.errors }}</span>
                     </div>
+                    <div>
+                        <label for="archivo">Archivo adjunto:</label>
+                        {{ recibo_form.archivo }}
+                        <span class="text-danger">{{ recibo_form.archivo.errors }}</span>
+                    </div>
 
                     {{ motivo_recibo_formset.management_form }}
             
                     <div class="card-body">
                         <div class="card-body table-responsive">
                             <table class="table table-hover">
-                              <thead class="text-dark">
+                                <thead class="text-dark">
                                     <tr>
                                         <th>Tipo</th>
                                         <th>Cantidad</th>
@@ -63,7 +68,6 @@
                                                 <td>{{ motivo.cantidad }}</td>
                                             </tr>
                                         {% endfor %}
-                                    
                                     {% else %}
                                         <tr>
                                             <th>¡Pendiente de asignar motivos!</th>
@@ -81,7 +85,6 @@
         </div>
     </div>
 </div>
-
 
 <script>
     function submitForm() {

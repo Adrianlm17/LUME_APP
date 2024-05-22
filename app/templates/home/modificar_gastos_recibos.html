@@ -14,11 +14,13 @@
       <thead class="thead-dark">
         <tr>
           <th>Tipo</th>
+          <th>Usuario</th>
           <th>Fecha</th>
           <th>Título</th>
           <th>Descripción</th>
           <th>Cantidad</th>
           <th>Estado</th>
+          <th>Fecha Tope</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -26,23 +28,30 @@
         {% for item in historial_completo %}
         <tr>
           <td>{{ item.tipo }}</td>
+          {% if item.usuario %}
+            <td>{{ item.usuario }}</td>
+          {% else %}
+            <td></td>
+          {% endif %}
           <td>{{ item.fecha }}</td>
           <td>{{ item.titulo }}</td>
           <td>{{ item.descripcion }}</td>
           <td>{{ item.cantidad_total }}</td>
           <td>{{ item.estado }}</td>
           {% if item.tipo == 'Gasto' or item.tipo == 'Recibo' %}
-          <td>{{ item.fecha_tope }}</td>
+            <td>{{ item.fecha_tope }}</td>
+          {% else %}
+            <td></td>
           {% endif %}
           <td>
             {% if item.tipo == 'Gasto' %}
-            <a href="{% url 'home:editar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='gasto' recibo_id=item.id %}" class="btn btn-primary btn-sm">Ver</a>
+            <a href="{% url 'home:editar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='gasto' recibo_id=item.id %}" class="btn btn-primary btn-sm">Editar</a>
             <a href="{% url 'home:eliminar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='gasto' recibo_id=item.id %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este gasto?')">Eliminar</a>
             {% elif item.tipo == 'Gasto Personal' %}
-            <a href="{% url 'home:editar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='gasto_personal' recibo_id=item.id %}" class="btn btn-primary btn-sm">Ver</a>
+            <a href="{% url 'home:editar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='gasto_personal' recibo_id=item.id %}" class="btn btn-primary btn-sm">Editar</a>
             <a href="{% url 'home:eliminar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='gasto_personal' recibo_id=item.id %}" class="btn btn-danger btn-sm"  onclick="return confirm('¿Estás seguro de que deseas eliminar este gasto personal?')">Eliminar</a>
             {% elif item.tipo == 'Recibo' %}
-            <a href="{% url 'home:editar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='recibo' recibo_id=item.id %}" class="btn btn-primary btn-sm">Ver</a>
+            <a href="{% url 'home:editar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='recibo' recibo_id=item.id %}" class="btn btn-primary btn-sm">Editar</a>
             <a href="{% url 'home:eliminar_recibo_gasto' comunidad_seleccionada=comunidad_seleccionada tipo='recibo' recibo_id=item.id %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este recibo?')">Eliminar</a>
             {% endif %}
           </td>

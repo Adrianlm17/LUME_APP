@@ -10,10 +10,12 @@ class UserProfile(models.Model):
     fondo = models.CharField(max_length=20, default='clear')
     lang = models.CharField(max_length=10, default='es')
     user_rol = models.CharField(max_length=100, blank=True)
-    IMG_profile = models.ImageField(upload_to='perfiles/', default='perfiles/default.jpg')
+    IMG_profile = models.ImageField(upload_to='perfiles/', default='perfiles/anonimo.png')
+    saldo = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     def __str__(self):
         return self.user.email
+
 
 
 
@@ -25,9 +27,10 @@ class Comunidad(models.Model):
     calle = models.CharField(max_length=100)
     portal = models.CharField(max_length=100)
     token = models.CharField(max_length=16, unique=True)
-    IMG_profile = models.ImageField(upload_to='perfiles/', default='perfiles/default.jpg')
+    IMG_profile = models.ImageField(upload_to='perfiles/', default='perfiles/anonimo.png')
     dinero = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     metodo_pago = models.CharField(max_length=50, choices=[('igual', 'Pagar por igual'), ('porcentajes', 'Pagar por porcentajes')], default='igual')
+    numero_cuenta = models.CharField(max_length=20, unique=True, null=True)
 
     def __str__(self):
         return self.nombre
@@ -53,12 +56,19 @@ class Vivienda(models.Model):
 
 
 class Incidencia(models.Model):
+    numero = models.BigAutoField(primary_key=True)
     titulo = models.CharField(max_length=100)
     descripcion = models.TextField()
     archivo = models.FileField(upload_to='incidencias/', null=True, blank=True)
     fecha_apertura = models.DateField(auto_now_add=True)
     fecha_cierre = models.DateField(null=True, blank=True)
-    prioridad = models.IntegerField(default=1)
+    PRIORIDAD_CHOICES = [
+        ('baja', 'Baja'),
+        ('media', 'Media'),
+        ('alta', 'Alta'),
+        ('urgente', 'Urgente'),
+    ]
+    prioridad = models.CharField(max_length=20, choices=PRIORIDAD_CHOICES, default='baja')
     ESTADO_CHOICES = [
         ('Pendiente de aceptar', 'Pendiente de aceptar'),
         ('Denegada', 'Denegada'),
@@ -73,11 +83,16 @@ class Incidencia(models.Model):
     empresa = models.ForeignKey('Empresa', on_delete=models.SET_NULL, null=True, blank=True)
     usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE, null=True)
-    valoracion = models.IntegerField(null=True, validators=[MinValueValidator(1), MaxValueValidator(10)])
+    valoracion = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(5)], default=3)
     gasto = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=0.00)
 
     def __str__(self):
-        return self.titulo
+        return f"#{self.numero} - {self.titulo}"
+
+    def save(self, *args, **kwargs):
+        if self.estado == 'Finalizada' and not self.fecha_cierre:
+            self.fecha_cierre = timezone.now().date()
+        super().save(*args, **kwargs)
 
 
 class Empresa(models.Model):
@@ -91,7 +106,7 @@ class Empresa(models.Model):
     direccion = models.CharField(max_length=255)
     token = models.CharField(max_length=16, unique=True)
     valoracion_media = models.IntegerField(null=True, validators=[MinValueValidator(1), MaxValueValidator(10)])
-    IMG_profile = models.ImageField(upload_to='perfiles/', default='perfiles/default.jpg')
+    IMG_profile = models.ImageField(upload_to='perfiles/', default='perfiles/anonimo.png')
 
     def __str__(self):
         return self.nombre
@@ -104,7 +119,6 @@ class Trabajador(models.Model):
     def __str__(self):
         return self.usuario.username
     
-
 
 class Evento(models.Model):
     PUBLIC = 'publico'
@@ -123,9 +137,12 @@ class Evento(models.Model):
     visibility = models.CharField(max_length=10, choices=VISIBILITY_CHOICES, default=PUBLIC)
     usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE, null=True)
+    direccion = models.CharField(max_length=255, null=True, blank=True)
+    pais = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.title
+
 
 
 class Attendance(models.Model):
@@ -190,6 +207,7 @@ class Acta(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     texto = models.TextField()
     firmada = models.ForeignKey(User, on_delete=models.CASCADE)
+    archivo = models.FileField(upload_to='actas/', null=True, blank=True)
 
     def __str__(self):
         return f"{self.titulo} - {self.comunidad}"
@@ -222,9 +240,10 @@ class Recibo(models.Model):
     titulo = models.CharField(max_length=100)
     descripcion = models.TextField()
     fecha = models.DateField()
-    fecha_tope = models.DateField()
+    fecha_tope = models.DateField(null=True)
     cantidad_total = models.DecimalField(max_digits=10, decimal_places=2)
     comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
+    archivo = models.FileField(upload_to='recibos/', null=True, blank=True)
 
     def __str__(self):
         return f"Recibo: {self.titulo} - {self.fecha_tope}"
@@ -254,10 +273,11 @@ class Gasto(models.Model):
     titulo = models.CharField(max_length=100)
     descripcion = models.TextField()
     cantidad_total = models.DecimalField(max_digits=10, decimal_places=2)
-    fecha_tope = models.DateField()
-    fecha = models.DateField()
+    fecha_tope = models.DateField(null=True)
+    fecha = models.DateField(null=True)
     comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    archivo = models.FileField(upload_to='gastos/', null=True, blank=True)
     ESTADO_CHOICES = [
         ('pagado', 'Pagado'),
         ('pendiente', 'Pendiente')
@@ -289,11 +309,13 @@ class PagosUsuario(models.Model):
     descripcion = models.TextField()
     fecha = models.DateField()
     cantidad = models.DecimalField(max_digits=10, decimal_places=2)
+    cantidad_pagada = models.DecimalField(max_digits=10, null=True, decimal_places=2)
     ESTADO_CHOICES = [
         ('pagado', 'Pagado'),
         ('pendiente', 'Pendiente')
     ]
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES)
+    archivo = models.FileField(upload_to='pagos/', null=True, blank=True)
 
     def __str__(self):
         return f"Pago: {self.cantidad} - {self.fecha}"
@@ -311,3 +333,10 @@ class SeguroComunidad(models.Model):
     def __str__(self):
         estado = "Pagado" if self.pagado else "Pendiente"
         return f"Seguro de {self.comunidad.nombre} - Vencimiento: {self.fecha_vencimiento} ({estado})"
+
+class Notificacion(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    mensaje = models.CharField(max_length=255)
+    url = models.URLField()
+    leida = models.BooleanField(default=False)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)

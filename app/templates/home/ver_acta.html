@@ -7,6 +7,8 @@
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
+<a href="{% url 'home:actas' %}" class="btn btn-light bg-info"><i class="fa fa-arrow-left"></i> Volver</a>
+
 <div class="row">
   <div class="col-md-8">
       <div class="card">
@@ -33,9 +35,15 @@
                 <label>Firmado por:</label>
                 <p>{{ acta.firmada.username }}</p>
               </div>
+              
+              <br>
+
+              {% if acta.archivo %}
+                <p>Archivos adjuntos: <a href="{% url 'home:ver_acta' acta.id %}?download=true"><i class="material-icons">file_download</i> DESCARGAR</a></p>
+              {% endif %}
+            
             </div>
           </div>
-
         </div>        
       </div>
   </div> 

@@ -13,7 +13,7 @@
                 <h2 class="text-center">Crear Gasto de la comunidad {{ comunidad.nombre }}</h2>
             </div>
             <div class="card-body">
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-6">
@@ -46,6 +46,11 @@
                                 <label>Usuario:</label><br>
                                 {{ gasto_form.usuario }}
                                 <span class="text-danger">{{ gasto_form.usuario.errors }}</span>
+                            </div>
+                            <div>
+                                <label for="archivo">Archivo adjunto:</label>
+                                {{ gasto_form.archivo }}
+                                <span class="text-danger">{{ gasto_form.archivo.errors }}</span>
                             </div>
                         </div>
                     </div>

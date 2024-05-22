@@ -7,6 +7,8 @@
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
+<a href="{% url 'home:actas' %}" class="btn btn-light bg-info"><i class="fa fa-arrow-left"></i> Volver</a>
+
 {% if success %}
   <div class="alert alert-success alert-dismissible">
     <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -17,7 +19,7 @@
 <div class="row">
   <div class="col-md-8">
       <div class="card">
-        <div class="card-header card-header-warning">
+        <div class="card-header card-header-info">
             <h4 class="card-title"><i class="material-icons">note_add</i> ACTA</h4>
         </div>
         <div class="card-body">
@@ -47,6 +49,13 @@
                   {{ acta_form.texto }}
                   <span class="text-danger">{{ acta_form.texto.errors }}</span>
                 </div>
+                <div>
+                  <label for="archivo">Archivo adjunto</label><br>
+                  {{ acta_form.archivo }}
+                  {% if acta_form.errors.archivo %}
+                      <span class="text-danger">{{ acta_form.errors.archivo }}</span>
+                  {% endif %}
+                </div>
               </div>
             </div>
 
@@ -54,7 +63,7 @@
 
             <div class="row">
               <div class="col-sm-12 text-center">
-                <button type="submit" class="btn btn-warning">Guardar Acta</button>
+                <button type="submit" class="btn btn-info">Guardar Acta</button>
               </div>
             </div>
           </form>

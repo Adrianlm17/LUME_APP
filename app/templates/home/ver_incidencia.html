@@ -1,7 +1,7 @@
 {% extends "layouts/base_app.html" %}
 {% load static %}
 
-{% block title %} Ver Incidencia | LUME {% endblock %} 
+{% block title %} Incidencia {{ incidencia.numero }} | LUME {% endblock %} 
 
 {% block content %}
 <a href="{% url 'home:ver_incidencias' %}" class="btn btn-light bg-dark"><i class="fa fa-arrow-left"></i> Volver</a>
@@ -12,13 +12,13 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-light bg-dark">
-                <h4 class="card-title mt-0"><i class="material-icons">visibility</i> Ver Incidencia</h4>
+                <h4 class="card-title mt-0"><i class="material-icons">visibility</i> Incidencia | {{ incidencia.numero }}</h4>
             </div>
             <div class="card-body">
                 <h5>Título: {{ incidencia.titulo }}</h5>
                 <p>Descripción: {{ incidencia.descripcion }}</p>
                 {% if incidencia.archivo %}
-                    <p>Archivos adjuntos: <a href="{% url 'home:ver_incidencia' incidencia.id %}?download=true"><i class="material-icons">file_download</i> DESCARGAR</a></p>
+                    <p>Archivos adjuntos: <a href="{% url 'home:ver_incidencia' incidencia.numero %}?download=true"><i class="material-icons">file_download</i> DESCARGAR</a></p>
                 {% endif %}
                 <p>Prioridad: {{ incidencia.prioridad }}</p>
                 <p>Estado: {{ incidencia.estado }}</p>
@@ -33,9 +33,9 @@
                     
                     <br>
                     
-                    <a href="{% url 'home:editar_incidencia' incidencia.id %}" class="btn btn-dark">Editar</a>
+                    <a href="{% url 'home:editar_incidencia' incidencia.numero %}" class="btn btn-dark">Editar</a>
                 {% endif %}
-            </div>
+            </div>            
         </div>
     </div>
 </div>

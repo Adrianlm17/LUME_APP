@@ -18,7 +18,11 @@
                             {{ title_form.titulo }}     <button type="submit" name="edit_title">Guardar Título</button>
                         </div>
                     </form>
-                    <h3 class="text-center">{{ chat.mensaje_user.email }}</h3> 
+                    {% if chat.user == request.user %}
+                        <h3 class="text-center">{{ chat.mensaje_user.email }}</h3> 
+                    {% else %}
+                        <h3 class="text-center">{{ chat.user.email }}</h3> 
+                    {% endif %}
                     <hr>
                     <div class="message-container">
                         <br>

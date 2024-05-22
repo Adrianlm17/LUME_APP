@@ -28,7 +28,22 @@
 <br>
 
 <div class="row">
-  <div class="col-lg-6 col-md-7 col-sm-7">
+  <div class="col-lg-4 col-md-3 col-sm-3">
+    <div class="card card-stats">
+        <div class="card-header card-header-warning card-header-icon">
+            <div class="card-icon">
+                <i class="material-icons">credit_card</i>
+            </div>
+            <p class="card-category">Numero Cuenta Bancaria</p>
+            {% if comunidad_seleccionada.numero_cuenta %}
+              <h3 class="card-title">{{ comunidad_seleccionada.numero_cuenta }}</h3>
+            {% else %}
+              <h3 class="card-title">No hay cuenta bancaria</h3>
+            {% endif %}
+        </div>
+    </div>
+</div>
+  <div class="col-lg-4 col-md-3 col-sm-3">
       <div class="card card-stats">
           <div class="card-header card-header-success card-header-icon">
               <div class="card-icon">
@@ -39,7 +54,7 @@
           </div>
       </div>
   </div>
-  <div class="col-lg-6 col-md-7 col-sm-7">
+  <div class="col-lg-4 col-md-3 col-sm-3">
       <div class="card card-stats">
           <div class="card-header card-header-info card-header-icon">
               <div class="card-icon">

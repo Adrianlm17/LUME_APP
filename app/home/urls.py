@@ -29,9 +29,9 @@ urlpatterns = [
     path('<int:comunidad_seleccionada>/ver_incidencias', home_views.ver_incidencias, name='ver_incidencias'),
     path('cambiar_comunidad_incidencias/<int:comunidad_id>/', home_views.cambiar_comunidad_incidencias, name='cambiar_comunidad_incidencias'),
     path('<int:comunidad_seleccionada>/crear_incidencia', home_views.crear_incidencia, name='crear_incidencia'),
-    path('<int:incidencia_id>/editar_incidencia', home_views.editar_incidencia, name='editar_incidencia'),
-    path('<int:incidencia_id>/editar_incidencia_empresa', home_views.editar_incidencia_empresa, name='editar_incidencia_empresa'),
-    path('<int:incidencia_id>/ver_incidencia', home_views.ver_incidencia, name='ver_incidencia'),
+    path('<int:numero>/editar_incidencia', home_views.editar_incidencia, name='editar_incidencia'),
+    path('<int:numero>/editar_incidencia_empresa', home_views.editar_incidencia_empresa, name='editar_incidencia_empresa'),
+    path('<int:numero>/ver_incidencia', home_views.ver_incidencia, name='ver_incidencia'),
     path('ver_empresas', home_views.ver_empresas, name='ver_empresas'),
     path('detalle_empresa/<int:empresa_id>', home_views.detalle_empresa, name='detalle_empresa'),
 
@@ -49,7 +49,7 @@ urlpatterns = [
     path('desapuntarse_evento/<int:event_id>/', home_views.desapuntarse_evento, name='desapuntarse_evento'),
 
     # ------------------------------- CALENDAR ------------------------------
-    path('calendario.html', home_views.calendario, name='calendario_actual'),
+    path('calendario', home_views.calendario, name='calendario_actual'),
     path('<int:año>/<int:mes>/calendario.html', home_views.calendario, name='calendario'),
     path('crear_recordatorio.html', home_views.crear_recordatorio, name='crear_recordatorio'),
     path('detalle_evento/<int:evento_id>/', home_views.detalle_evento, name='detalle_evento'),

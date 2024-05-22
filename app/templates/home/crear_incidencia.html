@@ -1,7 +1,7 @@
 {% extends "layouts/base_app.html" %}
 {% load static %}
 
-{% block title %} Crear Incidencia | LUME {% endblock %} 
+{% block title %} Crear Incidencia | LUME {% endblock %}
 
 {% block content %}
 <a href="{% url 'home:ver_incidencias' %}" class="btn btn-light bg-dark"><i class="fa fa-arrow-left"></i> Volver</a>
@@ -17,6 +17,7 @@
             <div class="card-body">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
+                    {{ incidencia_form.non_field_errors }}
                     <div class="form-group">
                         <label for="titulo">Título</label>
                         {{ incidencia_form.titulo }}
@@ -40,11 +41,10 @@
                     </div>
                     <div class="form-group">
                         <label for="prioridad">Prioridad</label>
-                        <select class="form-control" id="prioridad" name="prioridad">
-                            <option value="1">Baja</option>
-                            <option value="2">Media</option>
-                            <option value="3">Alta</option>
-                        </select>
+                        {{ incidencia_form.prioridad }}
+                        {% if incidencia_form.errors.prioridad %}
+                            <span class="text-danger">{{ incidencia_form.errors.prioridad }}</span>
+                        {% endif %}
                     </div>
                     <button type="submit" class="btn btn-light bg-dark">Crear Incidencia</button>
                 </form>

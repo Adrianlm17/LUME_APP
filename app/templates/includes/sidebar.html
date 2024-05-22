@@ -21,7 +21,7 @@
             </a>
           </li>
           <li class="nav-item {% if 'calendario' in segment %} active {% endif %}">
-            <a class="nav-link" href="/home/calendario.html">
+            <a class="nav-link" href="{% url 'home:calendario_actual' %}">
               <i class="material-icons">calendar_today</i>
               <p>Calendario</p>
             </a>
