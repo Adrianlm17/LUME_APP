@@ -2,6 +2,11 @@ from django.utils import timezone
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
+from taggit.managers import TaggableManager
+
+
+
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -24,16 +29,19 @@ class Comunidad(models.Model):
     pais = models.CharField(max_length=100)
     provincia = models.CharField(max_length=100)
     municipio = models.CharField(max_length=100)
-    calle = models.CharField(max_length=100)
+    dirrecion = models.CharField(max_length=100)
     portal = models.CharField(max_length=100)
     token = models.CharField(max_length=16, unique=True)
     IMG_profile = models.ImageField(upload_to='perfiles/', default='perfiles/anonimo.png')
     dinero = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     metodo_pago = models.CharField(max_length=50, choices=[('igual', 'Pagar por igual'), ('porcentajes', 'Pagar por porcentajes')], default='igual')
     numero_cuenta = models.CharField(max_length=20, unique=True, null=True)
+    lat = models.FloatField(null=True, blank=True)
+    lng = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return self.nombre
+
 
 
 
@@ -107,10 +115,13 @@ class Empresa(models.Model):
     token = models.CharField(max_length=16, unique=True)
     valoracion_media = models.IntegerField(null=True, validators=[MinValueValidator(1), MaxValueValidator(10)])
     IMG_profile = models.ImageField(upload_to='perfiles/', default='perfiles/anonimo.png')
+    lat = models.FloatField(null=True, blank=True)
+    lng = models.FloatField(null=True, blank=True)
+    tags = TaggableManager()
 
     def __str__(self):
         return self.nombre
-
+    
 
 class Trabajador(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -128,17 +139,17 @@ class Evento(models.Model):
         (PRIVATE, 'Privado'),
     ]
 
-    title = models.CharField(max_length=255, null=True)
-    descripcion = models.TextField(null=True)
-    date = models.DateField(blank=True, null=True)
+    title = models.CharField(max_length=255)
+    descripcion = models.TextField()
+    date = models.DateField(blank=True)
     max_attendees = models.PositiveIntegerField(null=True)
     current_attendees = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to='eventos/', blank=True, null=True)
     visibility = models.CharField(max_length=10, choices=VISIBILITY_CHOICES, default=PUBLIC)
     usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE, null=True)
-    direccion = models.CharField(max_length=255, null=True, blank=True)
-    pais = models.CharField(max_length=100, null=True, blank=True)
+    comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE)
+    direccion = models.CharField(max_length=255, blank=True)
+    pais = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         return self.title
@@ -169,11 +180,35 @@ class Chat(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
     mensaje_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mensaje_user')
     titulo = models.CharField(max_length=100)
+    IMG_profile = models.ImageField(upload_to='chat/', default='chat/anonimo.png')
     last_chat = models.CharField(max_length=100)
     read_by = models.ManyToManyField(User, related_name='read_chats', through='ChatReadBy')
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return f"Chat {self.id} - From: {self.user.email} - To: {self.mensaje_user.email}"
+
+
+class GroupChat(models.Model):
+    title = models.CharField(max_length=100)
+    users = models.ManyToManyField(User, related_name='group_chats')
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_chat = models.CharField(max_length=100, null=True)
+    IMG_profile = models.ImageField(upload_to='chat/', default='chat/anonimo.png')
+    read_by = models.ManyToManyField(User, related_name='read_groups', through='GroupReadBy')
+
+    def __str__(self):
+        return self.title
+
+
+class Message(models.Model):
+    group_chat = models.ForeignKey(GroupChat, related_name='messages', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Message from {self.user.username}'
 
 
 class ChatReadBy(models.Model):
@@ -188,11 +223,30 @@ class ChatReadBy(models.Model):
         status = "Read" if self.is_read else "Unread"
         return f"Chat {self.chat.id} read by {self.user.email}: {status}"
 
+class GroupReadBy(models.Model):
+    chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_read = models.BooleanField(default=False)
 
+    class Meta:
+        unique_together = (('chat', 'user'),)
+
+    def __str__(self):
+        status = "Read" if self.is_read else "Unread"
+        return f"Chat {self.chat.id} read by {self.user.email}: {status}"
 
 
 class ExtendsChat(models.Model):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    text = models.TextField()
+    user_send = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Extendido Chat {self.chat.id} - {self.text[:20]}"
+    
+
+class ExtendsGroupChat(models.Model):
+    chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE)
     text = models.TextField()
     user_send = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -274,7 +328,7 @@ class Gasto(models.Model):
     descripcion = models.TextField()
     cantidad_total = models.DecimalField(max_digits=10, decimal_places=2)
     fecha_tope = models.DateField(null=True)
-    fecha = models.DateField(null=True)
+    fecha = models.DateField()
     comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     archivo = models.FileField(upload_to='gastos/', null=True, blank=True)
@@ -283,7 +337,7 @@ class Gasto(models.Model):
         ('pendiente', 'Pendiente')
     ]
     
-    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default="pendiente", null=True)
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default="pendiente")
 
     def __str__(self):
         return f"Gasto: {self.titulo} - {self.fecha_tope}"

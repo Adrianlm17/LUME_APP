@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from app.home.models import Comunidad, Empresa, User, UserProfile
 from .forms import LoginForm, SignUpForm, TokenForm
-from django.contrib.auth.forms import PasswordResetForm
 
 
 def login_view(request):
@@ -18,9 +17,9 @@ def login_view(request):
                 login(request, user)
                 return redirect("/home/index.html")
             else:
-                msg = '¡Credenciales inválidas!'
+                msg = '¡Invalid credentials!'
         else:
-            msg = '¡Error al validar el formulario!'
+            msg = '¡Error validating the form!'
 
     return render(request, "accounts/login.html", {"form": form, "msg": msg})
 
@@ -41,11 +40,11 @@ def login_admin_view(request):
                     login(request, user)
                     return redirect("/admin_lume/index.html")
                 else:
-                    msg = '¡No tienes permisos para acceder a esta área!'
+                    msg = '¡You do not have permissions to access this area!'
             else:
-                msg = '¡Credenciales inválidas!'
+                msg = '¡Invalid credentials!'
         else:
-            msg = '¡Error al validar el formulario!'
+            msg = '¡Error validating the form!'
 
     return render(request, "accounts/login.html", {"form": form, "msg": msg})
 
@@ -76,21 +75,21 @@ def register_user(request):
                 user_rol = "lume"
 
             else:
-                msg = '¡El token proporcionado no es válido!'
+                msg = '¡The token provided is invalid!'
                 return render(request, "accounts/register.html", {"form": form, "token_form": token_form, "msg": msg, "success": success})
 
             if User.objects.filter(email=email).exists():
-                msg = '¡El correo electrónico ya está en uso!'
+                msg = '¡Email is already in use!'
             else:
                 user = form.save()
-                profile = UserProfile.objects.create(user=user, user_rol=user_rol)  # Asignar el valor de user_rol
+                profile = UserProfile.objects.create(user=user, user_rol=user_rol)
                 password = form.cleaned_data.get("password1")
                 user = authenticate(username=email, password=password)
                 msg = '¡Usuario creado correctamente!'
                 success = True
 
         else:
-            msg = '¡Formulario no válido!'
+            msg = '¡Invalid form!'
             success = False
     else:
         form = SignUpForm()

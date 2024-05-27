@@ -1,0 +1,279 @@
+# locale/es/LC_MESSAGES/django.po
+
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: es\n"
+
+msgid "Inicio"
+msgstr "Inicio"
+
+msgid "Quiénes somos"
+msgstr "Quiénes somos"
+
+msgid "Servicios"
+msgstr "Servicios"
+
+msgid "Servicios 2"
+msgstr "Te ofrecemos los servicios más completos del mercado"
+
+msgid "Servicios 3"
+msgstr "COMUNICADOS"
+
+msgid "Servicios 3.1"
+msgstr "Envía comunicados a los vecinos sobre temas importantes."
+
+msgid "Servicios 3.2"
+msgstr "Recibirán una notificación en su bandeja de entrada al instante."
+
+msgid "Servicios 4"
+msgstr "DOCUMENTACIÓN"
+
+msgid "Servicios 4.1"
+msgstr "Gestiona todos los documentos de la comunidad desde cualquier dispositivo."
+
+msgid "Servicios 4.2"
+msgstr "Puedes añadir documentos privados que únicamente ciertos vecinos podrán ver."
+
+msgid "Servicios 5"
+msgstr "RESERVAS"
+
+msgid "Servicios 5.1"
+msgstr "Permite reservar las instalaciones comunes con y sin aforo a los vecinos."
+
+msgid "Servicios 5.2"
+msgstr "Piscinas, pistas de pádel, salas gourmet, etc."
+
+msgid "Servicios 6"
+msgstr "TABLÓN"
+
+msgid "Servicios 6.1"
+msgstr "Los vecinos pueden hacer publicaciones en un tablón de anuncios."
+
+msgid "Servicios 6.1"
+msgstr "Elimina los grupos de WhatsApp con mensajes innecesarios e inoperativos."
+
+msgid "Servicios 7"
+msgstr "INCIDENCIAS"
+
+msgid "Servicios 7.1"
+msgstr "Gestiona el ciclo de las incidencias que surgen en la Comunidad."
+
+msgid "Servicios 7.2"
+msgstr "Los vecinos podrán dar de alta incidencias y el administrador/presidente recibirán avisos."
+
+msgid "Servicios 8"
+msgstr "CONTABILIDAD"
+
+msgid "Servicios 8.1"
+msgstr "Administra la contabilidad de la Comunidad."
+
+msgid "Servicios 8.2"
+msgstr "Los vecinos pueden ver las cuentas y el presupuesto de la Comunidad."
+
+msgid "Servicios 9"
+msgstr "MENSAJERÍA"
+
+msgid "Servicios 9.1"
+msgstr "Contactar con el administrador o presidente será fácil y rápido. Mensajes instantáneos y completos, con notificaciones de aviso."
+
+msgid "Servicios 10"
+msgstr "Multi-idioma"
+
+msgid "Servicios 10.1"
+msgstr "Los vecinos pueden hacer uso de LUME en varios idiomas."
+
+msgid "Nuestros proyectos"
+msgstr "Nuestros proyectos"
+
+msgid "Nuestros proyectos 2"
+msgstr "Algunos de nuestros proyectos más destacados"
+
+msgid "Nuestros proyectos 3"
+msgstr "Todas las comunidades"
+
+msgid "Nuestros proyectos 4"
+msgstr "Europa"
+
+msgid "Nuestros proyectos 5"
+msgstr "América"
+
+msgid "Nuestros proyectos 6"
+msgstr "Asia"
+
+msgid "Nuestros proyectos 7"
+msgstr "Montepinar"
+
+msgid "Nuestros proyectos 7.1"
+msgstr "¿Y si te dijéramos que lo que deseas para tu comunidad pudiera hacerse realidad? Pues es el claro ejemplo de la comunidad Montepinar, con su extensa lista de requisitos y apenas sin esperanzas, Montepinar obtuvo su aplicación ideal."
+
+msgid "Nuestros proyectos 8"
+msgstr "Desengaño 21"
+
+msgid "Nuestros proyectos 8.1"
+msgstr "¿Cansado de estar en números rojos y no saber por qué? ¿Harto de solo escuchar la palabra 'DERRAMA' en las juntas? Pues desde LUME ofrecemos una opción ideal donde poder ver todos tus gastos económicos, un historial con su respectivo balance mensual, y muchas cosas más. Y si no preguntar a la comunidad de Desengaño 21, que lleva ya 5 años contando con nuestros servicios."
+
+msgid "Nuestros proyectos 9"
+msgstr "Atalaya del Arcipreste"
+
+msgid "Nuestros proyectos 9.1"
+msgstr "¿Tenéis unas instalaciones chulísimas y apenas les dais uso? ¿Una pista de pádel y mil horas de cola para poder jugar un rato? Pues haz como la Atalaya del arcipreste y deja que de esos problemas nos encarguemos nosotros. Desde LUME te ofrecemos un sistema de gestión de espacios, donde podrás reservar las instalaciones de una forma sencilla."
+
+msgid "Nuestros proyectos 10"
+msgstr "Miguel Ángel Riat"
+
+msgid "Nuestros proyectos 10.1"
+msgstr "No hace falta ser una comunidad muy grande para poder solicitar nuestros servicios, como claro ejemplo está la comunidad de Miguel Ángel Riat. Esta comunidad de apenas cuatro viviendas acudió a LUME para que les proporcionara un sistema sencillo sin contenido innecesario, el cual les permitiera gestionar la comunidad de la manera más sencilla y eficaz posible."
+
+msgid "Nuestros proyectos 11"
+msgstr "Mary Axe"
+
+msgid "Nuestros proyectos 11.1"
+msgstr "Una comunidad de EE. UU. llamada Mary Axe con grandes problemas internos con su gestión. Decidió contactar con nosotros, donde les proporcionamos un servicio que se adaptara a sus necesidades y les facilitara la gestión de su comunidad."
+
+msgid "Nuestros proyectos 12"
+msgstr "Taxx Philips"
+
+msgid "Nuestros proyectos 12.1"
+msgstr "La comunidad Taxx Philips es una comunidad de Ecuador que cuenta con nuestros servicios desde hace más de 5 años."
+
+msgid "Nuestros proyectos 13"
+msgstr "Guls 73"
+
+msgid "Nuestros proyectos 13.1"
+msgstr "Otro claro ejemplo de fidelidad es la comunidad Guls 73 ubicada en Canadá. Lleva 3 años consecutivos contratando nuestro producto y esperemos que sigamos sumando años al marcados."
+
+msgid "Nuestros proyectos 14"
+msgstr "Ziu Chains Ke"
+
+msgid "Nuestros proyectos 14.1"
+msgstr "LUME no tiene barrera lingüística, y como podrá verificar la comunidad Ziu Chains Ke, están encantados de poder tener una aplicación totalmente traducida sin la necesidad de tener que estar traduciendo cada apartado como les pasaba en las anteriores aplicaciones."
+
+msgid "Precios"
+msgstr "Precios"
+
+msgid "Nuestros precios"
+msgstr "Nuestros precios"
+
+msgid "Nuestros precios 1"
+msgstr "Obten el mejor precio acorde las caracteristicas de su comunidad"
+
+msgid "mensuales"
+msgstr "mensuales"
+
+msgid "Precios 1"
+msgstr "Pack Simple"
+
+msgid "Precios 2"
+msgstr "Pack Estándar"
+
+msgid "Precios 3"
+msgstr "Pack Premium"
+
+msgid "Precios Propiedades"
+msgstr "Gestión económica"
+
+msgid "Precios Propiedades 2"
+msgstr "Chat"
+
+msgid "Precios Propiedades 3"
+msgstr "Incidencias"
+
+msgid "Precios Propiedades 4"
+msgstr "Actas"
+
+msgid "Precios Propiedades 5"
+msgstr "Soporte 24/7"
+
+msgid "Precios Propiedades 6"
+msgstr "Eventos"
+
+msgid "Precios Propiedades 7"
+msgstr "Reserva de espacios"
+
+msgid "Nosotros"
+msgstr "Nosotros"
+
+msgid "Equipo"
+msgstr "Equipo"
+
+msgid "Equipo 2"
+msgstr "Deja tu comunidad en las manos de profesionales en el sector"
+
+msgid "Equipo 3"
+msgstr "Gestor financiero"
+
+msgid "Equipo 3.1"
+msgstr "Con una gran experiencia en el sector de las finanzas, Amador es uno de los pilares fundamentales en LUME. Ayudando con la gestión de los gastos y permitiendo mostrar un sistema totalmente transparente. "
+
+msgid "Equipo 4"
+msgstr "Desarrollador Web"
+
+msgid "Equipo 4.1"
+msgstr "Adrián es el responsable de la parte técnica de LUME. Encargado de mantener la aplicación al día y siempre disponible para el cliente."
+
+msgid "Equipo 5"
+msgstr "Relaciones públicas"
+
+msgid "Equipo 5.1"
+msgstr "Conocedor del sector y de las principales necesidades de los clientes, se encuentra Maxi, cuya tarea principal es garantizar el bienestar de los usuarios y proporcionar soporte a las comunidades. "
+
+msgid "Contactar"
+msgstr "Contactar"
+
+msgid "Contacta con nosotros"
+msgstr "Contacta con nosotros"
+
+msgid "Contacta con nosotros 1"
+msgstr "No esperes más y contacta con nosotros para resolver cualquier duda, consulta o sugerencia"
+
+msgid "Contacta con nosotros 2"
+msgstr "Dirección"
+
+msgid "Contacta con nosotros 3"
+msgstr "Llámanos"
+
+msgid "Contacta con nosotros 4"
+msgstr "Correo"
+
+msgid "Acceder"
+msgstr "Acceder"
+
+msgid "Idiomas"
+msgstr "Idiomas"
+
+msgid "Una Aplicación Integral"
+msgstr "Una Aplicación Integral"
+
+msgid "Una Aplicación Integral 1"
+msgstr "En LUME, ofrecemos una aplicación que facilita la gestión de su comunidad vecinal, buscando cumplir todos los requisitos que puedan surgir y despreocupando a los usuarios de los posibles problemas cotidianos que suelan tener en dicha comunidad."
+
+msgid "Una Aplicación Integral 2"
+msgstr "Nuestro enfoque integral aborda todas las necesidades de la comunidad, desde la administración de servicios hasta la promoción de la participación ciudadana. Trabajamos para construir comunidades fuertes y vibrantes."
+
+msgid "Una Aplicación Integral 3"
+msgstr "Una comunidad transparente"
+
+msgid "Una Aplicación Integral 4"
+msgstr "Un hogar agradable y cooperativo"
+
+msgid "Una Aplicación Integral 5"
+msgstr "Administración sencilla y eficaz"
+
+msgid "Nombre"
+msgstr "Nombre"
+
+msgid "Correo"
+msgstr "Correo"
+
+msgid "Asunto"
+msgstr "Asunto"
+
+msgid "Mensaje"
+msgstr "Mensaje"
+
+msgid "Enviar"
+msgstr "Enviar"
+
+msgid "Derechos"
+msgstr "Todos los derechos reservados | Desarrollado por"

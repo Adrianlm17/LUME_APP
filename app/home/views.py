@@ -1,5 +1,6 @@
 import calendar
-from datetime import date, datetime, timedelta
+from django.db.models import Max
+from datetime import datetime, timedelta
 from decimal import Decimal
 from django.contrib import messages
 import locale
@@ -12,10 +13,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateDoesNotExist, loader
 from django.urls import reverse
 from app.admin_lume.forms import CrearUserProfileForm
-from app.home.forms import ActaForm, AsignarUsuarioComunidadForm, ChatForm, CrearAnuncioForm, EditarComunidadForm, EditarEmpresaForm, EventoForm, ExtendsChatForm, GastoForm, IncidenciaAdminForm, IncidenciaEmpresaForm, IncidenciaForm, MetodoPagoForm, MotivoReciboForm, MotivoReciboFormSet, NotaForm, PagosUsuarioForm, PorcentajePagoForm, ReciboForm, SeguroComunidadForm, UpdateIMGEmpresaForm, UpdateIMGForm, UpdateProfileForm
+from app.home.forms import ActaForm, AsignarUsuarioComunidadForm, ChatForm, CrearAnuncioForm, EditarComunidadForm, EditarEmpresaForm, EventoForm, ExtendsChatForm, ExtendsGroupChatForm, GastoForm, GroupChatForm, IncidenciaAdminForm, IncidenciaEmpresaForm, IncidenciaForm, MetodoPagoForm, MotivoReciboForm, MotivoReciboFormSet, NotaForm, PagosUsuarioForm, PorcentajePagoForm, ReciboForm, SeguroComunidadForm, UpdateIMGEmpresaForm, UpdateIMGForm, UpdateProfileForm
 from app.home.models import Nota, User
 from django.db.models import Q
-from .models import Acta, Anuncio, Attendance, Calendario, Chat, ChatReadBy, Comunidad, Empresa, Evento, ExtendsChat, Gasto, Incidencia, Motivo, Nota, Notificacion, PagosUsuario, Recibo, SeguroComunidad, Trabajador, Transaccion, UserProfile, Vivienda
+from .models import Acta, Anuncio, Attendance, Calendario, Chat, ChatReadBy, Comunidad, Empresa, Evento, ExtendsChat, ExtendsGroupChat, Gasto, GroupChat, GroupReadBy, Incidencia, Motivo, Nota, Notificacion, PagosUsuario, Recibo, SeguroComunidad, Trabajador, Transaccion, UserProfile, Vivienda
 
 
 
@@ -196,18 +197,154 @@ def delete_nota(request, nota_id):
 
 # ---------------------------------------------------------- CHAT ---------------------------------------------------------- 
 @login_required(login_url="/login/login/")
-def chat(request):
+def chat(request, user_id=None, grupo_id=None):
     user_chats = Chat.objects.filter(Q(user=request.user) | Q(mensaje_user=request.user))
     users = User.objects.exclude(id=request.user.id)
-    
-    user_read_chats = ChatReadBy.objects.filter(user=request.user, is_read=True).values_list('chat__id', flat=True)
+    group_chats = GroupChat.objects.filter(users__in=[request.user])
+    chat = None
+    messages = None
+    title_form = None
+    title_form_grupo = None
+    form = None
+    group_chat = None
+    group_chat_form = GroupChatForm()
+    chat_form = ChatForm()
 
+    user_read_chats = ChatReadBy.objects.filter(user=request.user, is_read=True).values_list('chat__id', flat=True)
+    
     chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
     num_mensajes_no_leidos = chats_no_leidos.count()
     notificaciones_no_leidas = Notificacion.objects.filter(user=request.user, leida=False)
     num_notificaciones_no_leidas = notificaciones_no_leidas.count()
-    
-    return render(request, 'home/chat.html', {'segment': 'chat', 'user_chats': user_chats, 'users': users, 'user_read_chats': user_read_chats, 'chats_no_leidos': chats_no_leidos, 'notificaciones_no_leidas': notificaciones_no_leidas, 'num_notificaciones_no_leidas': num_notificaciones_no_leidas, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
+
+    if request.method == 'POST':
+        if 'crear_chat' in request.POST:
+            selected_user_id = request.POST.get('selected_user_id')
+            if selected_user_id:
+                selected_user = get_object_or_404(User, id=selected_user_id)
+                existing_chat = Chat.objects.filter(
+                    Q(user=request.user, mensaje_user=selected_user) | 
+                    Q(user=selected_user, mensaje_user=request.user)
+                ).first()
+
+                if existing_chat:
+                    return redirect('home:user_chat', user_id=existing_chat.id)
+                else:
+                    chat = Chat(user=request.user, mensaje_user=selected_user, titulo='Nuevo Chat')
+                    chat.save()
+                    return redirect('home:user_chat', user_id=chat.id)
+        
+        elif 'crear_grupo' in request.POST:
+            group_chat_form = GroupChatForm(request.POST)
+            if group_chat_form.is_valid():
+                title = group_chat_form.cleaned_data['title']
+                users = group_chat_form.cleaned_data['users']
+                group_chat = GroupChat.objects.create(title=title, mensaje_user=request.user)
+                group_chat.users.set(users)
+                return redirect('home:group_chat', grupo_id=group_chat.id)
+
+    if user_id:
+        chat = get_object_or_404(Chat, id=user_id)
+        messages = ExtendsChat.objects.filter(chat=chat)
+        form = ExtendsChatForm()
+
+        if request.method == 'GET':
+            if chat.user:
+                chat_read_by, created = ChatReadBy.objects.get_or_create(chat=chat, user=request.user)
+                chat_read_by.is_read = True
+                chat_read_by.save()
+
+        if request.method == 'POST':
+            if 'edit_title' in request.POST:
+                title_form = ChatForm(request.POST, instance=chat)
+                if title_form.is_valid():
+                    title_form.save()
+                    return redirect('home:user_chat', user_id=user_id)
+            else:
+                form = ExtendsChatForm(request.POST)
+                if form.is_valid():
+                    message = form.save(commit=False)
+                    message.chat = chat
+                    message.user_send = request.user
+                    message.save()
+                    chat.last_chat = message.text
+                    chat.save()
+
+                    recipient = chat.mensaje_user if chat.user == request.user else chat.user
+                    
+                    chat_read_by, created = ChatReadBy.objects.get_or_create(chat=chat, user=recipient)
+                    chat_read_by.is_read = False
+                    chat_read_by.save()
+
+                    return redirect('home:user_chat', user_id=chat.id)
+        else:
+            title_form = ChatForm(instance=chat)
+
+    elif grupo_id:
+        
+        group_chat = get_object_or_404(GroupChat, id=grupo_id)
+        messages = ExtendsGroupChat.objects.filter(chat=group_chat)
+        form = ExtendsGroupChatForm()
+
+        if request.method == 'GET':
+
+            group_read_by, create = GroupReadBy.objects.get_or_create(chat=grupo_id, user=request.user)
+            group_read_by.is_read = True
+            group_read_by.save()
+            
+            title_form_grupo = GroupChatForm(initial={'title': group_chat.title})
+
+
+        elif request.method == 'POST':
+            if 'edit_title' in request.POST:
+                title_form_grupo = GroupChatForm(request.POST)
+                if title_form_grupo.is_valid():
+                    group_chat = title_form_grupo.save(commit=False)
+                    group_chat.save()
+                    return redirect('home:group_chat', grupo_id=grupo_id)
+
+            else:
+                form = ExtendsGroupChatForm(request.POST)
+                if form.is_valid():
+                    message = form.save(commit=False)
+                    message.chat = group_chat
+                    message.user_send = request.user
+                    group_chat.last_chat = message.text  
+                    message.save()
+                    group_chat.save()
+
+                    recipient_users = group_chat.users.all()
+                    for recipient in recipient_users:
+                        group_read_by, created = GroupReadBy.objects.get_or_create(chat=group_chat, user=recipient)
+                        group_read_by.is_read = False
+                        group_read_by.save()
+
+                    return redirect('home:group_chat', grupo_id=grupo_id)
+
+
+    return render(request, 'home/chat.html', {
+        'segment': 'chat',
+        'chat': chat,
+        'messages': messages,
+        'num_mensajes_no_leidos': num_mensajes_no_leidos,
+        'title_form': title_form,
+        'title_form_grupo':title_form_grupo,
+        'grupo_id': grupo_id,
+        'user_chats': user_chats,
+        'users': users,
+        'group_chats': group_chats,
+        'notificaciones_no_leidas': notificaciones_no_leidas,
+        'num_notificaciones_no_leidas': num_notificaciones_no_leidas,
+        'group_chat': group_chat,
+        'user_read_chats': user_read_chats,
+        'group_chat_form': group_chat_form,
+        'chat_form': chat_form,
+        'chats_no_leidos': chats_no_leidos,
+        'form': form,
+    })
+
+
+
 
 
 @login_required(login_url="/login/login/")
@@ -215,72 +352,51 @@ def open_chat(request):
     if request.method == 'POST':
         user_id = request.POST.get('usuario')
         recipient = get_object_or_404(User, id=user_id)
-        chat, created = Chat.objects.get_or_create(user=request.user, mensaje_user=recipient)
-        chat_read_by, created = ChatReadBy.objects.get_or_create(chat=chat, user=request.user)
 
-        if created:
-            chat_read_by.is_read = True
-            chat_read_by.save()
+        existing_chat = Chat.objects.filter(user=request.user, mensaje_user=recipient).first()
+
+        if existing_chat:
+            chat = existing_chat
         else:
-            chat_read_by.is_read = True
-            chat_read_by.save()
-
-        return redirect('home:chat_detail', chat_id=chat.id)
-    return redirect('home:chat')
-
-
-
-
-@login_required(login_url="/login/login/")
-def chat_detail(request, chat_id):
-    chat = get_object_or_404(Chat, id=chat_id)
-    messages = ExtendsChat.objects.filter(chat=chat)
-    form = ExtendsChatForm()
-
-
-    if request.method == 'GET':
-        if chat.user:
+            chat = Chat.objects.create(user=request.user, mensaje_user=recipient)
             chat_read_by, created = ChatReadBy.objects.get_or_create(chat=chat, user=request.user)
             chat_read_by.is_read = True
             chat_read_by.save()
 
+        return redirect('home:user_chat', user_id=chat.id)
+
+    return redirect('home:chat')
+
+
+
+@login_required(login_url="/login/login/")
+def open_group(request):
     if request.method == 'POST':
+        title = request.POST.get('titulo')
+        user_ids = request.POST.getlist('usuarios')
+        
+        # Crea el grupo de chat con el título proporcionado
+        group_chat = GroupChat.objects.create(title=title)
+        
+        # Agrega los usuarios seleccionados al grupo
+        for user_id in user_ids:
+            user = get_object_or_404(User, id=user_id)
+            group_chat.users.add(user)
+        
+        group_chat.users.add(request.user)
+        
+        # Marca el mensaje como leído para todos los usuarios del grupo
+        for user in group_chat.users.all():
+            group_read_by, created = GroupReadBy.objects.get_or_create(chat=group_chat, user=user)
+            group_read_by.is_read = False
+            group_read_by.save()
+        
+        # Redirige a la vista del grupo de chat recién creado
+        return redirect('home:group_chat', grupo_id=group_chat.id)
 
-        if 'edit_title' in request.POST:
-            title_form = ChatForm(request.POST, instance=chat)
-            if title_form.is_valid():
-                title_form.save()
-                return redirect('home:chat_detail', chat_id=chat.id)
-        else:
+    # Si la solicitud no es de tipo POST, redirige a alguna otra vista, por ejemplo, la vista de chat.
+    return redirect('home:chat')
 
-            form = ExtendsChatForm(request.POST)
-            if form.is_valid():
-                message = form.save(commit=False)
-                message.chat = chat
-                message.user_send = request.user
-                message.save()
-                chat.last_chat = message.text
-                chat.save()
-
-                if chat.user == request.user:
-                    recipient = chat.mensaje_user
-                else:
-                    recipient = chat.user
-                
-                chat_read_by, created = ChatReadBy.objects.get_or_create(chat=chat, user=recipient)
-                chat_read_by.is_read = False
-                chat_read_by.save()
-
-                return redirect('home:chat_detail', chat_id=chat.id)
-    else:
-        title_form = ChatForm(instance=chat)
-
-    chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
-    num_mensajes_no_leidos = chats_no_leidos.count()
-    notificaciones_no_leidas = Notificacion.objects.filter(user=request.user, leida=False)
-    num_notificaciones_no_leidas = notificaciones_no_leidas.count()
-
-    return render(request, 'home/chat_detail.html', {'segment': 'chat', 'chat': chat, 'messages': messages, 'notificaciones_no_leidas': notificaciones_no_leidas, 'num_notificaciones_no_leidas': num_notificaciones_no_leidas, 'form': form, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos, 'title_form': title_form})
 
 
 
@@ -383,7 +499,7 @@ def editar_incidencia(request, numero):
                     # Crear notificación para el jefe de la empresa
                     notificacion = Notificacion(
                         user=jefe.usuario,
-                        mensaje= incidencia.titulo,
+                        mensaje=incidencia.titulo,
                         url=f"/home/{incidencia.numero}/ver_incidencia"
                     )
                     notificacion.save()
@@ -401,6 +517,11 @@ def editar_incidencia(request, numero):
                 if valoracion_media_nueva is not None:
                     empresa.valoracion_media = Decimal(str(valoracion_media_nueva))
                     empresa.save()
+
+                if incidencia.gasto:
+                    comunidad = incidencia.comunidad
+                    comunidad.dinero -= incidencia.gasto
+                    comunidad.save()
                 
                 incidencia.fecha_cierre = timezone.now()
 
@@ -430,6 +551,7 @@ def editar_incidencia(request, numero):
         'notificaciones_no_leidas': notificaciones_no_leidas,
         'num_notificaciones_no_leidas': num_notificaciones_no_leidas,
     })
+
 
 
 @login_required(login_url="/login/login/")
@@ -502,7 +624,6 @@ def ver_incidencia(request, numero):
         })
 
 
-
 @login_required(login_url="/login/login/")
 def ver_empresas(request):
     chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
@@ -512,7 +633,10 @@ def ver_empresas(request):
     
     query = request.GET.get('q')
     if query:
-        empresas = Empresa.objects.filter(nombre__icontains=query).order_by('-valoracion_media')
+        empresas = Empresa.objects.filter(
+            Q(nombre__icontains=query) | 
+            Q(tags__name__icontains=query)
+        ).distinct().order_by('-valoracion_media')
     else:
         empresas = Empresa.objects.all().order_by('-valoracion_media')
     
@@ -524,6 +648,21 @@ def ver_empresas(request):
         'query': query,
         'notificaciones_no_leidas': notificaciones_no_leidas, 
         'num_notificaciones_no_leidas': num_notificaciones_no_leidas,
+    })
+
+
+@login_required(login_url="/login/login/")
+def mapa_empresas(request):
+    # Obtener las provincias de las comunidades a las que pertenece el usuario
+    provincias_usuario = Vivienda.objects.filter(usuario=request.user).values_list('comunidad__provincia', flat=True).distinct()
+
+    # Obtener las comunidades y empresas en las provincias del usuario
+    comunidades = Vivienda.objects.filter(usuario=request.user).values_list('comunidad', flat=True).distinct()
+    empresas = Empresa.objects.filter(provincia__in=provincias_usuario)
+
+    return render(request, 'home/mapa_empresas.html', {
+        'comunidades': comunidades,
+        'empresas': empresas,
     })
 
 
@@ -1376,7 +1515,7 @@ def editar_recibo(request, recibo_id):
         
 
         if total_gastos != recibo.cantidad_total:
-            return redirect('editar_recibo', recibo_id=recibo_id)
+            return redirect('home:editar_recibo', recibo_id=recibo_id)
         
         else:
             

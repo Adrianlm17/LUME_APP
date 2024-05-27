@@ -1,7 +1,7 @@
-    <div class="sidebar" data-color="purple" data-background-color="white" data-image="/static/img/sidebar-1.jpg">
+    <div class="sidebar" data-color="purple" style="background-color: #0D1B2A;">
       <div class="logo">
-        <a class="navbar-brand">
-          <img src="/static/img/LUME.png" alt="LUME Logo" height="70px">
+        <a class="navbar-brand" href="#">
+          <img src="/static/img/LUME_visits.png" alt="LUME Logo" height="70px">
         </a>
       </div>
       <div class="sidebar-wrapper">
@@ -14,7 +14,7 @@
               <p>Index</p>
             </a>
           </li>
-          <li class="nav-item {% if 'app' in segment %} active {% endif %}">
+          <li class="nav-item admin">
             <a class="nav-link" href="/home/index.html">
               <i class="material-icons">other_houses</i>
               <p>APP</p>
@@ -80,10 +80,10 @@
               <p>Ver Trabajador</p>
             </a>
           </li>
-          <li class="nav-item ">
+          <li class="nav-item salir">
             <a class="nav-link" href="{% url 'logout' %}" >
               <i class="material-icons">logout</i>
-              <p>Logout</p>
+              <p>Salir</p>
             </a>
           </li>       
         {% endif %}

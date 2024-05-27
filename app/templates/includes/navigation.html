@@ -24,7 +24,7 @@
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
             {% if num_mensajes_no_leidos %}
               {% for chat in chats_no_leidos %}
-                <a class="dropdown-item" href="{% url 'home:chat_detail' chat.chat.id %}">
+                <a class="dropdown-item" href="{% url 'home:user_chat' chat.chat.id %}">
                   Tienes un nuevo mensaje en el chat "<b>{{ chat.chat.titulo }}</b>"
                 </a>
               {% endfor %}
@@ -44,18 +44,25 @@
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link" href="" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="{% static 'app_files/' %}{{ request.user.userprofile.IMG_profile }}" alt="Profile Image" class="rounded-circle" style="width: 32px; height: 32px;">
+            <img src="{% static 'app_files/' %}{{ request.user.userprofile.IMG_profile }}" alt="Profile Image" class="rounded-circle profile-image" style="width: 40px; height: 40px;">
             <p class="d-lg-none d-md-block">
               Account
             </p>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-            <a class="dropdown-item" href="/home/config.html">Profile</a>
+            <a class="dropdown-item" href="/home/config.html"><i class="material-icons">settings</i> <b>Perfil</b></a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/login/logout/">Log out</a>
+            <a class="dropdown-item" href="/login/logout/"><i class="material-icons">logout</i> <b>Salir</b></a>
           </div>
         </li>
       </ul>
     </div>
   </div>
 </nav>
+
+<style>
+  .profile-image {
+    border: 1px solid black;
+    border-radius: 50%;
+  }
+</style>

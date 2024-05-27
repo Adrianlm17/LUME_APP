@@ -8,30 +8,30 @@
 
 <br>
 
-<div class="row">
-    <div class="col-md-12">
+<div class="row justify-content-center">
+    <div class="col-md-6">
         <div class="card">
-            <div class="card-header card-header-light bg-dark">
+            <div class="card-header card-header-light bg-dark text-center">
                 <h4 class="card-title mt-0"><i class="material-icons">visibility</i> Incidencia | {{ incidencia.numero }}</h4>
             </div>
-            <div class="card-body">
-                <h5>Título: {{ incidencia.titulo }}</h5>
-                <p>Descripción: {{ incidencia.descripcion }}</p>
+            <div class="card-body text-center">
+                <h5><b>Título:</b> {{ incidencia.titulo }}</h5>
+                <p><b>Descripción:</b> {{ incidencia.descripcion }}</p>
                 {% if incidencia.archivo %}
                     <p>Archivos adjuntos: <a href="{% url 'home:ver_incidencia' incidencia.numero %}?download=true"><i class="material-icons">file_download</i> DESCARGAR</a></p>
                 {% endif %}
-                <p>Prioridad: {{ incidencia.prioridad }}</p>
-                <p>Estado: {{ incidencia.estado }}</p>
+                <p><b>Prioridad:</b> {{ incidencia.prioridad }}</p>
+                <p><b>Estado:</b> {{ incidencia.estado }}</p>
                 {% if incidencia.empresa %}
-                    <p>Empresa: {{ incidencia.empresa }}</p>
-                    <p>Presupuesto: {{ incidencia.gasto }}€</p>
+                    <p><b>Empresa:</b> {{ incidencia.empresa }}</p>
+                    <p><b>Presupuesto:</b> {{ incidencia.gasto }}€</p>
                 {% else %}
-                    <p>Empresa: Pendiente de asignar</p>
+                    <p><b>Empresa:</b> Pendiente de asignar</p>
                 {% endif %}
                 {% if user.userprofile.user_rol == 'community_admin' or  user.userprofile.user_rol == 'lume' %}
-                    <a>Valoración: {{ incidencia.valoracion }}</a>
+                    <a><b>Valoración:</b> {{ incidencia.valoracion }}</a>
                     
-                    <br>
+                    <br><br>
                     
                     <a href="{% url 'home:editar_incidencia' incidencia.numero %}" class="btn btn-dark">Editar</a>
                 {% endif %}

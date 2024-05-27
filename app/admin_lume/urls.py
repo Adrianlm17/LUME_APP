@@ -20,7 +20,7 @@ urlpatterns = [
     
     # ------------------------------- COMPANY -------------------------------
     path('create_company.html', admin.create_company, name='create_company'),
-    path('companys.html', admin.company_list, name='communitys'), 
+    path('companys.html', admin.company_list, name='companys'), 
     path('<int:companys_id>/edit_company.html', admin.edit_company, name='edit_company'),
     path('<int:companys_id>/delete_company', admin.delete_company, name='delete_company'),
     

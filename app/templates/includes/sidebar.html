@@ -1,102 +1,93 @@
-    <div class="sidebar" data-color="purple" data-background-color="white" data-image="/static/img/sidebar-1.jpg">
-      <div class="logo">
-        <a class="navbar-brand">
-          <img src="/static/img/LUME.png" alt="LUME Logo" height="70px">
-        </a>
-      </div>
-      <div class="sidebar-wrapper">
-        <ul class="nav">
-        {% if request.user.is_authenticated %}
-
-          <li class="nav-item {% if 'index' in segment %} active {% endif %}">
-            <a class="nav-link" href="/home/index.html">
-              <i class="material-icons">dashboard</i>
-              <p>Index</p>
+<div class="sidebar" data-color="purple" style="background-color: #0D1B2A;">
+  <div class="logo">
+    <a class="navbar-brand" href="#">
+      <img src="/static/img/LUME_visits.png" alt="LUME Logo" height="70px">
+    </a>
+  </div>
+  <div class="sidebar-wrapper">
+    <ul class="nav">
+      {% if request.user.is_authenticated %}
+        <li class="nav-item {% if 'index' in segment %} active {% endif %}">
+          <a class="nav-link" href="/home/index.html">
+            <i class="material-icons">dashboard</i>
+            <p><b>Inicio</b></p>
+          </a>
+        </li>
+        <li class="nav-item {% if 'chat' in segment %} active {% endif %}">
+          <a class="nav-link" href="/home/chat.html">
+            <i class="material-icons">forum</i>
+            <p><b>Chat</b></p>
+          </a>
+        </li>
+        <li class="nav-item {% if 'calendario' in segment %} active {% endif %}">
+          <a class="nav-link" href="{% url 'home:calendario_actual' %}">
+            <i class="material-icons">calendar_today</i>
+            <p><b>Calendario</b></p>
+          </a>
+        </li>
+        <li class="nav-item {% if 'incidencias' in segment %} active {% endif %}">
+          <a class="nav-link" href="{% url 'home:ver_incidencias' %}">
+            <i class="material-icons">warning</i>
+            <p><b>Incidencias</b></p>
+          </a>
+        </li>
+        {% if request.user.userprofile.user_rol == 'community_user' or request.user.userprofile.user_rol == 'lume' or request.user.userprofile.user_rol == 'community_admin' %}
+          <li class="nav-item {% if 'actas' in segment %} active {% endif %}">
+            <a class="nav-link" href="{% url 'home:actas' %}">
+              <i class="material-icons">library_books</i>
+              <p><b>Actas</b></p>
             </a>
           </li>
-          <li class="nav-item {% if 'chat' in segment %} active {% endif %}">
-            <a class="nav-link" href="/home/chat.html">
-              <i class="material-icons">forum</i>
-              <p>Chat</p>
+          <li class="nav-item {% if 'eventos' in segment %} active {% endif %}">
+            <a class="nav-link" href="{% url 'home:eventos' %}">
+              <i class="material-icons">celebration</i>
+              <p><b>Eventos</b></p>
             </a>
           </li>
-          <li class="nav-item {% if 'calendario' in segment %} active {% endif %}">
-            <a class="nav-link" href="{% url 'home:calendario_actual' %}">
-              <i class="material-icons">calendar_today</i>
-              <p>Calendario</p>
-            </a>
-          </li>
-          <li class="nav-item {% if 'incidencias' in segment %} active {% endif %}">
-            <a class="nav-link" href="{% url 'home:ver_incidencias' %}">
-                <i class="material-icons">warning</i>
-                <p>Incidencias</p>
-            </a>
-          </li>
-          {% if request.user.userprofile.user_rol == 'community_user' or request.user.userprofile.user_rol == 'lume' or request.user.userprofile.user_rol == 'community_admin' %}
-            <li class="nav-item {% if 'actas' in segment %} active {% endif %}">
-                <a class="nav-link" href="{% url 'home:actas' %}">
-                    <i class="material-icons">library_books</i>
-                    <p>Actas</p>
-                </a>
-            </li>
-            
-            <li class="nav-item {% if 'eventos' in segment %} active {% endif %}">
-                <a class="nav-link" href="{% url 'home:eventos' %}">
-                    <i class="material-icons">celebration</i>
-                    <p>Eventos</p>
-                </a>
-            </li>
-            <li class="nav-item {% if 'gastos' in segment %} active {% endif %}">
-                <a class="nav-link" href="{% url 'home:gastos' %}">
-                    <i class="material-icons">insert_chart_outline</i>
-                    <p>Gastos</p>
-                </a>
-            </li>
-          {% endif %}
-          
-          <li class="nav-item {% if 'config' in segment %} active {% endif %}">
-            <a class="nav-link" href="/home/config.html">
-              <i class="material-icons">settings</i>
-              <p>Config</p>
-            </a>
-          </li>
-          
-          {% if request.user.userprofile.user_rol == 'community_admin' or request.user.userprofile.user_rol == 'lume' %}
-            <li class="nav-item {% if 'communidad' in segment %} active {% endif %}">
-              <a class="nav-link" href="{% url 'home:comunidades_configuracion' %}">
-                <i class="material-icons">home_work</i>
-                <p>Configuración Comunidad</p>
-              </a>
-            </li>
-          {% endif %}
-
-          {% if request.user.userprofile.user_rol == 'company_boss' or request.user.userprofile.user_rol == 'lume' %}
-            <li class="nav-item {% if 'empresa' in segment %} active {% endif %}">
-              <a class="nav-link" href="{% url 'home:config_empresa' %}">
-                <i class="material-icons">villa</i>
-                <p>Configuración Empresa</p>
-              </a>
-            </li>
-          {% endif %}
-
-
-          {% if request.user.userprofile.user_rol == 'lume' %}
-            <li class="nav-item {% if 'admin_lume' in segment %} active {% endif %}">
-              <a class="nav-link" href="/admin_lume/index.html">
-                <i class="material-icons">admin_panel_settings</i>
-                <p>Panel Admin</p>
-              </a>
-            </li>
-          {% endif %}
-
-          <li class="nav-item ">
-            <a class="nav-link" href="{% url 'logout' %}" >
-              <i class="material-icons">logout</i>
-              <p>Logout</p>
+          <li class="nav-item {% if 'gastos' in segment %} active {% endif %}">
+            <a class="nav-link" href="{% url 'home:gastos' %}">
+              <i class="material-icons">insert_chart_outline</i>
+              <p><b>Gastos</b></p>
             </a>
           </li>
         {% endif %}
-        </ul>
-      </div>
-
-    </div>
+        <li class="nav-item {% if 'config' in segment %} active {% endif %}">
+          <a class="nav-link" href="/home/config.html">
+            <i class="material-icons">settings</i>
+            <p><b>Configuración</b></p>
+          </a>
+        </li>
+        {% if request.user.userprofile.user_rol == 'community_admin' or request.user.userprofile.user_rol == 'lume' %}
+          <li class="nav-item {% if 'communidad' in segment %} active {% endif %}">
+            <a class="nav-link" href="{% url 'home:comunidades_configuracion' %}">
+              <i class="material-icons">home_work</i>
+              <p><b>Configuración Comunidad</b></p>
+            </a>
+          </li>
+        {% endif %}
+        {% if request.user.userprofile.user_rol == 'company_boss' or request.user.userprofile.user_rol == 'lume' %}
+          <li class="nav-item {% if 'empresa' in segment %} active {% endif %}">
+            <a class="nav-link" href="{% url 'home:config_empresa' %}">
+              <i class="material-icons">villa</i>
+              <p><b>Configuración Empresa</b></p>
+            </a>
+          </li>
+        {% endif %}
+        {% if request.user.userprofile.user_rol == 'lume' %}
+          <li class="nav-item admin">
+            <a class="nav-link" href="/admin_lume/index.html">
+              <i class="material-icons">admin_panel_settings</i>
+              <p><b>Panel Admin</b></p>
+            </a>
+          </li>
+        {% endif %}
+        <li class="nav-item salir">
+          <a class="nav-link" href="{% url 'logout' %}">
+            <i class="material-icons">logout</i>
+            <p><b>Salir</b></p>
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</div>

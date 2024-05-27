@@ -1,4 +1,5 @@
 import secrets
+from geopy.geocoders import Nominatim
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate
@@ -131,7 +132,6 @@ def community_list(request):
     return render(request, 'admin_lume/communitys.html', {'segment': 'ver_comunidad', 'communitys': communitys})
 
 
-@login_required(login_url="/login/login_admin/")
 def create_community(request):
     msg = None
     success = False
@@ -142,6 +142,16 @@ def create_community(request):
         if form.is_valid():
             comunidad = form.save(commit=False)
             comunidad.token = secrets.token_urlsafe(16)
+
+            # Geolocalización de la dirección de la comunidad
+            direccion = f"{comunidad.dirrecion}, {comunidad.municipio}, {comunidad.provincia}, {comunidad.pais}"
+            geolocalizador = Nominatim(user_agent="my_geocoder")
+            ubicacion = geolocalizador.geocode(direccion)
+
+            if ubicacion:
+                comunidad.lat = ubicacion.latitude
+                comunidad.lng = ubicacion.longitude
+
             comunidad.save()
             success = True
         
@@ -154,7 +164,6 @@ def create_community(request):
     return render(request, 'admin_lume/create_community.html', {'segment': 'crear_comunidad', "form": form, "msg": msg, "success": success})
 
 
-@login_required(login_url="/login/login_admin/")
 def edit_community(request, communitys_id):
     msg = None
     success = False
@@ -164,6 +173,15 @@ def edit_community(request, communitys_id):
         communitys_form = CrearComunidadForm(request.POST, instance=communitys)
         
         if communitys_form.is_valid():
+            # Geolocalización de la dirección de la comunidad
+            direccion = f"{communitys_form.cleaned_data['dirrecion']}, {communitys_form.cleaned_data['municipio']}, {communitys_form.cleaned_data['provincia']}, {communitys_form.cleaned_data['pais']}"
+            geolocalizador = Nominatim(user_agent="my_geocoder")
+            ubicacion = geolocalizador.geocode(direccion)
+
+            if ubicacion:
+                communitys_form.instance.lat = ubicacion.latitude
+                communitys_form.instance.lng = ubicacion.longitude
+
             communitys_form.save()
             success = True
 
@@ -197,7 +215,6 @@ def company_list(request):
     return render(request, 'admin_lume/companys.html', {'segment': 'ver_empresa', 'companys': companys})
 
 
-@login_required(login_url="/login/login_admin/")
 def create_company(request):
     msg = None
     success = False
@@ -208,6 +225,16 @@ def create_company(request):
         if company.is_valid():
             comunidad = company.save(commit=False)
             comunidad.token = secrets.token_urlsafe(16)
+
+            # Geolocalización de la dirección
+            direccion = f"{comunidad.direccion}, {comunidad.municipio}, {comunidad.provincia}, {comunidad.pais}"
+            geolocalizador = Nominatim(user_agent="my_geocoder")
+            ubicacion = geolocalizador.geocode(direccion)
+
+            if ubicacion:
+                comunidad.lat = ubicacion.latitude
+                comunidad.lng = ubicacion.longitude
+
             comunidad.save()
             success = True
         
@@ -219,8 +246,6 @@ def create_company(request):
 
     return render(request, 'admin_lume/create_company.html', {'segment': 'crear_empresa', "company": company, "msg": msg, "success": success})
 
-
-@login_required(login_url="/login/login_admin/")
 def edit_company(request, companys_id):
     msg = None
     success = False
@@ -230,6 +255,15 @@ def edit_company(request, companys_id):
         companys_form = CrearCompanyForm(request.POST, instance=companys)
         
         if companys_form.is_valid():
+            # Geolocalización de la dirección
+            direccion = f"{companys_form.cleaned_data['direccion']}, {companys_form.cleaned_data['municipio']}, {companys_form.cleaned_data['provincia']}, {companys_form.cleaned_data['pais']}"
+            geolocalizador = Nominatim(user_agent="my_geocoder")
+            ubicacion = geolocalizador.geocode(direccion)
+
+            if ubicacion:
+                companys_form.instance.lat = ubicacion.latitude
+                companys_form.instance.lng = ubicacion.longitude
+
             companys_form.save()
             success = True
 

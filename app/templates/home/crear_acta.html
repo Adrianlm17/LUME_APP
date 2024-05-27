@@ -3,75 +3,95 @@
 
 {% block title %} Crear Acta | LUME {% endblock %} 
 
-<!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+<style>
+    .custom-form label {
+        display: inline-block;
+        width: 100px;
+        text-align: left;
+    }
+    .custom-form input[type="text"],
+    .custom-form textarea {
+        width: 100%;
+        max-width: 400px;
+    }
+    .custom-form input[type="file"] {
+        display: inline-block;
+        width: auto;
+        margin-top: 10px;
+    }
+    .custom-form button[type="submit"] {
+        width: 200px;
+    }
+</style>
+{% endblock stylesheets %}
 
 {% block content %}
-<a href="{% url 'home:actas' %}" class="btn btn-light bg-info"><i class="fa fa-arrow-left"></i> Volver</a>
+<div class="container mt-4">
+    <a href="{% url 'home:actas' %}" class="btn btn-light bg-actas"><i class="fa fa-arrow-left"></i> Volver</a>
 
-{% if success %}
-  <div class="alert alert-success alert-dismissible">
-    <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>¡CREADA!</strong> Acta creada correctamente
-  </div> 
-{% endif %} 
+    {% if success %}
+    <div class="alert alert-success alert-dismissible">
+        <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>¡CREADA!</strong> Acta creada correctamente
+    </div> 
+    {% endif %} 
 
-<div class="row">
-  <div class="col-md-8">
-      <div class="card">
-        <div class="card-header card-header-info">
-            <h4 class="card-title"><i class="material-icons">note_add</i> ACTA</h4>
-        </div>
-        <div class="card-body">
-
-          {% if msg %}
-            <br>
-            <h6 class="card-category">
-              <span class="text-danger">{{ msg | safe }}</span>
-            </h6>
-          {% endif %}  
-
-          <br>
-
-          <form method="post" enctype="multipart/form-data">
-            
-            {% csrf_token %}
-
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>Título:</label>
-                  {{ acta_form.titulo }}
-                  <span class="text-danger">{{ acta_form.titulo.errors }}</span>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header card-header-actas">
+                    <h4 class="card-title"><i class="material-icons">note_add</i> ACTA</h4>
                 </div>
-                <div class="form-group">
-                  <label>Texto del Acta:</label><br>
-                  {{ acta_form.texto }}
-                  <span class="text-danger">{{ acta_form.texto.errors }}</span>
-                </div>
-                <div>
-                  <label for="archivo">Archivo adjunto</label><br>
-                  {{ acta_form.archivo }}
-                  {% if acta_form.errors.archivo %}
-                      <span class="text-danger">{{ acta_form.errors.archivo }}</span>
-                  {% endif %}
-                </div>
-              </div>
+                <div class="card-body text-center">
+
+                    {% if msg %}
+                    <br>
+                    <h6 class="card-category">
+                        <span class="text-danger">{{ msg | safe }}</span>
+                    </h6>
+                    {% endif %}  
+
+                    <br>
+
+                    <form method="post" enctype="multipart/form-data" class="custom-form">
+                        
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label for="titulo">Título:</label>
+                            {{ acta_form.titulo }}
+                            <span class="text-danger">{{ acta_form.titulo.errors }}</span>
+                        </div>
+
+                        <br>
+
+
+                        <div class="form-group">
+                            <label for="texto">Texto del Acta:</label><br>
+                            {{ acta_form.texto }}
+                            <span class="text-danger">{{ acta_form.texto.errors }}</span>
+                        </div>
+
+                        <br>
+
+                        <div>
+                            <label for="archivo">Archivo adjunto:</label>
+                            <input type="file" name="archivo" id="archivo">
+                            <span class="text-danger">{{ acta_form.archivo.errors }}</span>
+                        </div>
+
+                        <br>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-actas">Guardar Acta</button>
+                        </div>
+                    </form>
+                </div>        
             </div>
-
-            <br>
-
-            <div class="row">
-              <div class="col-sm-12 text-center">
-                <button type="submit" class="btn btn-info">Guardar Acta</button>
-              </div>
-            </div>
-          </form>
-        </div>        
-      </div>
-  </div> 
+        </div> 
+    </div>
 </div>
-
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->

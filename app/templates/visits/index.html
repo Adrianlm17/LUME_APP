@@ -1,323 +1,500 @@
 {% extends 'layouts/base_lume.html' %}
-{% load static %} 
-
-{% block title %} LUME {% endblock %}
-
-{% block links %} 
-    <link rel="stylesheet" href="{% static 'css/lume.css' %}" > 
-{% endblock %}
+{% load static %}
+{% load i18n %}
 
 {% block body %}
-    <header>
-        <nav class="navbar navbar-expand-lg fixed-top" id="lume-navbar">
-            <div class="container-fluid">
-
-                <!-- Logo -->
-                <a class="navbar-brand">
-                    <img src="{% static 'img/LUME.png' %}" alt="LUME Logo" height="90px">
-                </a>
-                
-                <!-- Botón del Menú -->
-                <button class="navbar-toggler order-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/lume_info.html">Quiénes somos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/projects.html">Nuestros proyectos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/contact.html">Contacto</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/login/login/">Acceder</a>
-                        </li>
-                        <!-- LANGUAGES -->
-                        <li class="nav-item">
-                            <div class="language-dropdown">
-                                <a class="nav-link language-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    IDIOMA
-                                </a>
-                                <!-- CHANGE LANGUAGE -->
-                                <ul class="language-menu dropdown-menu bg-light">
-                                    <li>
-                                        <form class="language-form" action="/" method="post">
-                                            <input type="hidden" name="idioma" value="es">
-                                            <button class="dropdown-item language-button" type="submit"><span class="fi fi-es"></span> Español</button>
-                                        </form>
-                                    </li>
-                                    <li>
-                                        <form class="language-form" action="/" method="post">
-                                            <input type="hidden" name="idioma" value="en">
-                                            <button class="dropdown-item language-button" type="submit"><span class="fi fi-gb"></span> English</button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>                
-            </div>
-        </nav>
+    <header id="header" class="header fixed-top">
+      <div class="align-items-center">
+        <div class="position-relative d-flex align-items-center justify-content-between" style="padding-right: 50px;">
+          <img src="{% static 'img/LUME_visits.png' %}" alt="LUME Logo" height="90px">
+          <nav id="navmenu" class="navmenu">
+            <ul>
+              <li><a href="#inicio">{% trans "Inicio" %}</a></li>
+              <li><a href="#quienes-somos">{% trans "Quiénes somos" %}</a></li>
+              <li><a href="#services">{% trans "Servicios" %}</a></li>
+              <li><a href="#portfolio">{% trans "Nuestros proyectos" %}</a></li>
+              <li><a href="#precios">{% trans "Precios" %}</a></li>
+              <li><a href="#equipo">{% trans "Nosotros" %}</a></li>
+              <li><a href="#contact">{% trans "Contactar" %}</a></li>
+              <li><a href="/login/login/">{% trans "Acceder" %}</a></li>
+              <li class="dropdown"><a href="#"><span>{% trans "Idiomas" %}</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                {% get_current_language as LANGUAGE_CODE %}
+                    <li><a href="{% url 'cambiar_idioma' 'es' %}"><span class="fi fi-es"></span></a></li>
+                    <li><a href="{% url 'cambiar_idioma' 'en' %}"><span class="fi fi-gb"></span></a></li>
+                    <li><a href="{% url 'cambiar_idioma' 'de' %}"><span class="fi fi-de"></span></a></li>
+                </ul>
+              </li>
+            </ul>
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+          </nav>
+        </div>
+      </div>
     </header>
 
-    <!-- BANNER -->
-    <div id="banner-container" class="animate__animated animate__backInDown">
-        <img src="{% static 'img/banner_lume.png' %}" alt="Banner LUME" class="img-fluid" id="banner_lume">
-    </div>
+    <main class="main">
+
     
-    <!-- BODY-->
-    <div id="body-container">
-
-        <br><br><br>
-
-        <!-- WELCOME -->
-        <div class="welcome-section">
-            <div class="welcome-content">
-                <img src="{% static 'img/lume_worker.png' %}" alt="LUME Worker" class="welcome-image">
-                <div class="welcome-text">
-                    <h2>Una Aplicación Integral</h2>
-                    <p>En LUME, ofrecemos una aplicación que facilita la gestión de su comunidad vecinal, buscando cumplir todos los requisitos que puedan surgir y despreocupando a los usuarios de los posibles problemas cotidianos que suelan tener en dicha comunidad.</p>
-                    <p>Nuestro enfoque integral aborda todas las necesidades de la comunidad, desde la administración de servicios hasta la promoción de la participación ciudadana. Trabajamos para construir comunidades fuertes y vibrantes.</p>
-                </div>
-            </div>
-        </div>
-
-        <br>
-
-        <!-- FEATURED PROJECTS -->
-        <div class="our-projects">
-            <h2>Comunidades Destacadas</h2>
-            <div id="project-carousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="project-row">
-                            <div class="project-card">
-                                <div class="card-body">
-                                    <img src="{% static 'img/montepinar.jpg' %}" alt="Montepinar">
-                                    <div class="content">
-                                        <h5 class="card-title">Montepinar</h5>
-                                        <p class="card-text">Con la comunidad Montepinar pudimos implementar un sistema de eventos con la finalidad de poder dar más uso a las instalaciones.</p>
-                                        <a href="/projects.html" class="btn">Ver</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="project-row">
-                            <div class="project-card">
-                                <div class="card-body">
-                                    <img src="{% static 'img/desengaño21.jpg' %}" alt="Desengaño 21">
-                                    <div class="content">
-                                        <h5 class="card-title">Desengaño 21</h5>
-                                        <p class="card-text">Desde Desengaño 21 nos solicitaban un sistema de gestión económico el cual les permitirá aumentar los recursos económicos de la comunidad.</p>
-                                        <a href="/projects.html" class="btn">Ver</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="project-row">
-                            <div class="project-card">
-                                <div class="card-body">
-                                    <img src="{% static 'img/esparta198.jpg' %}" alt="Esparta 198">
-                                    <div class="content">
-                                        <h5 class="card-title">Esparta 198</h5>
-                                        <p class="card-text">En busca de un sistema que les permita ser más transparentes, la comunidad Esparta 198 solicitó nuestros servicios.</p>
-                                        <a href="/projects.html" class="btn">Ver</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#project-carousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Anterior</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#project-carousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Siguiente</span>
-                </button>
-            </div>
-        </div>
-        
-        <br>
-
-        <!-- ADVANTAGES -->
-        <div class="advantages">
-            <h2 class="advantages-title">Gestionamos tu comunidad por ti</h2>
-            <h3 class="advantages-subtitle">Ofreciendo los servicios más completos del mercado</h3>
-            
-            <br><br><br>
-
-            <table class="advantages-content">
-                <tr>
-                    <td>
-                        <div class="d-flex p-3">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="avatar-sm icon-effect">
-                                    <div class="avatar-title bg-transparent text-success rounded-circle">
-                                        <i class="mdi mdi-bullhorn-outline fs-36"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h3 class="fs-18">COMUNICADOS</h3>
-                                <p class="text-muted my-3 ff-secondary">Envía comunicados a los vecinos sobre temas importantes.</p>
-                                <p class="text-muted my-3 ff-secondary">Recibirán una notificación en su bandeja de entrada al instante.</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex p-3">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="avatar-sm icon-effect">
-                                    <div class="avatar-title bg-transparent text-success rounded-circle">
-                                        <i class="mdi mdi-file-document-multiple-outline fs-36"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h3 class="fs-18">DOCUMENTACIÓN</h3>
-                                <p class="text-muted my-3 ff-secondary">Gestiona todos los documentos de la comunidad para una mejor gestión desde cualquier dispositivo.</p>
-                                <p class="text-muted my-3 ff-secondary">Puedes añadir documentos privados que únicamente ciertos vecinos podrán ver.</p>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="d-flex p-3">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="avatar-sm icon-effect">
-                                    <div class="avatar-title bg-transparent text-success rounded-circle">
-                                        <i class="mdi mdi-calendar-month-outline fs-36"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h3 class="fs-18">RESERVAS</h3>
-                                <p class="text-muted my-3 ff-secondary">Permite reservar las instalaciones comunes con y sin aforo a los vecinos.</p>
-                                <p class="text-muted my-3 ff-secondary">Piscinas, pistas de pádel, salas gourmet, etc.</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex p-3">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="avatar-sm icon-effect">
-                                    <div class="avatar-title bg-transparent text-success rounded-circle">
-                                        <i class="mdi mdi-billboard fs-36"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h3 class="fs-18">TABLÓN</h3>
-                                <p class="text-muted my-3 ff-secondary">Los vecinos pueden hacer publicaciones en un tablón de anuncios.</p>
-                                <p class="text-muted my-3 ff-secondary">Elimina los grupos de WhatsApp siempre inoperativos.</p>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="d-flex p-3">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="avatar-sm icon-effect">
-                                    <div class="avatar-title bg-transparent text-success rounded-circle">
-                                        <i class="mdi mdi-tools fs-36"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h3 class="fs-18">INCIDENCIAS</h3>
-                                <p class="text-muted my-3 ff-secondary">Gestiona el ciclo de las incidencias que surgen en la Comunidad.</p>
-                                <p class="text-muted my-3 ff-secondary">Los vecinos podrán dar de alta incidencias y el administrador/presidente recibirán avisos.</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex p-3">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="avatar-sm icon-effect">
-                                    <div class="avatar-title bg-transparent text-success rounded-circle">
-                                        <i class="mdi mdi-clipboard-text-outline fs-36"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h3 class="fs-18">GASTOS</h3>
-                                <p class="text-muted my-3 ff-secondary">Gestiona los gastos de la comunidad, permitiendo a los vecinos <br> 
-                                    visualizar en todo momento el balance mensual, el historial, etc.</p>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="d-flex p-3">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="avatar-sm icon-effect">
-                                    <div class="avatar-title bg-transparent text-success rounded-circle">
-                                        <i class="mdi mdi-message-outline fs-36"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h3 class="fs-18">MENSAJERÍA</h3>
-                                <p class="text-muted my-3 ff-secondary">Contactar con el administrador o presidente será fácil y rápido.</p>
-                                <p class="text-muted my-3 ff-secondary">Mensajes instantáneos y completos, con notificaciones de aviso.</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex p-3">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="avatar-sm icon-effect">
-                                    <div class="avatar-title bg-transparent text-success rounded-circle">
-                                        <i class="mdi mdi-web fs-36"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h3 class="fs-18">Multi-idioma</h3>
-                                <p class="text-muted my-3 ff-secondary">Los vecinos pueden hacer uso de LUME en varios idiomas.</p>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <!-- CONTACT -->
-        <section class="contact-us" style="background-color: #6f94ab;">
-            {% if success %}
-                <h2>¡Mensaje enviado correctamente!</h2>
-            {% else %}
-                <h2>Contacta con nosotros</h2>
-                <form action="/contact" method="post" class="contact-form">
-                    <input type="text" name="name" placeholder="Nombre *" required>
-                    <input type="email" name="email" placeholder="Correo electrónico *" required>
-                    <input type="phone" name="phone" placeholder="Teléfono *" required>
-                    <textarea name="message" placeholder="Mensaje *" required></textarea>
-                    <button type="submit">Enviar</button>
-                </form>
-            {% endif %}
+        <section id="inicio" class="hero section">
+          <img src="{% static 'img/banner_lume.png' %}" alt="" data-aos="fade-in">
         </section>
+    
+        <section id="quienes-somos" class="about section">
+          <div class="container section-title" data-aos="fade-up">
+            <span class="">LUME<br></span>
+            <h2 class="">LUME<br></h2>
+            <p>Living Urban Management Experience</p>
+          </div>
+    
+          <div class="container">
+    
+            <div class="row gy-4">
+    
+              <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-up" data-aos-delay="100">
+                <img src="{% static 'img/lume_app.png' %}" class="img-fluid" alt="">
+              </div>
+    
+              <div class="col-lg-6 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200">
+                <h3>{% trans "Una Aplicación Integral" %}</h3>
+                <p>{% trans "Una Aplicación Integral 1" %}</p>
+                <p>{% trans "Una Aplicación Integral 2" %}</p>
+                <ul>
+                  <li><i class="bi bi-check-circle"></i> <span>{% trans "Una Aplicación Integral 3" %}</span></li>
+                  <li><i class="bi bi-check-circle"></i> <span>{% trans "Una Aplicación Integral 4" %}</span></li>
+                  <li><i class="bi bi-check-circle"></i> <span>{% trans "Una Aplicación Integral 5" %}</span></li>
+                </ul>
+                <a href="#contact" class="read-more"><span>{% trans "Contactar" %}</span><i class="bi bi-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </section>
+    
+        <section id="services" class="services section">
+          <div class="container section-title" data-aos="fade-up">
+            <span class="">{% trans "Servicios" %}</span>
+            <h2>{% trans "Servicios" %}</h2>
+            <p>{% trans "Servicios 2" %}</p>
+          </div>
+    
+          <div class="container">
+    
+            <div class="row gy-3">
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="100">
+                <div class="service-item  position-relative">
+                  <div class="icon">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 3" %}</h3>
+                  </a>
+                  <p>{% trans "Servicios 3.1" %}</p>
+                  <p>{% trans "Servicios 3.2" %}</p>
+                </div>
+              </div>
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="200">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-file-earmark-fill"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 4" %}</h3>
+                  </a>
+                  <p>{% trans "Servicios 4.1" %}</p>
+                  <p>{% trans "Servicios 4.2" %}</p>
+                </div>
+              </div>
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-calendar2-date"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 5" %}</h3>
+                  </a>
+                  <p>{% trans "Servicios 5.1" %}</p>
+                  <p>{% trans "Servicios 5.2" %}</p>
+                </div>
+              </div>
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="400">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-card-list"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 6" %}</h3>
+                  </a>
+                  <p>{% trans "Servicios 6.1" %}</p>
+                  <p>{% trans "Servicios 6.2" %}</p>
+                  <a href="#" class="stretched-link"></a>
+                </div>
+              </div>
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="500">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-building-exclamation"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 7" %}</h3>
+                  </a>
+                  <p>{% trans "Servicios 7.1" %}</p>
+                  <p>{% trans "Servicios 7.2" %}</p>
+                  <a href="#" class="stretched-link"></a>
+                </div>
+              </div>
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="600">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-currency-exchange"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 8" %}</h3>
+                  </a>
+                  <p>{% trans "Servicios 8.1" %}</p>
+                  <p>{% trans "Servicios 8.2" %}</p>
+                  <a href="#" class="stretched-link"></a>
+                </div>
+              </div>
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="600">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-chat-square-text"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 9" %}</h3>
+                  </a>
+                  <p>
+                    {% trans "Servicios 9.1" %}
+                  </p>
+                  <a href="#" class="stretched-link"></a>
+                </div>
+              </div>
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="600">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-alphabet"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 10" %}</h3>
+                  </a>
+                  <p>
+                    {% trans "Servicios 10.1" %}
+                  </p>
+                  <a href="#" class="stretched-link"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        
+        <section id="portfolio" class="portfolio section">
+          <div class="container section-title" data-aos="fade-up">
+            <span>{% trans "Nuestros proyectos" %}</span>
+            <h2>{% trans "Nuestros proyectos" %}</h2>
+            <p>{% trans "Nuestros proyectos 2" %}</p>
+          </div>
+    
+          <div class="container">
+    
+            <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
+        
+              <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
+                <li data-filter="*" class="filter-active">{% trans "Nuestros proyectos 3" %}</li>
+                <li data-filter=".filter-europa">{% trans "Nuestros proyectos 4" %}</li>
+                <li data-filter=".filter-america">{% trans "Nuestros proyectos 5" %}</li>
+                <li data-filter=".filter-asia">{% trans "Nuestros proyectos 6" %}</li>
+              </ul>
+        
+              <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-europa">
+                  <img src="{% static 'img/proyectos/montepinar.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 7" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 7.1" %}  
+                    </p>
+                  </div>
+                </div>
+        
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-europa">
+                  <img src="{% static 'img/proyectos/desengaño21.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 8" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 8.1" %}
+                    </p>
+                  </div>
+                </div>
+        
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-europa">
+                  <img src="{% static 'img/proyectos/AtalayaDelArcipreste.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 9" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 9.1" %}
+                    </p>
+                  </div>
+                </div>
+        
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-europa">
+                  <img src="{% static 'img/proyectos/MiguelAngelRiat.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 10" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 10.1" %}
+                    </p>
+                  </div>
+                </div>
+        
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-america">
+                  <img src="{% static 'img/proyectos/MaryAxe.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 11" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 11.1" %}
+                    </p>
+                  </div>
+                </div>
+        
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-america">
+                  <img src="{% static 'img/proyectos/TaxxPhilips.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 12" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 12.1" %}
+                    </p>
+                  </div>
+                </div>
+        
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-america">
+                  <img src="{% static 'img/proyectos/Guls73.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 13" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 13.1" %}
+                    </p>
+                  </div>
+                </div>
+        
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-asia">
+                  <img src="{% static 'img/proyectos/ZiuChainsKe.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 14" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 14.1" %}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>    
+    
+        <section id="precios" class="pricing section">
+          <div class="container section-title" data-aos="fade-up">
+            <span class="">{% trans "Nuestros precios" %}</span>
+            <h2>{% trans "Nuestros precios" %}</h2>
+            <p>{% trans "Nuestros precios 1" %}</p>
+          </div>
+    
+          <div class="container">
+    
+            <div class="row g-4 g-lg-0">
+        
+              <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                <div class="pricing-item">
+                  <h3>{% trans "Precios 1" %}</h3>
+                  <h4>15€<span> / {% trans "mensuales" %}</span></h4>
+                  <ul>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 2" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 3" %}</span></li>
+                    <li class="na"><i class="bi bi-x"></i> <span>{% trans "Precios Propiedades 4" %}</span></li>
+                    <li class="na"><i class="bi bi-x"></i> <span>{% trans "Precios Propiedades 5" %}</span></li>
+                    <li class="na"><i class="bi bi-x"></i> <span>{% trans "Precios Propiedades 6" %}</span></li>
+                    <li class="na"><i class="bi bi-x"></i> <span>{% trans "Precios Propiedades 7" %}</span></li>
+                  </ul>
+                  <div class="text-center"><a href="#contact" class="buy-btn">{% trans "Contactar" %}</a></div>
+                </div>
+              </div>
+        
+              <div class="col-lg-4 featured" data-aos="zoom-in" data-aos-delay="200">
+                <div class="pricing-item">
+                  <h3>{% trans "Precios 2" %}</h3>
+                  <h4>30€<span> / {% trans "mensuales" %}</span></h4>
+                  <ul>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 2" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 3" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 4" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 5" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 6" %}</span></li>
+                    <li class="na"><i class="bi bi-x"></i> <span>{% trans "Precios Propiedades 7" %}</span></li>
+                  </ul>
+                  <div class="text-center"><a href="#contact" class="buy-btn">{% trans "Contactar" %}</a></div>
+                </div>
+              </div>
+        
+              <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                <div class="pricing-item">
+                  <h3>{% trans "Precios 3" %}</h3>
+                  <h4>50€<span> / {% trans "mensuales" %}</span></h4>
+                  <ul>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 2" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 3" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 4" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 5" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 6" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 7" %}</span></li>
+                  </ul>
+                  <div class="text-center"><a href="#contact" class="buy-btn">{% trans "Contactar" %}</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>    
+    
+        <section id="equipo" class="team section">
+          <div class="container section-title" data-aos="fade-up">
+            <span class="">{% trans "Equipo" %}</span>
+            <h2>{% trans "Equipo" %}</h2>
+            <p>{% trans "Equipo 2" %}</p>
+          </div>
+    
+          <div class="container">
+    
+            <div class="row">
+    
+              <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="100">
+                <div class="member">
+                  <img src="{% static 'img/team/Amador.jpg' %}" class="img-fluid" alt="">
+                  <div class="member-content">
+                    <h4>Amador Ribas</h4>
+                    <span>{% trans "Equipo 3" %}</span>
+                    <p>
+                      {% trans "Equipo 3.1" %}
+                    </p>
+                  </div>
+                </div>
+              </div>
+    
+              <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="200">
+                <div class="member">
+                  <img src="{% static 'img/team/Adrián.jpg' %}" class="img-fluid" alt="">
+                  <div class="member-content">
+                    <h4>Adrián López</h4>
+                    <span>{% trans "Equipo 4" %}</span>
+                    <p>
+                      {% trans "Equipo 4.1" %}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="300">
+                <div class="member">
+                  <img src="{% static 'img/team/Maxi.PNG' %}" class="img-fluid" alt="">
+                  <div class="member-content">
+                    <h4>Maxi</h4>
+                    <span>{% trans "Equipo 5" %}</span>
+                    <p>
+                      {% trans "Equipo 5.1" %}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+    
+        <section id="contact" class="contact section">
+          <div class="container section-title" data-aos="fade-up">
+            <span class="">{% trans "Contacta con nosotros" %}</span>
+            <h2 class="">{% trans "Contacta con nosotros" %}</h2>
+            <p>{% trans "Contacta con nosotros 1" %}</p>
+          </div>
+    
+          <div class="container" data-aos="fade-up" data-aos-delay="100">
+            <div class="row gy-4">
+              <div class="col-lg-6">
+                <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="200">
+                  <i class="bi bi-geo-alt"></i>
+                  <h3>{% trans "Contacta con nosotros 2" %}</h3>
+                  <p>Calle de Caracas, 6, Llevant, 07007</p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6">
+                <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="300">
+                  <i class="bi bi-telephone"></i>
+                  <h3>{% trans "Contacta con nosotros 3" %}</h3>
+                  <p>+34 999 99 99 99</p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6">
+                <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="400">
+                  <i class="bi bi-envelope"></i>
+                  <h3>{% trans "Contacta con nosotros 4" %}</h3>
+                  <p>lume.app.official@gmail.com</p>
+                </div>
+              </div>
+            </div>
+    
+            <div class="row gy-4 mt-1">
+              <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1537.8115017675086!2d2.6675384853765696!3d39.56810738128734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x129793b01716a01b%3A0x55bc574de040df4a!2sCIFP%20Francesc%20de%20Borja%20Moll!5e0!3m2!1ses!2ses!4v1716646086947!5m2!1ses!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+              </div>
+              <div class="col-lg-6">
+                <form method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
+                  <div class="row gy-4">
+                    <div class="col-md-6">
+                      <input type="text" name="name" class="form-control" placeholder='{% trans "Nombre" %}' required="">
+                    </div>
+                    <div class="col-md-6 ">
+                      <input type="email" class="form-control" name="email" placeholder='{% trans "Correo" %}' required="">
+                    </div>
+                    <div class="col-md-12">
+                      <input type="text" class="form-control" name="subject" placeholder='{% trans "Asunto" %}' required="">
+                    </div>
+                    <div class="col-md-12">
+                      <textarea class="form-control" name="message" rows="6" placeholder='{% trans "Mensaje" %}' required=""></textarea>
+                    </div>
+                    <div class="col-md-12 text-center">
+                      <button type="submit">{% trans "Enviar" %}</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+    </main>
 
-        <br>
+    <footer id="footer" class="footer position-relative">
+    <div class="container copyright text-center mt-5">
+        <p>© <span>2024 LUME {% trans "Derechos" %} <a href="https://github.com/Adrianlm17">Adrianlm17</a></span></p>
     </div>
-
-    <!-- FOOTER -->
-    <footer class="footer" style="background-color: #687a85; color: #fff; text-align: center; padding: 20px;">
-        <p>© 2024 LUME - Todos los derechos reservados | Desarrollado por <a href="https://github.com/Adrianlm17">Adrianlm17</a></p>
     </footer>
+
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <div id="preloader"></div>
+    
+    
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/vendor/php-email-form/validate.js"></script>
+    <script src="/static/vendor/aos/aos.js"></script>
+    <script src="/static/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="/static/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="/static/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="/static/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="/static/js/main.js"></script>
 
 {% endblock %}

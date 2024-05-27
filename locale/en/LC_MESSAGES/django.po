@@ -1,0 +1,279 @@
+# locale/en/LC_MESSAGES/django.po
+
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en\n"
+
+msgid "Inicio"
+msgstr "Home"
+
+msgid "Quiénes somos"
+msgstr "About Us"
+
+msgid "Servicios"
+msgstr "Services"
+
+msgid "Servicios 2"
+msgstr "We offer you the most comprehensive services in the market"
+
+msgid "Servicios 3"
+msgstr "ANNOUNCEMENTS"
+
+msgid "Servicios 3.1"
+msgstr "Send announcements to neighbors about important topics."
+
+msgid "Servicios 3.2"
+msgstr "They will receive a notification in their inbox instantly."
+
+msgid "Servicios 4"
+msgstr "DOCUMENTATION"
+
+msgid "Servicios 4.1"
+msgstr "Manage all community documents from any device."
+
+msgid "Servicios 4.2"
+msgstr "You can add private documents that only certain neighbors can see."
+
+msgid "Servicios 5"
+msgstr "BOOKINGS"
+
+msgid "Servicios 5.1"
+msgstr "Allows booking common facilities with and without capacity for neighbors."
+
+msgid "Servicios 5.2"
+msgstr "Pools, paddle courts, gourmet rooms, etc."
+
+msgid "Servicios 6"
+msgstr "BOARD"
+
+msgid "Servicios 6.1"
+msgstr "Neighbors can make posts on a bulletin board."
+
+msgid "Servicios 6.1"
+msgstr "Eliminate WhatsApp groups with unnecessary and inoperative messages."
+
+msgid "Servicios 7"
+msgstr "INCIDENTS"
+
+msgid "Servicios 7.1"
+msgstr "Manage the cycle of incidents that arise in the Community."
+
+msgid "Servicios 7.2"
+msgstr "Neighbors will be able to report incidents and the administrator/president will receive notifications."
+
+msgid "Servicios 8"
+msgstr "ACCOUNTING"
+
+msgid "Servicios 8.1"
+msgstr "Manage the accounting of the Community."
+
+msgid "Servicios 8.2"
+msgstr "Neighbors can see the accounts and budget of the Community."
+
+msgid "Servicios 9"
+msgstr "MESSAGING"
+
+msgid "Servicios 9.1"
+msgstr "Contacting the administrator or president will be easy and quick. Instant and complete messages, with notification alerts."
+
+msgid "Servicios 10"
+msgstr "Multi-language"
+
+msgid "Servicios 10.1"
+msgstr "Neighbors can use LUME in multiple languages."
+
+msgid "Nuestros proyectos"
+msgstr "Our Projects"
+
+msgid "Nuestros proyectos 2"
+msgstr "Some of our most outstanding projects"
+
+msgid "Nuestros proyectos 3"
+msgstr "All communities"
+
+msgid "Nuestros proyectos 4"
+msgstr "Europe"
+
+msgid "Nuestros proyectos 5"
+msgstr "America"
+
+msgid "Nuestros proyectos 6"
+msgstr "Asia"
+
+msgid "Nuestros proyectos 7"
+msgstr "Montepinar"
+
+msgid "Nuestros proyectos 7.1"
+msgstr "What if we told you that what you want for your community could come true? Well, that's the clear example of the Montepinar community, with its extensive list of requirements and barely any hopes, Montepinar got its ideal application."
+
+msgid "Nuestros proyectos 8"
+msgstr "Desengaño 21"
+
+msgid "Nuestros proyectos 8.1"
+msgstr "Tired of being in the red and not knowing why? Tired of just hearing the word 'SPILLS' (contribution) at meetings? Well, from LUME we offer an ideal option where you can see all your economic expenses, a history with its respective monthly balance, and many more things. And if you don't believe it, ask the Desengaño 21 community, which has been using our services for 5 years now."
+
+msgid "Nuestros proyectos 9"
+msgstr "Atalaya del Arcipreste"
+
+msgid "Nuestros proyectos 9.1"
+msgstr "Do you have really cool facilities and hardly use them? A paddle tennis court and a thousand hours of queue to play for a while? Well, do as the Atalaya del arcipreste and let us take care of those problems. From LUME we offer you a space management system, where you can reserve the facilities in a simple way."
+
+msgid "Nuestros proyectos 10"
+msgstr "Miguel Ángel Riat"
+
+msgid "Nuestros proyectos 10.1"
+msgstr "You don't have to be a very large community to be able to request our services, as the clear example is the Miguel Ángel Riat community. This community of just four homes turned to LUME to provide them with a simple system without unnecessary content, which would allow them to manage the community in the simplest and most efficient way possible."
+
+msgid "Nuestros proyectos 11"
+msgstr "Mary Axe"
+
+msgid "Nuestros proyectos 11.1"
+msgstr "A community from the USA called Mary Axe with big internal problems with its management. They decided to contact us, where we provided them with a service that would adapt to their needs and make the management of their community easier."
+
+msgid "Nuestros proyectos 12"
+msgstr "Taxx Philips"
+
+msgid "Nuestros proyectos 12.1"
+msgstr "The Taxx Philips community is a community from Ecuador that has been using our services for more than 5 years."
+
+msgid "Nuestros proyectos 13"
+msgstr "Guls 73"
+
+msgid "Nuestros proyectos 13.1"
+msgstr "Another clear example of loyalty is the Guls 73 community located in Canada. It has been hiring our product for 3 consecutive years and we hope to continue adding years to the count."
+
+msgid "Nuestros proyectos 14"
+msgstr "Ziu Chains Ke"
+
+msgid "Nuestros proyectos 14.1"
+msgstr "LUME has no language barrier, and as you can verify the Ziu Chains Ke community, they are delighted to have a fully translated application without the need to translate each section as happened in the previous applications."
+
+msgid "Precios"
+msgstr "Prices"
+
+msgid "Nuestros precios"
+msgstr "Our prices"
+
+msgid "Nuestros precios 1"
+msgstr "Get the best price according to the characteristics of your community"
+
+msgid "mensuales"
+msgstr "monthly"
+
+msgid "Precios 1"
+msgstr "Simple Pack"
+
+msgid "Precios 2"
+msgstr "Standard Pack"
+
+msgid "Precios 3"
+msgstr "Premium Pack"
+
+msgid "Precios Propiedades"
+msgstr "Economic management"
+
+msgid "Precios Propiedades 2"
+msgstr "Chat"
+
+msgid "Precios Propiedades 3"
+msgstr "Incidents"
+
+msgid "Precios Propiedades 4"
+msgstr "Minutes"
+
+msgid "Precios Propiedades 5"
+msgstr "24/7 Support"
+
+msgid "Precios Propiedades 6"
+msgstr "Events"
+
+msgid "Precios Propiedades 7"
+msgstr "Space reservation"
+
+msgid "Nosotros"
+msgstr "About Us"
+
+msgid "Equipo"
+msgstr "Team"
+
+msgid "Equipo 2"
+msgstr "Leave your community in the hands of professionals in the sector"
+
+msgid "Equipo 3"
+msgstr "Financial Manager"
+
+msgid "Equipo 3.1"
+msgstr "With extensive experience in the finance sector, Amador is one of the key pillars at LUME. Helping with expense management and allowing to show a totally transparent system."
+
+msgid "Equipo 4"
+msgstr "Web Developer"
+
+msgid "Equipo 4.1"
+msgstr "Adrián is responsible for the technical part of LUME. In charge of keeping the application up to date and always available for the customer."
+
+msgid "Equipo 5"
+msgstr "Public Relations"
+
+msgid "Equipo 5.1"
+msgstr "Maxi, who knows the sector and the main needs of customers, is Maxi, whose main task is to ensure the well-being of users and provide support to communities."
+
+msgid "Contactar"
+msgstr "Contact"
+
+msgid "Contacta con nosotros"
+msgstr "Contact us"
+
+msgid "Contacta con nosotros 1"
+msgstr "Don't wait any longer and contact us to resolve any questions, inquiries or suggestions"
+
+msgid "Contacta con nosotros 2"
+msgstr "Address"
+
+msgid "Contacta con nosotros 3"
+msgstr "Call us"
+
+msgid "Contacta con nosotros 4"
+msgstr "Mail"
+
+msgid "Acceder"
+msgstr "Log In"
+
+msgid "Idiomas"
+msgstr "Languages"
+
+msgid "Una Aplicación Integral"
+msgstr "A Comprehensive Application"
+
+msgid "Una Aplicación Integral 1"
+msgstr "At LUME, we offer an application that facilitates the management of your neighborhood community, seeking to meet all the requirements that may arise and relieving users of the possible everyday problems they may have in said community."
+
+msgid "Una Aplicación Integral 2"
+msgstr "Our comprehensive approach addresses all the needs of the community, from service administration to the promotion of citizen participation. We work to build strong and vibrant communities."
+
+msgid "Una Aplicación Integral 3"
+msgstr "A transparent community"
+
+msgid "Una Aplicación Integral 4"
+msgstr "A pleasant and cooperative home"
+
+msgid "Una Aplicación Integral 5"
+msgstr "Simple and efficient administration"
+
+msgid "Nombre"
+msgstr "Name"
+
+msgid "Correo"
+msgstr "Email"
+
+msgid "Asunto"
+msgstr "Subject"
+
+msgid "Mensaje"
+msgstr "Message"
+
+msgid "Enviar"
+msgstr "Send"
+
+msgid "Derechos"
+msgstr "All rights reserved | Developed by"

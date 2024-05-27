@@ -60,14 +60,14 @@ class CrearComunidadForm(forms.ModelForm):
 
     class Meta:
         model = Comunidad
-        fields = ['nombre', 'pais', 'provincia', 'municipio', 'calle', 'portal', 'dinero']
+        fields = ['nombre', 'pais', 'provincia', 'municipio', 'dirrecion', 'portal', 'dinero', 'numero_cuenta']
 
 
 
 class CrearCompanyForm(forms.ModelForm):
     class Meta:
         model = Empresa
-        fields = ['nombre', 'descripcion', 'telefono', 'correo', 'pais', 'provincia', 'municipio', 'direccion']
+        fields = ['nombre', 'descripcion', 'telefono', 'correo', 'pais', 'provincia', 'municipio', 'direccion', 'tags']
 
 
 

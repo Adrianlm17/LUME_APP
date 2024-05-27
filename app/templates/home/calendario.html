@@ -22,13 +22,13 @@
         {% for semana in calendario_mes %}
             <tr>
                 {% for dia, recordatorios in semana %}
-                    <td>
+                    <td class="calendar-cell">
                         {% if dia %}
                             {{ dia }}
                             {% if recordatorios %}
                                 <ul>
                                     {% for recordatorio in recordatorios %}
-                                        <a href="{% url 'home:detalle_evento' recordatorio.id %}" class="btn btn-outline-dark">{{ recordatorio.titulo|slice:":50" }}</a><br>
+                                        <a href="{% url 'home:detalle_evento' recordatorio.id %}" class="btn" style="color: azure; background-color: #50478b;">{{ recordatorio.titulo|slice:":50" }}</a><br>
                                     {% endfor %}
                                 </ul>
                             {% endif %}
@@ -46,12 +46,24 @@
     <a href="{% url 'home:crear_recordatorio' %}" class="btn btn-primary">Agregar Evento/Recordatorio</a>
 </div>
 
-
+{% block stylesheets %}
 <style>
     .calendario-alto td {
         height: 100px;
         vertical-align: top;
         padding: 10px;
-}
+        background-color: #ffedd5;
+        border: 1px solid black;
+    }
+
+    .table-bordered {
+        border: 2px solid black;
+        border-collapse: collapse;
+    }
+
+    .table-bordered th, .table-bordered td {
+        border: 1px solid black;
+    }
 </style>
+{% endblock stylesheets %}
 {% endblock content %}

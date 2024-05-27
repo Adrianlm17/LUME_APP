@@ -10,7 +10,7 @@ class LoginForm(forms.Form):
     email = forms.EmailField(
         widget=forms.EmailInput(
             attrs={
-                "placeholder": "Email",
+                "placeholder": "E-mail",
                 "class": "form-control"
             }
         ))
@@ -36,7 +36,7 @@ class SignUpForm(UserCreationForm):
     first_name = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Primer apellido",
+                "placeholder": "Surname",
                 "class": "form-control"
             }
         ))
@@ -44,7 +44,7 @@ class SignUpForm(UserCreationForm):
     last_name = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Segundo apellido",
+                "placeholder": "Second surname",
                 "class": "form-control"
             }
         ))
@@ -52,7 +52,7 @@ class SignUpForm(UserCreationForm):
     email = forms.EmailField(
         widget=forms.EmailInput(
             attrs={
-                "placeholder": "Email",
+                "placeholder": "E-mail",
                 "class": "form-control"
             }
         ))

@@ -8,27 +8,36 @@
 
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div class="card mb-4">
-                <img src="{% static 'app_files/' %}{{ empresa.IMG_profile }}" class="card-img-top img-fluid rounded mx-auto d-block" style="max-width: 300px; max-height: 300px;" alt="Imagen de la Empresa">
+        <div class="col-md-12">
+            <div class="card border-primary mb-4">
                 <div class="card-body">
-                    <h5 class="card-title text-center">{{ empresa.nombre }}</h5>
-                    <p class="card-text">Descripción: {{ empresa.descripcion }}</p>
-                    <p class="card-text">Teléfono: {{ empresa.telefono }}</p>
-                    <p class="card-text">Correo: {{ empresa.correo }}</p>
-                    <p class="card-text">País: {{ empresa.pais }}</p>
-                    <p class="card-text">Provincia: {{ empresa.provincia }}</p>
-                    <p class="card-text">Municipio: {{ empresa.municipio }}</p>
-                    <p class="card-text">Dirección: {{ empresa.direccion }}</p>
-                    <p class="card-text">Valoración Media: {{ empresa.valoracion_media }}</p>
+                    <div class="row justify-content-center">
+                        <div class="col-md-6 text-center">
+                            <img src="{% static 'app_files/' %}{{ empresa.IMG_profile }}" class="img-fluid rounded border" style="height: 375px; width: auto;" alt="Imagen de la Empresa">
+                        </div>
+                        <div class="col-md-6">
+                            <h2>{{ empresa.nombre }}</h2>
+                            <p><strong>Descripción:</strong> {{ empresa.descripcion }}</p>
+                            <p><strong>Teléfono:</strong> {{ empresa.telefono }}</p>
+                            <p><strong>Correo:</strong> {{ empresa.correo }}</p>
+                            <p><strong>País:</strong> {{ empresa.pais }}</p>
+                            <p><strong>Provincia:</strong> {{ empresa.provincia }}</p>
+                            <p><strong>Municipio:</strong> {{ empresa.municipio }}</p>
+                            <p><strong>Dirección:</strong> {{ empresa.direccion }}</p>
+                            <p><strong>Valoración Media:</strong> {{ empresa.valoracion_media }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-md-12">
-            <h3 class="mb-4 text-center"><b>Historial de Incidencias</b></h3>
+            <h3 class="mb-0" style="text-align: center; font-weight: bold;">Historial de Incidencias</h3>
+
+            <br>
+            
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
                     <thead class="thead-dark">

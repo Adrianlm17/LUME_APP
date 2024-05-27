@@ -1,0 +1,279 @@
+# locale/de/LC_MESSAGES/django.po
+
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: de\n"
+
+msgid "Inicio"
+msgstr "Start"
+
+msgid "Quiénes somos"
+msgstr "Wer wir sind"
+
+msgid "Servicios"
+msgstr "Dienstleistungen"
+
+msgid "Servicios 2"
+msgstr "Wir bieten Ihnen die umfassendsten Dienstleistungen auf dem Markt"
+
+msgid "Servicios 3"
+msgstr "MITTEILUNGEN"
+
+msgid "Servicios 3.1"
+msgstr "Senden Sie Mitteilungen an die Nachbarn zu wichtigen Themen."
+
+msgid "Servicios 3.2"
+msgstr "Sie erhalten sofort eine Benachrichtigung in Ihrem Posteingang."
+
+msgid "Servicios 4"
+msgstr "DOKUMENTATION"
+
+msgid "Servicios 4.1"
+msgstr "Verwalten Sie alle Dokumente der Gemeinschaft von jedem Gerät aus."
+
+msgid "Servicios 4.2"
+msgstr "Sie können private Dokumente hinzufügen, die nur bestimmte Nachbarn sehen können."
+
+msgid "Servicios 5"
+msgstr "RESERVIERUNGEN"
+
+msgid "Servicios 5.1"
+msgstr "Erlauben Sie Nachbarn, Gemeinschaftseinrichtungen mit und ohne Kapazität zu reservieren."
+
+msgid "Servicios 5.2"
+msgstr "Schwimmbäder, Paddle-Tennisplätze, Gourmet-Räume usw."
+
+msgid "Servicios 6"
+msgstr "TAFEL"
+
+msgid "Servicios 6.1"
+msgstr "Die Nachbarn können Anzeigen an einem Schwarzen Brett veröffentlichen."
+
+msgid "Servicios 6.1"
+msgstr "Löschen Sie WhatsApp-Gruppen mit unnötigen und inoperablen Nachrichten."
+
+msgid "Servicios 7"
+msgstr "VORFÄLLE"
+
+msgid "Servicios 7.1"
+msgstr "Verwalten Sie den Zyklus der in der Gemeinschaft auftretenden Zwischenfälle."
+
+msgid "Servicios 7.2"
+msgstr "Nachbarn können Vorfälle melden und der Administrator/Präsident wird benachrichtigt."
+
+msgid "Servicios 8"
+msgstr "BUCHHALTUNG"
+
+msgid "Servicios 8.1"
+msgstr "Verwalten Sie die Buchhaltung der Gemeinschaft."
+
+msgid "Servicios 8.2"
+msgstr "Nachbarn können die Konten und das Budget der Gemeinschaft einsehen."
+
+msgid "Servicios 9"
+msgstr "NACHRICHTEN"
+
+msgid "Servicios 9.1"
+msgstr "Die Kontaktaufnahme mit dem Administrator oder Präsidenten wird einfach und schnell sein. Sofortige und umfassende Nachrichten mit Benachrichtigungen."
+
+msgid "Servicios 10"
+msgstr "Mehrsprachig"
+
+msgid "Servicios 10.1"
+msgstr "Die Nachbarn können LUME in mehreren Sprachen verwenden."
+
+msgid "Nuestros proyectos"
+msgstr "Unsere Projekte"
+
+msgid "Nuestros proyectos 2"
+msgstr "Einige unserer herausragenden Projekte"
+
+msgid "Nuestros proyectos 3"
+msgstr "Alle Gemeinschaften"
+
+msgid "Nuestros proyectos 4"
+msgstr "Europa"
+
+msgid "Nuestros proyectos 5"
+msgstr "Amerika"
+
+msgid "Nuestros proyectos 6"
+msgstr "Asien"
+
+msgid "Nuestros proyectos 7"
+msgstr "Montepinar"
+
+msgid "Nuestros proyectos 7.1"
+msgstr "Was wäre, wenn wir Ihnen sagen würden, dass das, was Sie für Ihre Gemeinschaft wünschen, Realität werden könnte? Das ist das klare Beispiel der Gemeinschaft Montepinar, mit ihrer umfangreichen Liste von Anforderungen und kaum Hoffnung erhielt Montepinar ihre ideale Anwendung."
+
+msgid "Nuestros proyectos 8"
+msgstr "Desengaño 21"
+
+msgid "Nuestros proyectos 8.1"
+msgstr "Müde davon, rote Zahlen zu haben und nicht zu wissen warum? Genug davon, auf den Versammlungen nur das Wort 'Sonderabgabe' zu hören? Nun, von LUME aus bieten wir eine ideale Option, um alle Ihre wirtschaftlichen Ausgaben zu sehen, eine Historie mit ihrem entsprechenden monatlichen Gleichgewicht und vieles mehr. Und wenn Sie nicht die Gemeinschaft Desengaño 21 fragen, die bereits seit 5 Jahren unsere Dienstleistungen in Anspruch nimmt."
+
+msgid "Nuestros proyectos 9"
+msgstr "Atalaya del Arcipreste"
+
+msgid "Nuestros proyectos 9.1"
+msgstr "Haben Sie großartige Einrichtungen und nutzen sie kaum? Ein Paddle-Tennisplatz und tausend Stunden Wartezeit, um eine Weile zu spielen? Dann machen Sie es wie die Atalaya del Arcipreste und überlassen Sie uns diese Probleme. Bei LUME bieten wir Ihnen ein Raumbuchungssystem, mit dem Sie Einrichtungen einfach reservieren können."
+
+msgid "Nuestros proyectos 10"
+msgstr "Miguel Ángel Riat"
+
+msgid "Nuestros proyectos 10.1"
+msgstr "Sie müssen keine sehr große Gemeinschaft sein, um unsere Dienstleistungen in Anspruch zu nehmen, wie das Beispiel der Gemeinschaft Miguel Ángel Riat zeigt. Diese Gemeinschaft mit nur vier Wohnungen wandte sich an LUME, um ein einfaches System ohne unnötigen Inhalt bereitzustellen, das ihnen ermöglicht, die Gemeinschaft auf einfache und effiziente Weise zu verwalten."
+
+msgid "Nuestros proyectos 11"
+msgstr "Mary Axe"
+
+msgid "Nuestros proyectos 11.1"
+msgstr "Eine Gemeinschaft in den USA namens Mary Axe mit großen internen Problemen bei ihrer Verwaltung. Sie beschlossen, sich an uns zu wenden, wo wir ihnen einen Service boten, der ihren Bedürfnissen entsprach und ihnen die Verwaltung ihrer Gemeinschaft erleichterte."
+
+msgid "Nuestros proyectos 12"
+msgstr "Taxx Philips"
+
+msgid "Nuestros proyectos 12.1"
+msgstr "Die Gemeinschaft Taxx Philips ist eine Gemeinschaft in Ecuador, die unsere Dienste seit mehr als 5 Jahren in Anspruch nimmt."
+
+msgid "Nuestros proyectos 13"
+msgstr "Guls 73"
+
+msgid "Nuestros proyectos 13.1"
+msgstr "Ein weiteres Beispiel für Treue ist die Gemeinschaft Guls 73 in Kanada. Sie nutzt unser Produkt seit 3 aufeinander folgenden Jahren, und wir hoffen, dass wir weiterhin Jahre zu ihrem Konto hinzufügen können."
+
+msgid "Nuestros proyectos 14"
+msgstr "Ziu Chains Ke"
+
+msgid "Nuestros proyectos 14.1"
+msgstr "LUME hat keine sprachliche Barriere, und wie die Gemeinschaft Ziu Chains Ke bestätigen kann, sind sie begeistert, eine vollständig übersetzte Anwendung zu haben, ohne jeden Abschnitt übersetzen zu müssen, wie es bei den vorherigen Anwendungen der Fall war."
+
+msgid "Precios"
+msgstr "Preise"
+
+msgid "Nuestros precios"
+msgstr "Unsere Preise"
+
+msgid "Nuestros precios 1"
+msgstr "Erhalten Sie den besten Preis entsprechend den Merkmalen Ihrer Gemeinschaft"
+
+msgid "mensuales"
+msgstr "monatlich"
+
+msgid "Precios 1"
+msgstr "Einfaches Paket"
+
+msgid "Precios 2"
+msgstr "Standardpaket"
+
+msgid "Precios 3"
+msgstr "Premium-Paket"
+
+msgid "Precios Propiedades"
+msgstr "Finanzmanagement"
+
+msgid "Precios Propiedades 2"
+msgstr "Chat"
+
+msgid "Precios Propiedades 3"
+msgstr "Vorfälle"
+
+msgid "Precios Propiedades 4"
+msgstr "Protokolle"
+
+msgid "Precios Propiedades 5"
+msgstr "24/7 Unterstützung"
+
+msgid "Precios Propiedades 6"
+msgstr "Veranstaltungen"
+
+msgid "Precios Propiedades 7"
+msgstr "Raumbuchung"
+
+msgid "Nosotros"
+msgstr "Über uns"
+
+msgid "Equipo"
+msgstr "Team"
+
+msgid "Equipo 2"
+msgstr "Überlassen Sie Ihre Gemeinschaft den Profis der Branche"
+
+msgid "Equipo 3"
+msgstr "Finanzmanager"
+
+msgid "Equipo 3.1"
+msgstr "Mit langjähriger Erfahrung im Finanzsektor ist Amador einer der Grundpfeiler bei LUME. Er hilft bei der Verwaltung der Ausgaben und ermöglicht es, ein vollständig transparentes System zu zeigen."
+
+msgid "Equipo 4"
+msgstr "Webentwickler"
+
+msgid "Equipo 4.1"
+msgstr "Adrián ist verantwortlich für den technischen Teil von LUME. Er ist dafür zuständig, die Anwendung auf dem neuesten Stand zu halten und steht dem Kunden immer zur Verfügung."
+
+msgid "Equipo 5"
+msgstr "Öffentlichkeitsarbeit"
+
+msgid "Equipo 5.1"
+msgstr "Maxi, kennt den Sektor und die wichtigsten Bedürfnisse der Kunden. Seine Hauptaufgabe ist es, das Wohlergehen der Benutzer zu gewährleisten und Unterstützung für die Gemeinschaften zu bieten."
+
+msgid "Contactar"
+msgstr "Kontakt"
+
+msgid "Contacta con nosotros"
+msgstr "Kontaktiere uns"
+
+msgid "Contacta con nosotros 1"
+msgstr "Warten Sie nicht länger und kontaktieren Sie uns, um Fragen, Anfragen oder Anregungen zu klären"
+
+msgid "Contacta con nosotros 2"
+msgstr "Adresse"
+
+msgid "Contacta con nosotros 3"
+msgstr "Ruf uns an"
+
+msgid "Contacta con nosotros 4"
+msgstr "E-Mail"
+
+msgid "Acceder"
+msgstr "Einloggen"
+
+msgid "Idiomas"
+msgstr "Sprachen"
+
+msgid "Una Aplicación Integral"
+msgstr "Eine umfassende Anwendung"
+
+msgid "Una Aplicación Integral 1"
+msgstr "Bei LUME bieten wir eine Anwendung, die die Verwaltung Ihrer Nachbarschaftsgemeinschaft erleichtert und alle Anforderungen erfüllt, die auftreten können, und die Benutzer von den möglichen alltäglichen Problemen befreit, die in einer solchen Gemeinschaft auftreten können."
+
+msgid "Una Aplicación Integral 2"
+msgstr "Unser ganzheitlicher Ansatz deckt alle Bedürfnisse der Gemeinschaft ab, von der Verwaltung von Dienstleistungen bis zur Förderung der Bürgerbeteiligung. Wir arbeiten daran, starke und lebendige Gemeinschaften aufzubauen."
+
+msgid "Una Aplicación Integral 3"
+msgstr "Eine transparente Gemeinschaft"
+
+msgid "Una Aplicación Integral 4"
+msgstr "Ein angenehmes und kooperatives Zuhause"
+
+msgid "Una Aplicación Integral 5"
+msgstr "Einfache und effektive Verwaltung"
+
+msgid "Nombre"
+msgstr "Name"
+
+msgid "Correo"
+msgstr "E-Mail"
+
+msgid "Asunto"
+msgstr "Betreff"
+
+msgid "Mensaje"
+msgstr "Nachricht"
+
+msgid "Enviar"
+msgstr "Senden"
+
+msgid "Derechos"
+msgstr "Alle Rechte vorbehalten | Entwickelt von"

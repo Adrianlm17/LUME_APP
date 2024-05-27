@@ -1,9 +1,6 @@
 {% extends "layouts/base_admin.html" %}
 
-{% block title %} ADMIN | LUME {% endblock %} 
-
-<!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block title %} ADMIN | LUME {% endblock %}
 
 {% block content %}
 
@@ -11,91 +8,89 @@
   <div class="alert alert-success alert-dismissible">
     <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>¡CREADA!</strong> Empresa creada correctamente
-  </div> 
-{% endif %} 
+  </div>
+{% endif %}
 
 <div class="row">
   <div class="col-md-8">
-      <div class="card">
-        <div class="card-header card-header-primary">
-            <h4 class="card-title">CREAR EMPRESA</h4>
-        </div>
-        <div class="card-body">
-
-          {% if msg %}
-            <br>
-            <h6 class="card-category">
-              <span class="text-danger">{{ msg | safe }}</span>
-            </h6>
-          {% endif %}  
-
-          <br>
-
-          <form method="post" enctype="multipart/form-data">
-            
-            {% csrf_token %}
-            
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>Nombre:</label>
-                  {{ company.nombre }}
-                  <span class="text-danger">{{ company.nombre.errors }}</span>
-                </div>
-                <div class="form-group">
-                  <label>Descripción:</label><br>
-                  {{ company.descripcion }}
-                  <span class="text-danger">{{ company.descripcion.errors }}</span>
-                </div>
-                <div class="form-group">
-                  <label>Telefono:</label>
-                  {{ company.telefono }}
-                  <span class="text-danger">{{ company.telefono.errors }}</span>
-                </div>
-                <div class="form-group">
-                  <label>Correo:</label>
-                  {{ company.correo }}
-                  <span class="text-danger">{{ company.correo.errors }}</span>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>Pais:</label>
-                  {{ company.pais }}
-                  <span class="text-danger">{{ company.pais.errors }}</span>
-                </div>
-                <div class="form-group">
-                  <label>Provincia:</label>
-                  {{ company.provincia }}
-                  <span class="text-danger">{{ company.provincia.errors }}</span>
-                </div>
-                <div class="form-group">
-                  <label>Municipio:</label>
-                  {{ company.municipio }}
-                  <span class="text-danger">{{ company.municipio.errors }}</span>
-                </div>
-                <div class="form-group">
-                  <label>Dirección:</label>
-                  {{ company.direccion }}
-                  <span class="text-danger">{{ company.direccion.errors }}</span>
-                </div>
-              </div>
-            </div>
-
-            <br>
-
-            <div class="row">
-              <div class="col-sm-12 text-center">
-                <button type="submit" class="btn btn-primary">Crear Empresa</button>
-              </div>
-            </div>
-          </form>
-        </div>        
+    <div class="card">
+      <div class="card-header card-header-primary">
+        <h4 class="card-title">CREAR EMPRESA</h4>
       </div>
-  </div> 
+      <div class="card-body">
+
+        {% if msg %}
+          <br>
+          <h6 class="card-category">
+            <span class="text-danger">{{ msg | safe }}</span>
+          </h6>
+        {% endif %}
+        
+        <br>
+
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Nombre:</label>
+                {{ company.nombre }}
+                <span class="text-danger">{{ company.nombre.errors }}</span>
+              </div>
+              <div class="form-group">
+                <label>Descripción:</label><br>
+                {{ company.descripcion }}
+                <span class="text-danger">{{ company.descripcion.errors }}</span>
+              </div>
+              <div class="form-group">
+                <label>Telefono:</label>
+                {{ company.telefono }}
+                <span class="text-danger">{{ company.telefono.errors }}</span>
+              </div>
+              <div class="form-group">
+                <label>Correo:</label>
+                {{ company.correo }}
+                <span class="text-danger">{{ company.correo.errors }}</span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Pais:</label>
+                {{ company.pais }}
+                <span class="text-danger">{{ company.pais.errors }}</span>
+              </div>
+              <div class="form-group">
+                <label>Provincia:</label>
+                {{ company.provincia }}
+                <span class="text-danger">{{ company.provincia.errors }}</span>
+              </div>
+              <div class="form-group">
+                <label>Municipio:</label>
+                {{ company.municipio }}
+                <span class="text-danger">{{ company.municipio.errors }}</span>
+              </div>
+              <div class="form-group">
+                <label>Dirección:</label>
+                {{ company.direccion }}
+                <span class="text-danger">{{ company.direccion.errors }}</span>
+              </div>
+              <div class="form-group">
+                <label>Tags:</label>
+                {{ company.tags }}
+                <span class="text-danger">{{ company.tags.errors }}</span>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              <button type="submit" class="btn btn-primary">Crear Empresa</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock content %}
-
-<!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}

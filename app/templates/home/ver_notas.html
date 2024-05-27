@@ -3,83 +3,78 @@
 
 {% block title %} CHAT | LUME {% endblock %} 
 
-<!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
-
-{% block content %}
-
-<a href="{% url 'home:home' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Volver</a>
-
-{% if success %}
-  <div class="alert alert-success alert-dismissible">
-    <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>¡ACTUALIZADA!</strong> Nota actualizada correctamente
-  </div> 
-{% endif %} 
-
-<div class="row">
-  <div class="col-md-8">
-      <div class="card">
-        <div class="card-header card-header-warning">
-            <h4 class="card-title"><i class="material-icons">note_alt</i> NOTA</h4>
-        </div>
-        <div class="card-body">
-
-          {% if msg %}
-            <br>
-            <h6 class="card-category">
-              <span class="text-danger">{{ msg | safe }}</span>
-            </h6>
-          {% endif %}  
-
-          <br>
-
-          <form method="post" enctype="multipart/form-data">
-            
-            {% csrf_token %}
-
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group titulo">
-                  <label>Titulo:</label>
-                  {{ nota_form.titulo }}
-                  <span class="text-danger">{{ nota_form.titulo.errors }}</span>
-                </div>
-                <div class="form-group descripcion">
-                  <label>Descripción:</label><br>
-                  {{ nota_form.descripcion }}
-                  <span class="text-danger">{{ nota_form.descripcion.errors }}</span>
-                </div>
-              </div>
-            </div>
-
-            <br>
-
-            <div class="row">
-              <div class="col-sm-12 text-center">
-                <button type="submit" class="btn btn-warning">Guardar Nota</button>
-              </div>
-            </div>
-          </form>
-        </div>        
-      </div>
-  </div> 
-</div>
-
-
+{% block stylesheets %}
 <style>
-  .titulo input{
-    width: 100%; 
-    cols: 50; 
-  }
-
-  .descripcion textarea{
+  .titulo input,
+  .descripcion textarea {
     width: 100%; 
     cols: 50; 
   }
 </style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+{% if success %}
+<div class="alert alert-success alert-dismissible">
+  <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>¡ACTUALIZADA!</strong> Nota actualizada correctamente
+</div> 
+{% endif %} 
+
+<a href="{% url 'home:home' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Volver</a>
+
+
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header card-header-notas">
+        <h4 class="card-title"><i class="material-icons">note_alt</i> NOTA</h4>
+      </div>
+      <div class="card-body">
+
+        {% if msg %}
+        <br>
+        <h6 class="card-category">
+          <span class="text-danger">{{ msg | safe }}</span>
+        </h6>
+        {% endif %}  
+
+        <br>
+
+        <form method="post" enctype="multipart/form-data">
+          
+          {% csrf_token %}
+
+          <div>
+            <div>
+              <div class="form-group titulo">
+                <label>Titulo:</label>
+                {{ nota_form.titulo }}
+                <span class="text-danger">{{ nota_form.titulo.errors }}</span>
+              </div>
+              <div class="form-group descripcion">
+                <label>Descripción:</label><br>
+                {{ nota_form.descripcion }}
+                <span class="text-danger">{{ nota_form.descripcion.errors }}</span>
+              </div>
+            </div>
+          </div>
+
+          <br>
+
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              <button type="submit" class="btn btn-notas">Guardar Nota</button>
+            </div>
+          </div>
+        </form>
+      </div>        
+    </div>
+  </div> 
+</div>
 
 {% endblock content %}
 
-<!-- Specific Page JS goes HERE  -->
 {% block javascripts %}{% endblock javascripts %}

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Acta, Anuncio, Chat, Comunidad, Empresa, Evento, ExtendsChat, Gasto, Incidencia, Motivo, Nota, PagosUsuario, Recibo, SeguroComunidad, UserProfile, Vivienda
+from .models import Acta, Anuncio, Chat, Comunidad, Empresa, Evento, ExtendsChat, ExtendsGroupChat, Gasto, GroupChat, Incidencia, Motivo, Nota, PagosUsuario, Recibo, SeguroComunidad, UserProfile, Vivienda
 
 
 
@@ -57,16 +57,43 @@ class NotaForm(forms.ModelForm):
 class ChatForm(forms.ModelForm):
     class Meta:
         model = Chat
-        fields = ["titulo"]
+        fields = ["titulo", "IMG_profile"]
+
+
+class GroupChatForm(forms.Form):
+    title = forms.CharField(label='Título', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Título del grupo'}))
+    users = forms.ModelMultipleChoiceField(queryset=User.objects.all(), widget=forms.SelectMultiple(attrs={'class': 'form-control select2', 'multiple': 'multiple'}))
+    
+    class Meta:
+        model = GroupChat
+        fields = ["title", "users", "IMG_profile"]
 
 
 class ExtendsChatForm(forms.ModelForm):
     class Meta:
         model = ExtendsChat
         fields = ["text"]
+        widgets = {
+            'text': forms.Textarea(attrs={
+                'class': 'custom-textarea',
+                'placeholder': 'Escribe un mensaje...'
+            }),
+        }
 
 
 
+class ExtendsGroupChatForm(forms.ModelForm):
+    class Meta:
+        model = ExtendsGroupChat
+        fields = ["text"]
+        widgets = {
+            'text': forms.Textarea(attrs={
+                'class': 'custom-textarea',
+                'placeholder': 'Escribe un mensaje...'
+            }),
+        }
+
+    
 class ActaForm(forms.ModelForm):
     class Meta:
         model = Acta
@@ -122,7 +149,7 @@ class EditarComunidadForm(forms.ModelForm):
 
     class Meta:
         model = Comunidad
-        fields = ['nombre', 'pais', 'provincia', 'municipio', 'calle', 'portal', 'dinero', 'numero_cuenta']
+        fields = ['nombre', 'pais', 'provincia', 'municipio', 'dirrecion', 'portal', 'dinero', 'numero_cuenta']
 
 
 class MetodoPagoForm(forms.ModelForm):
@@ -245,7 +272,8 @@ class IncidenciaEmpresaForm(forms.ModelForm):
 class EditarEmpresaForm(forms.ModelForm):
     class Meta:
         model = Empresa
-        fields = ['nombre', 'descripcion', 'telefono', 'correo', 'pais', 'provincia', 'municipio', 'direccion']
+        fields = ['nombre', 'descripcion', 'telefono', 'correo', 'pais', 'provincia', 'municipio', 'direccion', 'tags']
+
 
 class UpdateIMGEmpresaForm(forms.ModelForm):
     class Meta:

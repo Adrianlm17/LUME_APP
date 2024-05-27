@@ -4,101 +4,502 @@
 {% block title %} CHAT | LUME {% endblock %}
 
 {% block stylesheets %}
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        /* Estilos para el contenedor principal */
+        .chat-container {
+            display: flex;
+            height: calc(80vh - 10px); /* Altura completa menos márgenes */
+            margin: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        /* Estilos para el contenido */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 5px;
+        }
+
+        /* Estilos para la barra de búsqueda de usuarios */
+        #search-user {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Estilos para el listado de usuarios */
+        .user-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .user-item:hover {
+            background-color: #e0e0e0; /* Color al pasar el ratón */
+        }
+
+        .user-img {
+            margin-right: 10px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .user-info {
+            flex-grow: 1;
+        }
+
+        /* Estilos para la ventana de chat */
+        #chat-window {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border-left: 1px solid #ccc;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .recipient-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+
+        .user-email {
+            flex-grow: 1;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .title-container {
+            display: flex;
+            align-items: center;
+        }
+
+        
+        .title-container form {
+            display: flex;
+            align-items: center;
+        }
+
+        .recipient-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .recipient-info p {
+            margin-right: 20px;
+        }
+
+        .badge {
+            margin-left: auto; /* Mover a la derecha */
+            background-color: #007bff; /* Color del badge */
+            color: white; /* Color del texto */
+            padding: 5px 10px; /* Espaciado interno */
+            border-radius: 50%; /* Forma circular */
+        }
+
+        .chat-messages-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* Alinear los mensajes al final */
+            background-color: #fdf3e5; /* Cambiar el color de fondo */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+            overflow-y: auto;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            max-width: 70%;
+            width: fit-content;
+            display: flex;
+            align-items: center;
+        }
+
+        .message .user-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            margin-left: 10px;
+        }
+
+        .message-text {
+            max-width: 80%;
+        }
+
+        .sent {
+            background-color: #95e08b;
+            text-align: right;
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .sent .message-text {
+            margin-right: 10px;
+        }
+
+        .sent .user-img {
+            margin-left: 10px;
+        }
+
+        .received {
+            background-color: #7a83fa;
+            text-align: left;
+            margin-right: auto;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .received .message-text {
+            margin-left: 10px;
+        }
+
+        .received .user-img {
+            margin-right: 10px;
+        }
+
+        .chat-input {
+            display: flex;
+            margin-top: 10px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+
+        .chat-input textarea {
+            flex-grow: 1;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            resize: none;
+        }
+
+        .chat-input button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .user-info-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info-content p {
+            margin: 0;
+        }
+
+        .badge {
+            margin-left: auto;
+            background-color: rgb(96, 177, 76);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+        }
+
+
+    </style>
 {% endblock stylesheets %}
 
 {% block content %}
 <div class="row">
     <div class="col-md-12">
-        <div class="card">
-            <div class="card-header card-header-success">
-                <h4 class="card-title mt-0"><i class="material-icons">chat</i> CHAT</h4>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Imagen</th>
-                                <th>Usuario</th>
-                                <th>Titulo</th>
-                                <th>Último mensaje</th>
-                                <th>Estado</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for chat in user_chats %}
-                            <tr>
-                                {% if chat.user == request.user %}
-                                    <td><img src="{% static 'app_files/' %}{{ chat.mensaje_user.userprofile.IMG_profile }}" alt="Profile Image" class="rounded-circle" style="width: 32px; height: 32px;"></td>
-                                    <td>{{ chat.mensaje_user.email }}</td>
-                                {% else %}
-                                    <td><img src="{% static 'app_files/' %}{{ chat.user.userprofile.IMG_profile }}" alt="Profile Image" class="rounded-circle" style="width: 32px; height: 32px;"></td>
-                                    <td>{{ chat.user.email }}</td>
-                                {% endif %}
-                                <td>{{ chat.titulo }}</td>
-                                <td>{{ chat.last_chat|slice:":25" }}</td>
-                                <td>
-                                    {% if chat.id in user_read_chats %}
-                                    <button class="btn btn-success">Leído</button>
-                                    {% else %}
-                                    <button class="btn btn-danger">No leído</button>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <a href="{% url 'home:chat_detail' chat.id %}" class="btn btn-info">Abrir Chat</a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="6">No hay chats disponibles.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+        <div class="chat-container">
+            <div class="content">
+                <!-- Búsqueda de usuarios y botones -->
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <input type="text" class="form-control mr-3" placeholder="Buscar usuario..." id="search-user">
+                    <div>
+                        <button name="crear_chat" class="btn btn-sm btn-primary mr-2" style="margin-left: 10px;">Crear chat</button>
+                        <button name="crear_grupo" class="btn btn-sm btn-primary">Crear grupo</button>
+                    </div>
                 </div>
+                
+                <!-- Listado de usuarios -->
+                <div class="user-list mt-3">
+                    {% if user_chats or group_chats %}
+                        {% for chat in user_chats %}
+                            <div class="user-item" onclick="selectUser('{{ chat.id }}')">
+                                <img src="{% static 'app_files/' %}{{ chat.IMG_profile }}" alt="Profile Image" class="rounded-circle user-img profile-image">
+                                <div class="user-info">
+                                    <div class="user-info-header">
+                                        <h4><b>{{ chat.mensaje_user.email }} | {{ chat.titulo }}</b></h4>
+                                    </div>
+                                    <div class="user-info-content">
+                                        <p>{{ chat.last_chat|slice:":50" }}</p>
+                                        {% if not chat.id in user_read_chats %}
+                                            <span class="badge badge-primary">+1</span>
+                                        {% endif %}
+                                    </div>
+                                </div>                                
+                            </div>
+                        {% endfor %}
+                        {% for group_chat in group_chats %}
+                            <div class="user-item" onclick="selectGroup('{{ group_chat.id }}')">
+                                <img src="{% static 'app_files/' %}{{ group_chat.IMG_profile }}" alt="Profile Image" class="rounded-circle user-img profile-image">
+                                <div class="user-info">
+                                    <h4><b>{{ group_chat.title }}</b></h4>
+                                    <p>{% if group_chat.last_chat %}{{ group_chat.last_chat|slice:":50" }}{% else %}{% endif %}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    {% else %}
+                        <p>No hay chats actualmente.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Ventana de chat -->
+            <div class="col-md-9" id="chat-window">
+                {% if chat %}
+                    <!-- Encabezado del chat -->
+                    <div class="chat-header">
+                        <img src="{% static 'app_files/' %}{{ chat.IMG_profile }}" alt="Chat Image" class="recipient-img profile-image">
+                        <h2 class="user-email">
+                            {% if chat.user == request.user %}
+                                {{ chat.mensaje_user.email }}
+                            {% else %}
+                                {{ chat.user.email }}
+                            {% endif %}
+                        </h2>
+                        <div class="title-container">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ title_form.titulo }} <button type="submit" name="edit_title" class="btn btn-primary">Guardar Asunto</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Mensajes del chat -->
+                    <div class="chat-messages-container">
+                        <div class="chat-messages">
+                            {% for message in messages %}
+                                <div class="message {% if message.user_send == request.user %}sent{% else %}received{% endif %}">
+                                    <img src="{% static 'app_files/' %}{{ message.user_send.userprofile.IMG_profile }}" alt="Profile Image" class="user-img profile-image">
+                                    <div class="message-text">
+                                        <strong>{{ message.user_send.email }}</strong>
+                                        <p>{{ message.text }}</p>
+                                        <span>{{ message.created_at }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <!-- Formulario de envío de mensaje -->
+                        <form method="post" class="chat-input">
+                            {% csrf_token %}
+                            {{ form.text }}
+                            <button type="submit" class="btn btn-success"><i class="material-icons">send</i></button>
+                        </form>
+                    </div>
+                {% elif grupo_id %}
+                    <!-- Encabezado del grupo -->
+                    <div class="chat-header">
+                        <img src="{% static 'app_files/' %}{{ group_chat.IMG_profile }}" alt="Chat Image" class="recipient-img profile-image">
+                        <div class="chat-header">
+                            <h2>{{ group_chat.title }}</h2>
+                        </div>
+                        <div class="title-container">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ title_form_grupo.title }} <button type="submit" name="edit_title" class="btn btn-primary">Guardar titulo</button>
+                            </form>
+                        </div>
+                    </div>                
+                    <!-- Mensajes del grupo -->
+                    <div class="chat-messages-container">
+                        <div class="chat-messages">
+                            {% for message in messages %}
+                                <div class="message {% if message.user_send == request.user %}sent{% else %}received{% endif %}">
+                                    <img src="{% static 'app_files/' %}{{ message.user_send.userprofile.IMG_profile }}" alt="Profile Image" class="user-img profile-image">
+                                    <div class="message-text">
+                                        <strong>{{ message.user_send.email }}</strong>
+                                        <p>{{ message.text }}</p>
+                                        <span>{{ message.created_at }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <!-- Formulario de envío de mensaje -->
+                        <form method="post" class="chat-input">
+                            {% csrf_token %}
+                            {{ form.text }}
+                            <button type="submit" class="btn btn-success"><i class="material-icons">send</i></button>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="chat-header">
+                        <h2><b>Nuevo chat</b></h2>
+                    </div>
+                    
+                    <br>
+
+                    <div>
+                        <form action="{% url 'home:open_chat' %}" method="post">
+                            {% csrf_token %}
+                            <select name="usuario" style="margin-bottom: 10px;">
+                                {% for user in users %}
+                                <option value="{{ user.id }}">{{ user.email }}</option> 
+                                {% endfor %}
+                            </select>
+                            <br>
+                            <button type="submit" name="crear_chat" class="btn btn-primary">Abrir chat</button>
+                        </form>   
+                    </div>
+
+                    <br>
+
+                    <div class="chat-header">
+                        <h2>Crear Grupo de Chat</h2>
+                    </div>
+                    <br>
+                    <form action="{% url 'home:open_group' %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="group-title">Título del Grupo:</label>
+                            <input type="text" id="group-title" name="titulo" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <h4>Selecciona usuarios para agregar al grupo:</h4>
+                            {% for user in users %}
+                                <div>
+                                    <input type="checkbox" id="user_{{ user.id }}" name="usuarios" value="{{ user.id }}">
+                                    <label for="user_{{ user.id }}">{{ user.email }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" name="crear_grupo" class="btn btn-primary mt-3">Crear Grupo</button>
+                    </form>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
 
-<div class="fixed-plugin" style="background-color: #4CAF50; display: flex; justify-content: center; align-items: center; border: 1px solid #000; border-radius: 5px; width: 50px; height: 50px;">
-    <div class="dropdown show-dropdown">
-        <a href="#" data-toggle="dropdown">
-            <i class="fa fa-address-book fa-2x" style="color: #fff;"></i>
-        </a>
-        <ul class="dropdown-menu">
-            <h2><b>Nuevo chat</b></h2>
-            <form action="{% url 'home:open_chat' %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="usuario">Seleccionar Usuario:</label>
-                    <select class="form-control select2" id="usuario" name="usuario">
-                        <option></option> <!-- Option for placeholder -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        scrollToBottom();
+    });
+
+    function scrollToBottom() {
+        var chatMessagesContainer = $('.chat-messages');
+        chatMessagesContainer.scrollTop(chatMessagesContainer[0].scrollHeight);
+    }
+
+    var textarea = document.getElementById('id_text');
+    textarea.setAttribute('rows', '2');
+
+    $(document).ready(function() {
+        $('#search-user').on('input', function() {
+            var searchText = $(this).val().toLowerCase();
+            $('.user-item').each(function() {
+                var userEmail = $(this).find('h4').text().toLowerCase();
+                if (userEmail.includes(searchText)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+
+    function selectUser(userId) {
+        window.location.href = '/home/chat/' + userId + '/';
+    }
+    function selectGroup(group_chat_id) {
+        window.location.href = '/home/group-chat/' + group_chat_id + '/';
+    }
+
+    $(document).ready(function() {
+        $('button[name="crear_chat"]').click(function() {
+            $('#chat-window').html(`
+                <h2><b>Nuevo chat</b></h2>
+                <form action="{% url 'home:open_chat' %}" method="post">
+                    {% csrf_token %}
+                    <select name="usuario" style="margin-bottom: 10px;">
                         {% for user in users %}
                         <option value="{{ user.id }}">{{ user.email }}</option> 
                         {% endfor %}
                     </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Abrir chat</button>
-            </form>            
-        </ul>
-    </div>
-</div>
-{% endblock content %}
-
-{% block scripts %}
-    <!-- Incluye jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Incluye Select2 JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#usuario').select2({
-                placeholder: "Seleccione un usuario",
-                allowClear: true
-            });
+                    <br>
+                    <button type="submit" name="crear_chat" class="btn btn-primary">Abrir chat</button>
+                </form>            
+            `);
         });
-    </script>
-{% endblock scripts %}
+
+        $('button[name="crear_grupo"]').click(function() {
+            $('#chat-window').html(`
+            <div class="chat-header">
+                <h2>Crear Grupo de Chat</h2>
+            </div>
+            <br>
+            <form action="{% url 'home:open_group' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="group-title">Título del Grupo:</label>
+                    <input type="text" id="group-title" name="titulo" class="form-control">
+                </div>
+                <div class="form-group">
+                    <h4>Selecciona usuarios para agregar al grupo:</h4>
+                    {% for user in users %}
+                        <div>
+                            <input type="checkbox" id="user_{{ user.id }}" name="usuarios" value="{{ user.id }}">
+                            <label for="user_{{ user.id }}">{{ user.email }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="submit" name="crear_grupo" class="btn btn-primary mt-3">Crear Grupo</button>
+            </form>
+
+
+            `);
+        });
+    });
+</script>
+    
+{% endblock content %}
+    

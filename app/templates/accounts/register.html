@@ -12,7 +12,7 @@
     <div id="alerts"></div>
 
     <div class="login-box animate__animated animate__fadeIn">
-        <h2>REGISTER</h2>
+        <h1 style="color: white;">REGISTER</h1>
 
         <h6 class="card-category">
             {% if msg %}
@@ -26,7 +26,7 @@
         {% if success %}
 
             <p style="color:black; background-color: white; ">
-              <a href="/login/login/" class="text-black text-small">¡INICIAR SESIÓN!</a>
+              <a href="/login/login/" class="text-black text-small">¡LOG IN!</a>
             </p>  
 
         {% else %}
@@ -68,13 +68,13 @@
                     <span class="text-danger">{{ token_form.token.errors }}</span>
                 </div>
 
-                <button type="submit" name="register" class="btn btn-secondary pull-left">Register</button>
+                <button type="submit" name="register" class="btn btn-secondary pull-left">Create Account</button>
             </form>
 
             <br>
 
             <p class="mt-3">
-                ¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión</a>
+                ¿Do you already have an account? <a href="{% url 'login' %}">Log in</a>
             </p>
         {% endif %}
     </div>

@@ -21,8 +21,11 @@ urlpatterns = [
     
     # ------------------------------- CHATS -------------------------------
     path('chat.html', home_views.chat, name='chat'),
-    path('open_chat', home_views.open_chat, name='open_chat'),
-    path('chat/<int:chat_id>/', home_views.chat_detail, name='chat_detail'),
+    path('chat/<int:user_id>/', home_views.chat, name='user_chat'),
+    path('group-chat/<int:grupo_id>/', home_views.chat, name='group_chat'),
+    path('open_chat/', home_views.open_chat, name='open_chat'),
+    path('open_group', home_views.open_group, name='open_group'),
+    
 
     # ------------------------------- INCIDENCIAS -------------------------------
     path('ver_incidencias', home_views.ver_incidencias, name='ver_incidencias'),
@@ -33,6 +36,7 @@ urlpatterns = [
     path('<int:numero>/editar_incidencia_empresa', home_views.editar_incidencia_empresa, name='editar_incidencia_empresa'),
     path('<int:numero>/ver_incidencia', home_views.ver_incidencia, name='ver_incidencia'),
     path('ver_empresas', home_views.ver_empresas, name='ver_empresas'),
+    path('mapa', home_views.mapa_empresas, name='mapa'),
     path('detalle_empresa/<int:empresa_id>', home_views.detalle_empresa, name='detalle_empresa'),
 
     # ------------------------------- ACTAS -------------------------------

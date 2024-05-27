@@ -3,8 +3,19 @@
 
 {% block title %} ANUNCIO | LUME {% endblock %} 
 
-<!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+<style>
+  .card {
+    margin-top: 50px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .card-header-danger {
+    background-color: #f44336;
+    color: #fff;
+  }
+</style>
+{% endblock stylesheets %}
 
 {% block content %}
 
@@ -12,29 +23,31 @@
 
 <br>
 
-<div class="row">
+<div class="row justify-content-center">
   <div class="col-md-8">
-      <div class="card">
-        <div class="card-header card-header-danger">
-            <h4 class="card-title"><i class="material-icons">new_releases</i> {{ anuncio.comunidad }}</h4>
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">Titulo: {{ anuncio.titulo }}</h5>
-            
-            <br>
-
-            <p class="card-text">Descripción:<br>
-                {{ anuncio.descripcion }}
-            </p>
-            
-            <br>
-            <p class="card-text">Fecha: {{ anuncio.fecha_anuncio|date:'d/m/Y' }}</p>
-        </div>        
+    <div class="card">
+      <div class="card-header card-header-danger" style="text-align: center;">
+          <h4 class="card-title"><i class="material-icons">new_releases</i> {{ anuncio.comunidad }}</h4>
       </div>
+      
+      <br>
+
+      <div class="card-body">
+          <h5 class="card-title">Titulo: {{ anuncio.titulo }}</h5>
+          
+          <br>
+
+          <p class="card-text">Descripción:<br>
+              {{ anuncio.descripcion }}
+          </p>
+          
+          <br>
+          <p class="card-text">Fecha: {{ anuncio.fecha_anuncio|date:'d/m/Y' }}</p>
+      </div>        
+    </div>
   </div> 
 </div>
 
 {% endblock content %}
 
-<!-- Specific Page JS goes HERE  -->
 {% block javascripts %}{% endblock javascripts %}

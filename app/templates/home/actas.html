@@ -23,7 +23,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header card-header-info">
+            <div class="card-header card-header-actas">
                 <h4 class="card-title mt-0"><i class="material-icons">library_books</i> ACTAS</h4>
             </div>
             <div class="card-body">
@@ -44,7 +44,7 @@
                                 <td>{{ acta.titulo }}</td>
                                 <td>{{ acta.fecha }}</td>
                                 <td>
-                                    <a href="{% url 'home:ver_acta' acta.id %}" class="btn btn-info">Ver Acta</a>
+                                    <a href="{% url 'home:ver_acta' acta.id %}" class="btn btn-actas">Ver Acta</a>
                                 </td>
                             </tr>
                             {% empty %}
