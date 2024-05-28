@@ -156,7 +156,7 @@ class Evento(models.Model):
 
 
 
-class Attendance(models.Model):
+class Asistencias(models.Model):
     evento = models.ForeignKey(Evento, on_delete=models.CASCADE)
     usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     joined_at = models.DateTimeField(default=timezone.now)
