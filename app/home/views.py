@@ -899,14 +899,24 @@ def delete_calendario(request, recordatorio_id):
 @login_required(login_url="/login/login/")
 def eventos(request):
     now = timezone.now()
+    
+    # Obtener las comunidades a las que pertenece el usuario a través de sus viviendas
     user_communities = Comunidad.objects.filter(vivienda__usuario=request.user).distinct()
     
+    # Obtener la provincia de las comunidades del usuario
+    user_provinces = user_communities.values_list('provincia', flat=True).distinct()
+    
+    # Eventos de las comunidades del usuario (privados y públicos)
     community_events = Evento.objects.filter(
-        Q(visibility=Evento.PRIVATE, comunidad__in=user_communities, date__gte=now)
+        Q(comunidad__in=user_communities) &
+        Q(date__gte=now)
     ).distinct()
 
+    # Eventos públicos en las mismas provincias que las comunidades del usuario
     other_public_events = Evento.objects.filter(
-        Q(visibility=Evento.PUBLIC, date__gte=now)
+        Q(visibility=Evento.PUBLIC) &
+        Q(date__gte=now) &
+        Q(comunidad__provincia__in=user_provinces)
     ).exclude(comunidad__in=user_communities).distinct()
 
     community_events_with_attendance = {}
@@ -931,9 +941,8 @@ def eventos(request):
         'chats_no_leidos': chats_no_leidos, 
         'notificaciones_no_leidas': notificaciones_no_leidas, 
         'num_notificaciones_no_leidas': num_notificaciones_no_leidas, 
-        'num_mensajes_no_leidos':num_mensajes_no_leidos
+        'num_mensajes_no_leidos': num_mensajes_no_leidos
     })
-
 
 
 
