@@ -16,7 +16,7 @@ from app.admin_lume.forms import CrearUserProfileForm
 from app.home.forms import ActaForm, AsignarUsuarioComunidadForm, ChatForm, CrearAnuncioForm, EditarComunidadForm, EditarEmpresaForm, EventoForm, ExtendsChatForm, ExtendsGroupChatForm, GastoForm, GroupChatForm, IncidenciaAdminForm, IncidenciaEmpresaForm, IncidenciaForm, MetodoPagoForm, MotivoReciboForm, MotivoReciboFormSet, NotaForm, PagosUsuarioForm, PorcentajePagoForm, ReciboForm, SeguroComunidadForm, UpdateIMGEmpresaForm, UpdateIMGForm, UpdateProfileForm
 from app.home.models import Nota, User
 from django.db.models import Q
-from .models import Acta, Anuncio, Attendance, Calendario, Chat, ChatReadBy, Comunidad, Empresa, Evento, ExtendsChat, ExtendsGroupChat, Gasto, GroupChat, GroupReadBy, Incidencia, Motivo, Nota, Notificacion, PagosUsuario, Recibo, SeguroComunidad, Trabajador, Transaccion, UserProfile, Vivienda
+from .models import Acta, Anuncio, Asistencias, Calendario, Chat, ChatReadBy, Comunidad, Empresa, Evento, ExtendsChat, ExtendsGroupChat, Gasto, GroupChat, GroupReadBy, Incidencia, Motivo, Nota, Notificacion, PagosUsuario, Recibo, SeguroComunidad, Trabajador, Transaccion, UserProfile, Vivienda
 
 
 
@@ -921,12 +921,12 @@ def eventos(request):
 
     community_events_with_attendance = {}
     for evento in community_events:
-        is_attending = Attendance.objects.filter(evento=evento, usuario=request.user).exists()
+        is_attending = Asistencias.objects.filter(evento=evento, usuario=request.user).exists()
         community_events_with_attendance[evento] = is_attending
 
     other_public_events_with_attendance = {}
     for evento in other_public_events:
-        is_attending = Attendance.objects.filter(evento=evento, usuario=request.user).exists()
+        is_attending = Asistencias.objects.filter(evento=evento, usuario=request.user).exists()
         other_public_events_with_attendance[evento] = is_attending
 
     chats_no_leidos = ChatReadBy.objects.filter(user=request.user, is_read=False)
@@ -971,10 +971,10 @@ def unirse_evento(request, event_id):
     evento = get_object_or_404(Evento, id=event_id)
     if evento.current_attendees < evento.max_attendees:
 
-        if Attendance.objects.filter(evento=evento, usuario=request.user).exists():
+        if Asistencias.objects.filter(evento=evento, usuario=request.user).exists():
             messages.error(request, 'Ya estás inscrito en este evento!')
         else:
-            Attendance.objects.create(evento=evento, usuario=request.user)
+            Asistencias.objects.create(evento=evento, usuario=request.user)
             evento.current_attendees += 1
             evento.save()
 
@@ -995,7 +995,7 @@ def unirse_evento(request, event_id):
 @login_required(login_url="/login/login/")
 def desapuntarse_evento(request, event_id):
     evento = get_object_or_404(Evento, id=event_id)
-    attendance = Attendance.objects.filter(evento=evento, usuario=request.user)
+    attendance = Asistencias.objects.filter(evento=evento, usuario=request.user)
     
     if attendance.exists():
         attendance.delete()
