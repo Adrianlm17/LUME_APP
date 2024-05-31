@@ -3,76 +3,99 @@
 
 {% block title %}Crear Evento | LUME{% endblock %}
 
+{% block stylesheets %}
+<style>
+    .custom-form label {
+        display: block;
+        text-align: left;
+        margin-bottom: 5px;
+    }
+    .custom-form input[type="text"],
+    .custom-form input[type="date"],
+    .custom-form input[type="number"],
+    .custom-form select,
+    .custom-form textarea {
+        width: 100%;
+        max-width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+    .custom-form input[type="file"] {
+        display: block;
+        margin-top: 10px;
+    }
+    .custom-form button[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #921bba;
+        border: none;
+        color: white;
+        border-radius: 4px;
+    }
+</style>
+{% endblock stylesheets %}
+
 {% block content %}
-<a href="{% url 'home:eventos' %}" class="btn btn-info"><i class="fa fa-arrow-left"></i> Volver</a>
+<div class="container mt-4">
+    <a href="{% url 'home:eventos' %}" class="btn btn-light btn-eventos mb-4"><i class="fa fa-arrow-left"></i> Volver</a>
 
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header card-header-info">
-                <h2 class="text-center">Crear Evento</h2>
-            </div>
-            <div class="card-body">
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Título:</label>
-                                {{ form.title }}
-                                <span class="text-danger">{{ form.title.errors }}</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Descripción:</label><br>
-                                {{ form.descripcion }}
-                                <span class="text-danger">{{ form.descripcion.errors }}</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Fecha:</label><br>
-                                {{ form.date }}
-                                <span class="text-danger">{{ form.date.errors }}</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Máximo de Asistentes:</label><br>
-                                {{ form.max_attendees }}
-                                <span class="text-danger">{{ form.max_attendees.errors }}</span>
-                            </div>
-                            <div>
-                                <label>Imagen:</label><br>
-                                {{ form.image }}
-                                <span class="text-danger">{{ form.image.errors }}</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Visibilidad:</label><br>
-                                {{ form.visibility }}
-                                <span class="text-danger">{{ form.visibility.errors }}</span>
-                            </div>
-                            <div class="form-group">
-                                <label>Comunidad:</label><br>
-                                {{ form.comunidad }}
-                                <span class="text-danger">{{ form.comunidad.errors }}</span>
-                            </div>
-                            <div class="form-group">
-                                <label for="direccion">Dirección</label>
-                                {{ form.direccion }}
-                                <span class="text-danger">{{ form.direccion.errors }}</span>
-                            </div>
-                            <div class="form-group">
-                                <label for="pais">País</label>
-                                {{ form.pais }}
-                                <span class="text-danger">{{ form.pais.errors }}</span>
-                            </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header card-header-eventos text-center">
+                    <h2>Crear Evento</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" class="custom-form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="title">Título:</label>
+                            {{ form.title }}
+                            <span class="text-danger">{{ form.title.errors }}</span>
                         </div>
-                    </div>
-                    
-                    <br>
-
-                    <div class="row justify-content-center">
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-info btn-block">Crear Evento</button>
+                        <div class="form-group">
+                            <label for="descripcion">Descripción:</label>
+                            {{ form.descripcion }}
+                            <span class="text-danger">{{ form.descripcion.errors }}</span>
                         </div>
-                    </div>
-                </form>
+                        <div class="form-group">
+                            <label for="date">Fecha:</label>
+                            {{ form.date }}
+                            <span class="text-danger">{{ form.date.errors }}</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="max_attendees">Máximo de Asistentes:</label>
+                            {{ form.max_attendees }}
+                            <span class="text-danger">{{ form.max_attendees.errors }}</span>
+                        </div>
+                        <div>
+                            <label for="image">Imagen:</label>
+                            {{ form.image }}
+                            <span class="text-danger">{{ form.image.errors }}</span>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="visibility">Visibilidad:</label>
+                            {{ form.visibility }}
+                            <span class="text-danger">{{ form.visibility.errors }}</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="comunidad">Comunidad:</label>
+                            {{ form.comunidad }}
+                            <span class="text-danger">{{ form.comunidad.errors }}</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="direccion">Dirección:</label>
+                            {{ form.direccion }}
+                            <span class="text-danger">{{ form.direccion.errors }}</span>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-eventos">Crear Evento</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

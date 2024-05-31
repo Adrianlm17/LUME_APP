@@ -6651,6 +6651,75 @@ a.text-dark:hover, a.text-dark:focus {
       font-size: 0.875rem;
       line-height: 1.5;
       border-radius: 0.1875rem;; }
+  .btn.btn-empresas {
+    color: #000000;
+    background-color: #63A68D;
+    border-color: #3B7862;
+    box-shadow: 0 0 1px 2px #3B7862; 
+    padding: 0.40625rem 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.1875rem;}
+    .btn.btn-empresas:hover {
+      color: #000000;
+      background-color: #34D198;
+      border-color: #0E8D5F;
+      padding: 0.40625rem 1.25rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      border-radius: 0.1875rem;; }
+  .btn.btn-comunidades {
+    color: #000000;
+    background-color: #E86496;
+    border-color: #B03D68;
+    box-shadow: 0 0 1px 2px #B03D68; 
+    padding: 0.40625rem 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.1875rem;}
+    .btn.btn-comunidades:hover {
+      color: #fff;
+      background-color: #D13770;
+      border-color: #962851;
+      padding: 0.40625rem 1.25rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      border-radius: 0.1875rem;; }
+  .btn.btn-config {
+    color: #000000;
+    background-color: #A1A4A5;
+    border-color: #636A6C;
+    box-shadow: 0 0 1px 2px #636A6C; 
+    padding: 0.40625rem 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.1875rem;}
+    .btn.btn-config:hover {
+      color: #fff;
+      background-color: #535A5B;
+      border-color: #313D3E;
+      padding: 0.40625rem 1.25rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      border-radius: 0.1875rem;; }
+  .btn.btn-gastos {
+    color: #000000;
+    background-color: #3EDB46;
+    border-color: #19801F;
+    box-shadow: 0 0 1px 2px #19801F; 
+    padding: 0.40625rem 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.1875rem;}
+    .btn.btn-gastos:hover {
+      color: #000000;
+      background-color: #53AE58;
+      border-color: #1D6520;
+      box-shadow: 0 0 1px 2px #1D6520; 
+      padding: 0.40625rem 1.25rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      border-radius: 0.1875rem;}
   .btn.btn-eventos {
     color: #000000;
     background-color: #D65BE9;
@@ -11719,12 +11788,42 @@ html[dir="rtl"] .form-check .form-check-sign .check:before {
   .card.card-rotate.bg-notas .front,
   .card.card-rotate.bg-notas .back {
     background: linear-gradient(60deg, #FF6500, #FEA56B); }
+  .card .card-header-empresas .card-icon,
+  .card .card-header-empresas .card-text,
+  .card .card-header-empresas:not(.card-header-icon):not(.card-header-text), .card.bg-empresas,
+  .card.card-rotate.bg-empresas .front,
+  .card.card-rotate.bg-empresas .back {
+    background: linear-gradient(60deg, #89D6B9, #177C56); }
+  .card .card-header-eventos .card-icon,
+  .card .card-header-eventos .card-text,
+  .card .card-header-eventos:not(.card-header-icon):not(.card-header-text), .card.bg-eventos,
+  .card.card-rotate.bg-eventos .front,
+  .card.card-rotate.bg-eventos .back {
+    background: linear-gradient(60deg, #860D89, #DD53E1); }
   .card .card-header-actas .card-icon,
   .card .card-header-actas .card-text,
   .card .card-header-actas:not(.card-header-icon):not(.card-header-text), .card.bg-actas,
   .card.card-rotate.bg-actas .front,
   .card.card-rotate.bg-actas .back {
     background: linear-gradient(60deg, #0839C1, #6890FF); }
+  .card .card-header-gastos .card-icon,
+  .card .card-header-gastos .card-text,
+  .card .card-header-gastos:not(.card-header-icon):not(.card-header-text), .card.bg-gastos,
+  .card.card-rotate.bg-gastos .front,
+  .card.card-rotate.bg-gastos .back {
+    background: linear-gradient(60deg, #1AAA22, #77F77E); }
+  .card .card-header-config .card-icon,
+  .card .card-header-config .card-text,
+  .card .card-header-config:not(.card-header-icon):not(.card-header-text), .card.bg-config,
+  .card.card-rotate.bg-config .front,
+  .card.card-rotate.bg-config .back {
+    background: linear-gradient(60deg, #6D7D83, #384141); }
+  .card .card-header-comunidades .card-icon,
+  .card .card-header-comunidades .card-text,
+  .card .card-header-comunidades:not(.card-header-icon):not(.card-header-text), .card.bg-comunidades,
+  .card.card-rotate.bg-comunidades .front,
+  .card.card-rotate.bg-comunidades .back {
+    background: linear-gradient(60deg, #B25B7C, #A7154C); }
   .card .card-header-danger .card-icon,
   .card .card-header-danger .card-text,
   .card .card-header-danger:not(.card-header-icon):not(.card-header-text), .card.bg-danger,

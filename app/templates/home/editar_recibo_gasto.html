@@ -4,31 +4,43 @@
 {% block title %}Modificar Recibo o Gasto | LUME{% endblock %}
 
 {% block content %}
-<a href="{% url 'home:mostrar_modificar_gastos_recibos' comunidad_seleccionada %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Volver</a>
+<style>
+    form.text-center .form-group {
+        display: inline-block;
+        text-align: left;
+        width: 100%;
+}
+</style>
 
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header card-header-success">
-                <h2 class="text-center">Modificar Recibo o Gasto</h2>
-            </div>
-            <div class="card-body">
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                </form>
+<div class="container">
+    <a href="{% url 'home:mostrar_modificar_gastos_recibos' comunidad_seleccionada %}" class="btn btn-gastos mb-4"><i class="fa fa-arrow-left"></i> Volver</a>
 
-                <br>
-                
-                {% if recibo.archivo %}
-                    <p>Archivos adjuntos: 
-                        <a href="?download=true"><i class="material-icons">file_download</i> DESCARGAR</a>
-                    </p>
-                {% endif %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header card-header-gastos text-center">
+                    <h2>Modificar Recibo o Gasto</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" class="text-center">
+                        {% csrf_token %}
+                        <div>
+                            <br>
+                            {{ form.as_p }}
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-gastos">Guardar Cambios</button>
+                        </div>
+                    </form>
+                    <br>
+                    {% if recibo.archivo %}
+                        <p class="text-center">Archivos adjuntos: 
+                            <a href="?download=true"><i class="material-icons">file_download</i> DESCARGAR</a>
+                        </p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}

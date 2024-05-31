@@ -239,6 +239,24 @@
             border-radius: 50%;
         }
 
+        scroll-container {
+            display: block;
+            margin: 0 auto;
+        }
+
+        scroll-container {
+            display: block;
+            width: auto;
+            height: 100px;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+        }
+        scroll-page {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            font-size: 5em;
+        }
 
     </style>
 {% endblock stylesheets %}
@@ -250,10 +268,10 @@
             <div class="content">
                 <!-- Búsqueda de usuarios y botones -->
                 <div class="d-flex align-items-center justify-content-between mb-3">
-                    <input type="text" class="form-control mr-3" placeholder="Buscar usuario..." id="search-user">
+                    <input type="text" style="width: 250px; margin-left:15px" class="form-control mr-3" placeholder="Buscar usuario..." id="search-user">
                     <div>
-                        <button name="crear_chat" class="btn btn-sm btn-primary mr-2" style="margin-left: 10px;">Crear chat</button>
-                        <button name="crear_grupo" class="btn btn-sm btn-primary">Crear grupo</button>
+                        <button name="crear_chat" class="btn btn-sm btn-primary mr-2" style="margin-left:15px; margin-top:15px">Crear chat</button>
+                        <button name="crear_grupo" class="btn btn-sm btn-primary" style="margin-left:15px;">Crear grupo</button>
                     </div>
                 </div>
                 
@@ -403,12 +421,15 @@
                         </div>
                         <div class="form-group">
                             <h4>Selecciona usuarios para agregar al grupo:</h4>
-                            {% for user in users %}
-                                <div>
-                                    <input type="checkbox" id="user_{{ user.id }}" name="usuarios" value="{{ user.id }}">
-                                    <label for="user_{{ user.id }}">{{ user.email }}</label>
-                                </div>
-                            {% endfor %}
+                            <scroll-container>
+                                {% for user in users %}
+                                    <div>
+                                        <input type="checkbox" id="user_{{ user.id }}" name="usuarios" value="{{ user.id }}">
+                                        <label for="user_{{ user.id }}">{{ user.email }}</label>
+                                    </div>
+                                {% endfor %}
+                            </scroll-container>
+                            
                         </div>
                         <button type="submit" name="crear_grupo" class="btn btn-primary mt-3">Crear Grupo</button>
                     </form>

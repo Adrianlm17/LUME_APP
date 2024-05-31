@@ -4,113 +4,159 @@
 {% block title %} Configuración de Empresa {% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-md-8">
-    <div class="card">
-      <div class="card-header card-header-primary">
-        <h4 class="card-title">Configuración de Empresa</h4>
-      </div>
-      <div class="card-body">
-        <form method="post">
-          {% csrf_token %}
-          {% if msg %}
-          <div class="alert alert-danger" role="alert">
-            {{ msg }}
-          </div>
-          {% endif %}
-
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label for="nombre">Nombre</label>
-                {{ form_empresa.nombre }}
-              </div>
-              <div class="form-group">
-                <label for="descripcion">Descripción</label><br>
-                {{ form_empresa.descripcion }}
-              </div>
-              <div class="form-group">
-                <label for="telefono">Teléfono</label>
-                {{ form_empresa.telefono }}
-              </div>
-              <div class="form-group">
-                <label for="correo">Correo Electrónico</label>
-                {{ form_empresa.correo }}
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label for="pais">País</label>
-                {{ form_empresa.pais }}
-              </div>
-              <div class="form-group">
-                <label for="provincia">Provincia</label>
-                {{ form_empresa.provincia }}
-              </div>
-              <div class="form-group">
-                <label for="municipio">Municipio</label>
-                {{ form_empresa.municipio }}
-              </div>
-              <div class="form-group">
-                <label for="direccion">Dirección</label>
-                {{ form_empresa.direccion }}
-              </div>
-              <div class="form-group">
-                <label for="tags">Tags</label>
-                {{ form_empresa.tags }}
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-12 text-center">
-              <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card card-profile">
-      <div class="card-avatar">
-        <!-- Mostrar la imagen actual del perfil -->
-        <img class="img" src="{% static 'app_files/' %}{{ form_imagen.instance.IMG_profile }}" />
-      </div>
-      <div class="card-body">
-        <form method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          {{ form_imagen.as_p }}
-          <button type="submit" class="btn btn-primary">Guardar Imagen</button>
-        </form>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card">
-      <div class="card-header card-header-primary">
-        <h3>Trabajadores de la Empresa</h3>
-      </div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <thead>
-              {% csrf_token %}
-              {% for trabajador in trabajadores %}
-                <tr>
-                  <th>{{ trabajador.usuario.email }}</th>
-                  <th>
-                    <form method="post" class="eliminar-form">
-                      <input type="hidden" name="trabajador_id" value="{{ trabajador.pk }}">
-                      <button type="submit" class="eliminar-btn">Eliminar</button>
+<div class="container mt-4">
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header card-header-empresas text-center">
+                    <h4 class="card-title font-weight-bold">Configuración de Empresa</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {% if msg %}
+                        <div class="alert alert-danger text-center" role="alert">
+                            {{ msg }}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nombre">Nombre</label>
+                                    {{ form_empresa.nombre }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="descripcion">Descripción</label><br>
+                                    {{ form_empresa.descripcion }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="telefono">Teléfono</label>
+                                    {{ form_empresa.telefono }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="correo">Correo Electrónico</label>
+                                    {{ form_empresa.correo }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="pais">País</label>
+                                    {{ form_empresa.pais }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="provincia">Provincia</label>
+                                    {{ form_empresa.provincia }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="municipio">Municipio</label>
+                                    {{ form_empresa.municipio }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="direccion">Dirección</label>
+                                    {{ form_empresa.direccion }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="tags">Tags</label>
+                                    {{ form_empresa.tags }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-12 text-center">
+                                <button type="submit" class="btn btn-empresas">Guardar Cambios</button>
+                            </div>
+                        </div>
                     </form>
-                  </th>
-                </tr>
-              {% endfor %}
-            </thead>
-          </table>
+                </div>
+            </div>
         </div>
-      </div>
+        
+        <div class="col-md-4">
+            <div class="card card-profile">
+                <div class="card-avatar text-center">
+                    <img class="img-fluid rounded-circle" src="{% static 'app_files/' %}{{ form_imagen.instance.IMG_profile }}" />
+                </div>
+                <div class="card-body text-center">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form_imagen.as_p }}
+                        <button type="submit" class="btn btn-empresas">Guardar Imagen</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header card-header-empresas text-center">
+                    <h3 class="card-title">Trabajadores de la Empresa</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Correo Electrónico</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for trabajador in trabajadores %}
+                                <tr class="{% cycle 'table-light' 'table-secondary' %}">
+                                    <td>{{ trabajador.usuario.email }}</td>
+                                    <td>
+                                        <form method="post" class="eliminar-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="trabajador_id" value="{{ trabajador.pk }}">
+                                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    .card-header-primary {
+        background-color: #007bff;
+        color: white;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+    .table-hover tbody tr:hover {
+        background-color: #f5f5f5;
+    }
+    .table-bordered th,
+    .table-bordered td {
+        border: 1px solid #dee2e6;
+    }
+    .table-light {
+        background-color: #f8f9fa;
+    }
+    .table-secondary {
+        background-color: #e9ecef;
+    }
+    .card-profile .card-avatar img {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 15px;
+    }
+</style>
 {% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}

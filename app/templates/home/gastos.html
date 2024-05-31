@@ -11,18 +11,26 @@
 
 {% if comunidades|length > 1 %}
   
-  <h2>{{ comunidad_seleccionada.nombre }}</h2>
-
-  <form method="post" action="{% url 'home:cambiar_comunidad_gastos' comunidad_seleccionada.id %}">
-      {% csrf_token %}
-      <select name="comunidad_id">
-          {% for comunidad in comunidades %}
-              <option value="{{ comunidad.id }}" {% if comunidad.id == comunidad_seleccionada.id %}selected{% endif %}>{{ comunidad.nombre }}</option>
-          {% endfor %}
-      </select>
-      
-      <button type="submit" class="btn btn-info">Cambiar comunidad</button>
-  </form>
+  <div class="card">
+    <div class="card-header card-header-gastos text-center">
+      <h2>{{ comunidad_seleccionada.nombre }}</h2>
+    
+  
+      <div class="justify-content: right">
+        <form method="post" action="{% url 'home:cambiar_comunidad_gastos' comunidad_seleccionada.id %}">
+          {% csrf_token %}
+          <select name="comunidad_id">
+              {% for comunidad in comunidades %}
+                  <option value="{{ comunidad.id }}" {% if comunidad.id == comunidad_seleccionada.id %}selected{% endif %}>{{ comunidad.nombre }}</option>
+              {% endfor %}
+          </select>
+          
+          <button type="submit" class="btn btn-gastos">Cambiar comunidad</button>
+      </form>
+      </div>
+  
+</div>
+</div>
 {% endif %}
 
 <br>
@@ -36,7 +44,7 @@
             </div>
             <p class="card-category">Numero Cuenta Bancaria</p>
             {% if comunidad_seleccionada.numero_cuenta %}
-              <h3 class="card-title">{{ comunidad_seleccionada.numero_cuenta }}</h3>
+              <h3 class="card-title" style="font-size: 15px;">{{ comunidad_seleccionada.numero_cuenta }}</h3>
             {% else %}
               <h3 class="card-title">No hay cuenta bancaria</h3>
             {% endif %}
@@ -145,7 +153,7 @@
                     </table>
                     <div class="row justify-content-center">
                         <div class="col-md-6 text-center">
-                            <a href="{% url 'home:historial_completo' comunidad_seleccionada.id %}" class="btn btn-success btn-lg">Ver Historial completo</a>
+                            <a href="{% url 'home:historial_completo' comunidad_seleccionada.id %}" class="btn btn-eventos">Ver Historial completo</a>
                         </div>
                     </div>
                   {% else %}
@@ -235,13 +243,13 @@
 {% if es_presidente_o_vicepresidente %}
 <div class="row justify-content-center">
   <div class="text-center mr-4">
-    <a href="{% url 'home:crear_gasto' comunidad_seleccionada.id %}" class="btn btn-success btn-lg">Crear Gasto | Derrama</a>
+    <a href="{% url 'home:crear_gasto' comunidad_seleccionada.id %}" class="btn btn-gastos">Crear Gasto | Derrama</a>
   </div>
   <div class="text-center mr-4">
-    <a href="{% url 'home:mostrar_modificar_gastos_recibos' comunidad_seleccionada.id %}" class="btn btn-info btn-lg">Modificar Gasto | Recibo</a>
+    <a href="{% url 'home:mostrar_modificar_gastos_recibos' comunidad_seleccionada.id %}" class="btn btn-gastos">Modificar Gasto | Recibo</a>
   </div>
   <div class="text-center mr-4">
-    <a href="{% url 'home:crear_recibo' comunidad_seleccionada.id %}" class="btn btn-success btn-lg">Crear Recibo</a>
+    <a href="{% url 'home:crear_recibo' comunidad_seleccionada.id %}" class="btn btn-gastos">Crear Recibo</a>
   </div>
 </div>
 {% endif %}

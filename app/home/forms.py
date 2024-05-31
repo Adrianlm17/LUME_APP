@@ -284,7 +284,7 @@ class UpdateIMGEmpresaForm(forms.ModelForm):
 class EventoForm(forms.ModelForm):
     class Meta:
         model = Evento
-        fields = ['title', 'descripcion', 'date', 'max_attendees', 'image', 'visibility', 'comunidad', 'direccion', 'pais']
+        fields = ['title', 'descripcion', 'date', 'max_attendees', 'image', 'visibility', 'comunidad', 'direccion']
         widgets = {'date': forms.DateInput(attrs={'type': 'date'})}
 
     def __init__(self, *args, **kwargs):

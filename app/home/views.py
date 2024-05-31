@@ -1408,7 +1408,7 @@ def crear_recibo(request, comunidad_seleccionada):
                         estado=estado,
                         archivo=recibo.archivo
                     )
-            else:  # método_pago == 'porcentajes'
+            else:
                 total_porcentajes = sum(vivienda.porcentaje_pago for vivienda in viviendas_comunidad)
                 for vivienda in viviendas_comunidad:
                     cantidad_por_usuario = total_recibo * vivienda.porcentaje_pago / total_porcentajes
@@ -1750,6 +1750,7 @@ def edit_profile(request):
     success = False
     user_instance = request.user
     profile_instance = user_instance.userprofile
+    saldo = request.user.userprofile.saldo
 
     if request.method == "POST":
         # Manejar el formulario de perfil
@@ -1784,7 +1785,7 @@ def edit_profile(request):
     notificaciones_no_leidas = Notificacion.objects.filter(user=request.user, leida=False)
     num_notificaciones_no_leidas = notificaciones_no_leidas.count()
 
-    return render(request, "home/config.html", {'segment': 'config', "user_form": user_form, 'notificaciones_no_leidas': notificaciones_no_leidas, 'num_notificaciones_no_leidas': num_notificaciones_no_leidas, "profile_form" : profile_form, "profile_IMG": profile_IMG, "msg": msg, "success": success, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
+    return render(request, "home/config.html", {'segment': 'config', "saldo": saldo, "user_form": user_form, 'notificaciones_no_leidas': notificaciones_no_leidas, 'num_notificaciones_no_leidas': num_notificaciones_no_leidas, "profile_form" : profile_form, "profile_IMG": profile_IMG, "msg": msg, "success": success, 'chats_no_leidos': chats_no_leidos, 'num_mensajes_no_leidos':num_mensajes_no_leidos})
 
 
 
@@ -1982,7 +1983,7 @@ def administrar_distribucion_gastos(request, comunidad_id):
             
             if valid_forms:
 
-                if comunidad.metodo_pago == 'porcentajes':
+                if comunidad.metodo_pago == 'coeficientes':
 
                     total_porcentaje = sum([form.cleaned_data.get('porcentaje_pago', 0) for form in porcentaje_forms])
 

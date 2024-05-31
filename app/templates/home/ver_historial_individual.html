@@ -4,35 +4,72 @@
 {% block title %} Detalle del Movimiento | LUME {% endblock %} 
 
 {% block content %}
-<a href="{% url 'home:gastos' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Volver</a>
+<div class="container">
+    <a href="{% url 'home:gastos' %}" class="btn btn-gastos mb-4"><i class="fa fa-arrow-left"></i> Volver</a>
 
-<br>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header card-header-info">
-                <h1>Detalle del Movimiento</h1>
-            </div>
-            <div class="card-body">
-                <p><strong>Título: </strong> {{ movimiento.titulo }}</p>
-                <p><strong>Descripción: </strong> {{ movimiento.descripcion }}</p>
-                {% if tipo == 'gasto_personal' %}
-                    <p><strong>Cantidad Total: </strong> {{ movimiento.cantidad }}</p>
-                    <p><strong>Fecha:</strong> {{ movimiento.fecha }}</p>
-                {% else %}
-                    <p><strong>Cantidad Total: </strong> {{ movimiento.cantidad_total }}</p>
-                    <p><strong>Fecha: </strong> {{ movimiento.fecha_tope }}</p>
-                {% endif %}
-                <p><strong>Estado: </strong>{{ movimiento.estado }}</p>
-                {% if movimiento.archivo %}
-                    <p><b>Archivos adjuntos:</b> 
-                        <a href="?download=true"><i class="material-icons">file_download</i> DESCARGAR</a>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header card-header-gastos text-center" style="border-bottom: 1px solid #d3d3d3;">
+                    <h1>Detalle del Movimiento</h1>
+                </div>
+                <div class="card-body" style="background-color: #f9f9f9;">
+                    <p style="background-color: #d6d5d5; margin-bottom: 0rem; padding: 10px;">
+                        <strong>Título </strong>
                     </p>
-                {% endif %}
+                    <p style="border-bottom: 1px solid #d3d3d3; background-color: #eaeaea; padding: 10px;">
+                        {{ movimiento.titulo }}
+                    </p>
+                    <p style="background-color: #d6d5d5; margin-bottom: 0rem; padding: 10px;">
+                        <strong>Descripción </strong>
+                    </p>
+                    <p style="border-bottom: 1px solid #d3d3d3; background-color: #eaeaea; padding: 10px;">
+                        {{ movimiento.descripcion }}
+                    </p>
+                    {% if tipo == 'gasto_personal' %}
+                        <p style="background-color: #d6d5d5; margin-bottom: 0rem; padding: 10px;">
+                            <strong>Cantidad Total </strong>
+                        </p>
+                        <p style="border-bottom: 1px solid #d3d3d3; background-color: #eaeaea; padding: 10px;">
+                            {{ movimiento.cantidad }}
+                        </p>
+                        <p style="background-color: #d6d5d5; margin-bottom: 0rem; padding: 10px;">
+                            <strong>Fecha </strong>
+                        </p>
+                        <p style="border-bottom: 1px solid #d3d3d3; background-color: #eaeaea; padding: 10px;">
+                            {{ movimiento.fecha }}
+                        </p>
+                    {% else %}
+                        <p style="background-color: #d6d5d5; margin-bottom: 0rem; padding: 10px;">
+                            <strong>Cantidad Total </strong>
+                        </p>
+                        <p style="border-bottom: 1px solid #d3d3d3; background-color: #eaeaea; padding: 10px;">
+                            {{ movimiento.cantidad_total }}
+                        </p>
+                        <p style="background-color: #d6d5d5; margin-bottom: 0rem; padding: 10px;">
+                            <strong>Fecha </strong>
+                        </p>
+                        <p style="border-bottom: 1px solid #d3d3d3; background-color: #eaeaea; padding: 10px;">
+                            {{ movimiento.fecha_tope }}
+                        </p>
+                    {% endif %}
+                    <p style="background-color: #d6d5d5; margin-bottom: 0rem; padding: 10px;">
+                        <strong>Estado </strong>
+                    </p>
+                    <p style="border-bottom: 1px solid #d3d3d3; background-color: #eaeaea; padding: 10px;">
+                        {{ movimiento.estado }}
+                    </p>
+                    {% if movimiento.archivo %}
+                        <p style="background-color: #d6d5d5; margin-bottom: 0rem; padding: 10px;">
+                            <b>Archivos adjuntos</b>
+                        </p>
+                        <p class="text-center" style="border-bottom: 1px solid #d3d3d3; background-color: #eaeaea; padding: 10px;">
+                            <a href="?download=true"><i class="material-icons">file_download</i> DESCARGAR</a>
+                        </p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock content %}

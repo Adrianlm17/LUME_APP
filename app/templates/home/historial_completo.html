@@ -4,15 +4,15 @@
 {% block title %} HISTORIAL GASTOS | LUME {% endblock %} 
 
 {% block content %}
-<a href="{% url 'home:gastos' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Volver</a>
+<a href="{% url 'home:gastos' %}" class="btn btn-gastos"><i class="fa fa-arrow-left"></i> Volver</a>
 
-<br>
+<br><br>
 
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header card-header-info">
-                <h1>Historial Completo de {{ comunidad.nombre }}</h1>
+            <div class="card-header card-header-gastos" style="text-align: center;">
+                <h1 style="font-weight: bold; color: black;">Historial Completo de {{ comunidad.nombre }}</h1>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -38,9 +38,9 @@
                                         <td>{{ movimiento.cantidad_total }}</td>
                                         <td>
                                             {% if movimiento.tipo == 'Gasto' %}
-                                                <a href="{% url 'home:ver_historial_individual' tipo='gasto' movimiento_id=movimiento.id %}" class="btn btn-primary btn-sm">Ver</a>
+                                                <a href="{% url 'home:ver_historial_individual' tipo='gasto' movimiento_id=movimiento.id %}" class="btn btn-editar btn-sm">Ver</a>
                                             {% elif movimiento.tipo == 'Gasto Personal' %}
-                                                <a href="{% url 'home:ver_historial_individual' tipo='gasto_personal' movimiento_id=movimiento.id %}" class="btn btn-primary btn-sm">Ver</a>
+                                                <a href="{% url 'home:ver_historial_individual' tipo='gasto_personal' movimiento_id=movimiento.id %}" class="btn btn-editar btn-sm">Ver</a>
                                             {% endif %}
 
                                         </td>
