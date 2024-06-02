@@ -1,0 +1,78 @@
+{% extends "layouts/base_admin.html" %}
+
+{% block title %} ADMIn | LUME {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header card-header-success">
+        <h4 class="card-title mt-0"><i class="material-icons">person_add_alt_1</i> Listado de Usuarios </h4>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <tbody>
+              <tr>
+                <th>
+                  NOMBRE
+                </th>
+                <th>
+                  PRIMER APELLIDO
+                </th>
+                <th>
+                  SEGUNDO APELLIDO
+                </th>
+                <th>
+                  EMAIL
+                </th>
+                <th>
+                  EDITAR
+                </th>
+                <th>
+                  ELIMINAR
+                </th>
+              </tr>
+              
+              {% for user in users %}
+              
+              <tr>
+                <td>
+                  {{ user.username }}
+                </td>
+                <td>
+                  {{ user.first_name }}
+                </td>
+                <td>
+                  {{ user.last_name }}
+                </td>
+                <td>
+                  {{ user.email }}
+                </td>
+                <td>
+                  <a href="{% url 'admin_lume:edit_user' user.id %}">Editar</a>
+                </td>
+                <td>
+                  <form action="{% url 'admin_lume:delete_user' user.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">Eliminar</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>  
+</div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

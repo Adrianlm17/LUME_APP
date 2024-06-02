@@ -1,0 +1,159 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} LUME {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+  <div class="row">
+  <div class="col-lg-6 col-md-12">
+    <div class="card">
+        <div class="card-header card-header-tabs card-header-danger ">
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper">
+                    <ul class="nav nav-tabs" data-tabs="tabs">
+                        <li class="nav-item">
+                            <a data-toggle="tab">
+                                <i class="material-icons">new_releases</i> ANUNCIOS
+                                <div class="ripple-container"></div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="tab-content">
+                <div class="tab-pane active" id="profile">
+                  {% if anuncios %}
+                    <table class="table">
+                        <tbody>
+                            {% for anuncio in anuncios %}
+                            <tr>
+                                <td>{{ anuncio.comunidad }}</td>
+                                <td>{{ anuncio.titulo|slice:":150" }}</td>
+                                <td>{{ anuncio.fecha_anuncio|date:'d/m/Y' }}</td>
+                                <td class="td-actions text-right">
+                                  <a href="{% url 'home:detalles_anuncio' anuncio.id %}" class="btn btn-primary btn-link btn-sm" title="Ver anuncio">
+                                      <i class="material-icons">open_in_full</i>
+                                  </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                  {% else %}
+                      <p>¡No hay anuncios!</p>
+                  {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>  
+  <div class="col-lg-6 col-md-12">
+    <div class="card">
+      <div class="card-header card-header-notas">
+        <h4><i class="material-icons">note_alt</i> NOTAS</h4>
+      </div>
+      <div class="card-body table-responsive">
+        <table class="table table-hover">
+          <thead class="text-warning">
+            <th><b>Titulo</b></th>
+            <th><b>Descripción</b></th>
+            <th><b>Editar</b></th>
+            <th>Eliminar</th>
+          </thead>
+          <tbody>
+            {% if notas %}
+              {% for nota in notas %}
+                <tr>
+                  <td>
+                    {{ nota.titulo|slice:":25" }}
+                  </td>
+                  <td>
+                    {{ nota.descripcion|slice:":25" }}
+                  </td>
+                  <td>
+                    <a class="btn btn-editar" href="{% url 'home:ver_notas' nota.id %}">Editar</a>
+                  </td>
+                  <td>
+                    <form action="{% url 'home:delete_nota' nota.id %}" method="post">
+                      {% csrf_token %}
+                      <button class="btn btn-eliminar" type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar esta nota?')">Eliminar</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <th>No tienes notas aún!</th>
+              </tr>
+            {% endif %}
+        </tbody>
+      </table>
+    </div>
+    <!-- crear -->
+    <div class="card-footer" style="padding-left: 75%">
+      <div class="stats">
+        <a href="{% url 'home:notas' %}" class="btn btn-notas">Crear</a>
+      </div>
+    </div>      
+  </div>
+  </div>
+
+  <div class="col-lg-6 col-md-12">
+    <div class="card">
+        <div class="card-header card-header-tabs card-header-eventos">
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper">
+                    <ul class="nav nav-tabs" data-tabs="tabs">
+                        <li class="nav-item">
+                            <a data-toggle="tab">
+                                <i class="material-icons">date_ranger</i> PROXIMOS EVENTOS
+                                <div class="ripple-container"></div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+          {% if proximos_eventos %}
+            <table class="table table-hover">
+                <thead class="text-eventos">
+                    <th><b>Título</b></th>
+                    <th><b>Fecha</b></th>
+                    <th><b>Ver</b></th>
+                </thead>
+                <tbody>
+                    {% for evento in proximos_eventos %}
+                    <tr>
+                        <td>{{ evento.titulo|slice:":50" }}</td>
+                        <td>{{ evento.fecha|date:"F d, Y" }}</td>
+                        <td><a href="{% url 'home:detalle_evento' evento.id %}" class="btn btn-primary">Ver evento</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+              <p>¡No hay eventos próximos!</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+    $(document).ready(function() {
+      md.initDashboardPageCharts();
+
+    });
+  </script>
+
+{% endblock javascripts %}

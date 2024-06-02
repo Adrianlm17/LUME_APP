@@ -1,0 +1,48 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} Editar Incidencia | LUME {% endblock %} 
+
+{% block content %}
+<a href="{% url 'home:ver_incidencias' %}" class="btn btn-light bg-dark"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<br>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-light bg-dark">
+                <h4 class="card-title mt-0"><i class="material-icons">edit</i> Editar Incidencia</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% if incidencia_form.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Error:</strong> Por favor, corrija los siguientes errores.
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="titulo">Título:</label><br>
+                        {{ incidencia_form.titulo }}
+                        {{ incidencia_form.titulo.errores }}
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripción:</label><br>
+                        {{ incidencia_form.descripcion }}
+                    </div>
+                    <div class="form-group">
+                        <label for="gasto">Gasto:</label><br>
+                        {{ incidencia_form.gasto }}
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado:</label><br>
+                        {{ incidencia_form.estado }}
+                    </div>
+                    <button type="submit" class="btn btn-dark">Guardar</button>                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

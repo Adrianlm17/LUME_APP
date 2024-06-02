@@ -1,0 +1,99 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} CONFIGURACION COMUNIDAD | LUME {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <a href="{% url 'home:administrar_viviendas' comunidad_seleccionada=comunidad_id %}" class="btn btn-comunidades"><i class="fa fa-arrow-left"></i> Volver</a>
+        </div>
+    </div>
+
+    {% if success %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>¡ACTUALIZADA!</strong> Vivienda actualizada correctamente
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header card-header-comunidades">
+                    <h4 class="card-title text-center">Editar Vivienda</h4>
+                </div>
+                <div class="card-body">
+                    {% if msg %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ msg | safe }}
+                    </div>
+                    {% endif %}
+
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        {{ viviendas_form.as_p }}
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success">Guardar cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-comunidades {
+        background-color: #007bff;
+        color: white;
+        border: none;
+    }
+
+    .btn-comunidades:hover {
+        background-color: #0056b3;
+        color: white;
+    }
+
+    .card-header-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .card-title {
+        margin-bottom: 0;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+    .form-control {
+        border-radius: 0.25rem;
+    }
+
+    .needs-validation .form-control:invalid {
+        border-color: #dc3545;
+    }
+
+    .invalid-feedback {
+        display: block;
+    }
+
+    .text-center button {
+        margin-top: 10px;
+    }
+</style>
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}

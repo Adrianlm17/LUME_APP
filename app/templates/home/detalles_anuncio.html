@@ -1,0 +1,53 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} ANUNCIO | LUME {% endblock %} 
+
+{% block stylesheets %}
+<style>
+  .card {
+    margin-top: 50px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .card-header-danger {
+    background-color: #f44336;
+    color: #fff;
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<a href="{% url 'home:home' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<br>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header card-header-danger" style="text-align: center;">
+          <h4 class="card-title"><i class="material-icons">new_releases</i> {{ anuncio.comunidad }}</h4>
+      </div>
+      
+      <br>
+
+      <div class="card-body">
+          <h5 class="card-title">Titulo: {{ anuncio.titulo }}</h5>
+          
+          <br>
+
+          <p class="card-text">Descripción:<br>
+              {{ anuncio.descripcion }}
+          </p>
+          
+          <br>
+          <p class="card-text">Fecha: {{ anuncio.fecha_anuncio|date:'d/m/Y' }}</p>
+      </div>        
+    </div>
+  </div> 
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}

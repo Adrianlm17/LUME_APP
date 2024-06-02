@@ -1,0 +1,77 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} Añadir Usuario a la Comunidad | LUME {% endblock %} 
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <a href="{% url 'home:administrar_viviendas' comunidad.id %}" class="btn btn-comunidades"><i class="fa fa-arrow-left"></i> Volver</a>
+        </div>
+    </div>
+
+    <h2 class="text-center mb-4" style="font-weight: bold;">Añadir Usuario a la Comunidad | {{ comunidad.nombre }}</h2>
+
+    <div class="card mx-auto" style="max-width: 600px;">
+        <div class="card-body">
+            <form method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_usuario" class="form-label">Usuario:</label>
+                    {{ form.usuario }}
+                    <div class="invalid-feedback">{{ form.usuario.errors }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="id_rol_comunidad" class="form-label">Rol en la Comunidad:</label>
+                    {{ form.rol_comunidad }}
+                    <div class="invalid-feedback">{{ form.rol_comunidad.errors }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="id_piso" class="form-label">Piso:</label>
+                    {{ form.piso }}
+                    <div class="invalid-feedback">{{ form.piso.errors }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="id_puerta" class="form-label">Puerta:</label>
+                    {{ form.puerta }}
+                    <div class="invalid-feedback">{{ form.puerta.errors }}</div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success">Añadir Usuario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-comunidades {
+        background-color: #007bff;
+        color: white;
+        border: none;
+    }
+
+    .btn-comunidades:hover {
+        background-color: #0056b3;
+        color: white;
+    }
+
+    .card {
+        border: 1px solid #dee2e6;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: 0.25rem;
+    }
+
+    .invalid-feedback {
+        display: block;
+    }
+</style>
+{% endblock content %}

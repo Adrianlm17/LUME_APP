@@ -1,0 +1,86 @@
+{% extends "layouts/base_admin.html" %}
+
+{% block title %} ADMIN | LUME {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+{% if success %}
+  <div class="alert alert-success alert-dismissible">
+    <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>¡CREADA!</strong> Vivienda asignada correctamente
+  </div> 
+{% endif %} 
+
+<div class="row">
+  <div class="col-md-8">
+      <div class="card">
+        <div class="card-header card-header-primary">
+            <h4 class="card-title">CREAR Vivienda</h4>
+        </div>
+        <div class="card-body">
+
+          {% if msg %}
+            <br>
+            <h6 class="card-category">
+              <span class="text-danger">{{ msg | safe }}</span>
+            </h6>
+          {% endif %}  
+
+          <br>
+
+          <form method="post" enctype="multipart/form-data">
+            
+            {% csrf_token %}
+            
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Usuario:</label>
+                  {{ living_place.usuario }}
+                  <span class="text-danger">{{ living_place.usuario.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Comunidad:</label><br>
+                  {{ living_place.comunidad }}
+                  <span class="text-danger">{{ living_place.comunidad.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Rol:</label><br>
+                  {{ living_place.rol_comunidad}}
+                  <span class="text-danger">{{ living_place.rol_comunidad.errors }}</span>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Piso:</label>
+                  {{ living_place.piso }}
+                  <span class="text-danger">{{ living_place.piso.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Puerta:</label>
+                  {{ living_place.puerta }}
+                  <span class="text-danger">{{ living_place.puerta.errors }}</span>
+                </div>
+              </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+              <div class="col-sm-12 text-center">
+                <button type="submit" class="btn btn-primary">Crear Vivienda</button>
+              </div>
+            </div>
+          </form>
+        </div>        
+      </div>
+  </div> 
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

@@ -1,0 +1,43 @@
+{% extends "layouts/base_admin.html" %}
+
+{% block title %} ADMIN | LUME {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-6 col-md-12">
+      <div class="card">
+        <div class="card-header card-header-warning">
+          <h4><i class="material-icons">note_alt</i> NOTAS</h4>
+        </div>
+        <div class="card-body table-responsive">
+          <table class="table table-hover">
+            <tbody>
+              <tr>
+                <td>Recuerda crear un usuario antes de asignar una vivienda</td>
+              </tr>
+              <tr>
+                <td>¡LAS CREDENCIALES SEGURAS (8 digitos minimo, caracteres especiales...)</td>
+              </tr>
+              <tr>
+                <td>Si no eres LUME, no eres LUME :)</td>
+              </tr>
+              <tr>
+                <td>Los usuarios asignados a una empresa deben tener su rol previamente</td>
+              </tr>
+              <tr>
+                <td>Puedes editar un dato en su respectivo apartado (Ver comunidades, ver empresas, ver usuarios...)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

@@ -1,0 +1,42 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} Incidencia {{ incidencia.numero }} | LUME {% endblock %} 
+
+{% block content %}
+<a href="{% url 'home:ver_incidencias' %}" class="btn btn-light bg-dark"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<br>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header card-header-light bg-dark text-center">
+                <h4 class="card-title mt-0"><i class="material-icons">visibility</i> Incidencia | {{ incidencia.numero }}</h4>
+            </div>
+            <div class="card-body text-center">
+                <h5><b>Título:</b> {{ incidencia.titulo }}</h5>
+                <p><b>Descripción:</b> {{ incidencia.descripcion }}</p>
+                {% if incidencia.archivo %}
+                    <p>Archivos adjuntos: <a href="{% url 'home:ver_incidencia' incidencia.numero %}?download=true"><i class="material-icons">file_download</i> DESCARGAR</a></p>
+                {% endif %}
+                <p><b>Prioridad:</b> {{ incidencia.prioridad }}</p>
+                <p><b>Estado:</b> {{ incidencia.estado }}</p>
+                {% if incidencia.empresa %}
+                    <p><b>Empresa:</b> {{ incidencia.empresa }}</p>
+                    <p><b>Presupuesto:</b> {{ incidencia.gasto }}€</p>
+                {% else %}
+                    <p><b>Empresa:</b> Pendiente de asignar</p>
+                {% endif %}
+                {% if user.userprofile.user_rol == 'community_admin' or  user.userprofile.user_rol == 'lume' %}
+                    <a><b>Valoración:</b> {{ incidencia.valoracion }}</a>
+                    
+                    <br><br>
+                    
+                    <a href="{% url 'home:editar_incidencia' incidencia.numero %}" class="btn btn-dark">Editar</a>
+                {% endif %}
+            </div>            
+        </div>
+    </div>
+</div>
+{% endblock content %}

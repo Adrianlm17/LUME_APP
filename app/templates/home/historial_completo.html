@@ -1,0 +1,60 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} HISTORIAL GASTOS | LUME {% endblock %} 
+
+{% block content %}
+<a href="{% url 'home:gastos' %}" class="btn btn-gastos"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<br><br>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-gastos" style="text-align: center;">
+                <h1 style="font-weight: bold; color: black;">Historial Completo de {{ comunidad.nombre }}</h1>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% if historial_completo %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Fecha</th>
+                                    <th>Título</th>
+                                    <th>Descripción</th>
+                                    <th>Cantidad Total</th>
+                                    <th>Ver</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for movimiento in historial_completo %}
+                                    <tr>
+                                        <td>{{ movimiento.tipo }}</td>
+                                        <td>{{ movimiento.fecha }}</td>
+                                        <td>{{ movimiento.titulo }}</td>
+                                        <td>{{ movimiento.descripcion|slice:":25" }}</td>
+                                        <td>{{ movimiento.cantidad_total }}</td>
+                                        <td>
+                                            {% if movimiento.tipo == 'Gasto' %}
+                                                <a href="{% url 'home:ver_historial_individual' tipo='gasto' movimiento_id=movimiento.id %}" class="btn btn-editar btn-sm">Ver</a>
+                                            {% elif movimiento.tipo == 'Gasto Personal' %}
+                                                <a href="{% url 'home:ver_historial_individual' tipo='gasto_personal' movimiento_id=movimiento.id %}" class="btn btn-editar btn-sm">Ver</a>
+                                            {% endif %}
+
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>No hay movimientos en el historial.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

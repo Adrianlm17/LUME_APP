@@ -1,0 +1,500 @@
+{% extends 'layouts/base_lume.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block body %}
+    <header id="header" class="header fixed-top">
+      <div class="align-items-center">
+        <div class="position-relative d-flex align-items-center justify-content-between" style="padding-right: 50px;">
+          <img src="{% static 'img/LUME_visits.png' %}" alt="LUME Logo" height="90px">
+          <nav id="navmenu" class="navmenu">
+            <ul>
+              <li><a href="#inicio">{% trans "Inicio" %}</a></li>
+              <li><a href="#quienes-somos">{% trans "Quiénes somos" %}</a></li>
+              <li><a href="#services">{% trans "Servicios" %}</a></li>
+              <li><a href="#portfolio">{% trans "Nuestros proyectos" %}</a></li>
+              <li><a href="#precios">{% trans "Precios" %}</a></li>
+              <li><a href="#equipo">{% trans "Nosotros" %}</a></li>
+              <li><a href="#contact">{% trans "Contactar" %}</a></li>
+              <li><a href="/login/login/">{% trans "Acceder" %}</a></li>
+              <li class="dropdown"><a href="#"><span>{% trans "Idiomas" %}</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                {% get_current_language as LANGUAGE_CODE %}
+                    <li><a href="{% url 'cambiar_idioma' 'es' %}"><span class="fi fi-es"></span></a></li>
+                    <li><a href="{% url 'cambiar_idioma' 'en' %}"><span class="fi fi-gb"></span></a></li>
+                    <li><a href="{% url 'cambiar_idioma' 'de' %}"><span class="fi fi-de"></span></a></li>
+                </ul>
+              </li>
+            </ul>
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+
+    
+        <section id="inicio" class="hero section">
+          <img src="{% static 'img/banner_lume.png' %}" alt="" data-aos="fade-in">
+        </section>
+    
+        <section id="quienes-somos" class="about section">
+          <div class="container section-title" data-aos="fade-up">
+            <span class="">LUME<br></span>
+            <h2 class="">LUME<br></h2>
+            <p>Living Urban Management Experience</p>
+          </div>
+    
+          <div class="container">
+    
+            <div class="row gy-4">
+    
+              <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-up" data-aos-delay="100">
+                <img src="{% static 'img/lume_app.png' %}" class="img-fluid" alt="">
+              </div>
+    
+              <div class="col-lg-6 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200">
+                <h3>{% trans "Una Aplicación Integral" %}</h3>
+                <p>{% trans "Una Aplicación Integral 1" %}</p>
+                <p>{% trans "Una Aplicación Integral 2" %}</p>
+                <ul>
+                  <li><i class="bi bi-check-circle"></i> <span>{% trans "Una Aplicación Integral 3" %}</span></li>
+                  <li><i class="bi bi-check-circle"></i> <span>{% trans "Una Aplicación Integral 4" %}</span></li>
+                  <li><i class="bi bi-check-circle"></i> <span>{% trans "Una Aplicación Integral 5" %}</span></li>
+                </ul>
+                <a href="#contact" class="read-more"><span>{% trans "Contactar" %}</span><i class="bi bi-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </section>
+    
+        <section id="services" class="services section">
+          <div class="container section-title" data-aos="fade-up">
+            <span class="">{% trans "Servicios" %}</span>
+            <h2>{% trans "Servicios" %}</h2>
+            <p>{% trans "Servicios 2" %}</p>
+          </div>
+    
+          <div class="container">
+    
+            <div class="row gy-3">
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="100">
+                <div class="service-item  position-relative">
+                  <div class="icon">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 3" %}</h3>
+                  </a>
+                  <p>{% trans "Servicios 3.1" %}</p>
+                  <p>{% trans "Servicios 3.2" %}</p>
+                </div>
+              </div>
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="200">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-file-earmark-fill"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 4" %}</h3>
+                  </a>
+                  <p>{% trans "Servicios 4.1" %}</p>
+                  <p>{% trans "Servicios 4.2" %}</p>
+                </div>
+              </div>
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-calendar2-date"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 5" %}</h3>
+                  </a>
+                  <p>{% trans "Servicios 5.1" %}</p>
+                  <p>{% trans "Servicios 5.2" %}</p>
+                </div>
+              </div>
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="400">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-card-list"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 6" %}</h3>
+                  </a>
+                  <p>{% trans "Servicios 6.1" %}</p>
+                  <p>{% trans "Servicios 6.2" %}</p>
+                  <a href="#" class="stretched-link"></a>
+                </div>
+              </div>
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="500">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-building-exclamation"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 7" %}</h3>
+                  </a>
+                  <p>{% trans "Servicios 7.1" %}</p>
+                  <p>{% trans "Servicios 7.2" %}</p>
+                  <a href="#" class="stretched-link"></a>
+                </div>
+              </div>
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="600">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-currency-exchange"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 8" %}</h3>
+                  </a>
+                  <p>{% trans "Servicios 8.1" %}</p>
+                  <p>{% trans "Servicios 8.2" %}</p>
+                  <a href="#" class="stretched-link"></a>
+                </div>
+              </div>
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="600">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-chat-square-text"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 9" %}</h3>
+                  </a>
+                  <p>
+                    {% trans "Servicios 9.1" %}
+                  </p>
+                  <a href="#" class="stretched-link"></a>
+                </div>
+              </div>
+        
+              <div class="col-lg-3 col-md-5" data-aos="fade-up" data-aos-delay="600">
+                <div class="service-item position-relative">
+                  <div class="icon">
+                    <i class="bi bi-alphabet"></i>
+                  </div>
+                  <a href="#" class="stretched-link">
+                    <h3>{% trans "Servicios 10" %}</h3>
+                  </a>
+                  <p>
+                    {% trans "Servicios 10.1" %}
+                  </p>
+                  <a href="#" class="stretched-link"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        
+        <section id="portfolio" class="portfolio section">
+          <div class="container section-title" data-aos="fade-up">
+            <span>{% trans "Nuestros proyectos" %}</span>
+            <h2>{% trans "Nuestros proyectos" %}</h2>
+            <p>{% trans "Nuestros proyectos 2" %}</p>
+          </div>
+    
+          <div class="container">
+    
+            <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
+        
+              <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
+                <li data-filter="*" class="filter-active">{% trans "Nuestros proyectos 3" %}</li>
+                <li data-filter=".filter-europa">{% trans "Nuestros proyectos 4" %}</li>
+                <li data-filter=".filter-america">{% trans "Nuestros proyectos 5" %}</li>
+                <li data-filter=".filter-asia">{% trans "Nuestros proyectos 6" %}</li>
+              </ul>
+        
+              <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-europa">
+                  <img src="{% static 'img/proyectos/montepinar.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 7" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 7.1" %}  
+                    </p>
+                  </div>
+                </div>
+        
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-europa">
+                  <img src="{% static 'img/proyectos/desengaño21.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 8" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 8.1" %}
+                    </p>
+                  </div>
+                </div>
+        
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-europa">
+                  <img src="{% static 'img/proyectos/AtalayaDelArcipreste.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 9" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 9.1" %}
+                    </p>
+                  </div>
+                </div>
+        
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-europa">
+                  <img src="{% static 'img/proyectos/MiguelAngelRiat.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 10" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 10.1" %}
+                    </p>
+                  </div>
+                </div>
+        
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-america">
+                  <img src="{% static 'img/proyectos/MaryAxe.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 11" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 11.1" %}
+                    </p>
+                  </div>
+                </div>
+        
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-america">
+                  <img src="{% static 'img/proyectos/TaxxPhilips.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 12" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 12.1" %}
+                    </p>
+                  </div>
+                </div>
+        
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-america">
+                  <img src="{% static 'img/proyectos/Guls73.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 13" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 13.1" %}
+                    </p>
+                  </div>
+                </div>
+        
+                <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-asia">
+                  <img src="{% static 'img/proyectos/ZiuChainsKe.jpg' %}" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4>{% trans "Nuestros proyectos 14" %}</h4>
+                    <p>
+                      {% trans "Nuestros proyectos 14.1" %}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>    
+    
+        <section id="precios" class="pricing section">
+          <div class="container section-title" data-aos="fade-up">
+            <span class="">{% trans "Nuestros precios" %}</span>
+            <h2>{% trans "Nuestros precios" %}</h2>
+            <p>{% trans "Nuestros precios 1" %}</p>
+          </div>
+    
+          <div class="container">
+    
+            <div class="row g-4 g-lg-0">
+        
+              <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                <div class="pricing-item">
+                  <h3>{% trans "Precios 1" %}</h3>
+                  <h4>15€<span> / {% trans "mensuales" %}</span></h4>
+                  <ul>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 2" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 3" %}</span></li>
+                    <li class="na"><i class="bi bi-x"></i> <span>{% trans "Precios Propiedades 4" %}</span></li>
+                    <li class="na"><i class="bi bi-x"></i> <span>{% trans "Precios Propiedades 5" %}</span></li>
+                    <li class="na"><i class="bi bi-x"></i> <span>{% trans "Precios Propiedades 6" %}</span></li>
+                    <li class="na"><i class="bi bi-x"></i> <span>{% trans "Precios Propiedades 7" %}</span></li>
+                  </ul>
+                  <div class="text-center"><a href="#contact" class="buy-btn">{% trans "Contactar" %}</a></div>
+                </div>
+              </div>
+        
+              <div class="col-lg-4 featured" data-aos="zoom-in" data-aos-delay="200">
+                <div class="pricing-item">
+                  <h3>{% trans "Precios 2" %}</h3>
+                  <h4>30€<span> / {% trans "mensuales" %}</span></h4>
+                  <ul>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 2" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 3" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 4" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 5" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 6" %}</span></li>
+                    <li class="na"><i class="bi bi-x"></i> <span>{% trans "Precios Propiedades 7" %}</span></li>
+                  </ul>
+                  <div class="text-center"><a href="#contact" class="buy-btn">{% trans "Contactar" %}</a></div>
+                </div>
+              </div>
+        
+              <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                <div class="pricing-item">
+                  <h3>{% trans "Precios 3" %}</h3>
+                  <h4>50€<span> / {% trans "mensuales" %}</span></h4>
+                  <ul>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 2" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 3" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 4" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 5" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 6" %}</span></li>
+                    <li><i class="bi bi-check"></i> <span>{% trans "Precios Propiedades 7" %}</span></li>
+                  </ul>
+                  <div class="text-center"><a href="#contact" class="buy-btn">{% trans "Contactar" %}</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>    
+    
+        <section id="equipo" class="team section">
+          <div class="container section-title" data-aos="fade-up">
+            <span class="">{% trans "Equipo" %}</span>
+            <h2>{% trans "Equipo" %}</h2>
+            <p>{% trans "Equipo 2" %}</p>
+          </div>
+    
+          <div class="container">
+    
+            <div class="row">
+    
+              <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="100">
+                <div class="member">
+                  <img src="{% static 'img/team/Amador.jpg' %}" class="img-fluid" alt="">
+                  <div class="member-content">
+                    <h4>Amador Ribas</h4>
+                    <span>{% trans "Equipo 3" %}</span>
+                    <p>
+                      {% trans "Equipo 3.1" %}
+                    </p>
+                  </div>
+                </div>
+              </div>
+    
+              <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="200">
+                <div class="member">
+                  <img src="{% static 'img/team/Adrián.jpg' %}" class="img-fluid" alt="">
+                  <div class="member-content">
+                    <h4>Adrián López</h4>
+                    <span>{% trans "Equipo 4" %}</span>
+                    <p>
+                      {% trans "Equipo 4.1" %}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="300">
+                <div class="member">
+                  <img src="{% static 'img/team/Maxi.PNG' %}" class="img-fluid" alt="">
+                  <div class="member-content">
+                    <h4>Maxi</h4>
+                    <span>{% trans "Equipo 5" %}</span>
+                    <p>
+                      {% trans "Equipo 5.1" %}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+    
+        <section id="contact" class="contact section">
+          <div class="container section-title" data-aos="fade-up">
+            <span class="">{% trans "Contacta con nosotros" %}</span>
+            <h2 class="">{% trans "Contacta con nosotros" %}</h2>
+            <p>{% trans "Contacta con nosotros 1" %}</p>
+          </div>
+    
+          <div class="container" data-aos="fade-up" data-aos-delay="100">
+            <div class="row gy-4">
+              <div class="col-lg-6">
+                <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="200">
+                  <i class="bi bi-geo-alt"></i>
+                  <h3>{% trans "Contacta con nosotros 2" %}</h3>
+                  <p>Calle de Caracas, 6, Llevant, 07007</p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6">
+                <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="300">
+                  <i class="bi bi-telephone"></i>
+                  <h3>{% trans "Contacta con nosotros 3" %}</h3>
+                  <p>+34 999 99 99 99</p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6">
+                <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="400">
+                  <i class="bi bi-envelope"></i>
+                  <h3>{% trans "Contacta con nosotros 4" %}</h3>
+                  <p>lume.app.official@gmail.com</p>
+                </div>
+              </div>
+            </div>
+    
+            <div class="row gy-4 mt-1">
+              <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1537.8115017675086!2d2.6675384853765696!3d39.56810738128734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x129793b01716a01b%3A0x55bc574de040df4a!2sCIFP%20Francesc%20de%20Borja%20Moll!5e0!3m2!1ses!2ses!4v1716646086947!5m2!1ses!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+              </div>
+              <div class="col-lg-6">
+                <form method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
+                  <div class="row gy-4">
+                    <div class="col-md-6">
+                      <input type="text" name="name" class="form-control" placeholder='{% trans "Nombre" %}' required="">
+                    </div>
+                    <div class="col-md-6 ">
+                      <input type="email" class="form-control" name="email" placeholder='{% trans "Correo" %}' required="">
+                    </div>
+                    <div class="col-md-12">
+                      <input type="text" class="form-control" name="subject" placeholder='{% trans "Asunto" %}' required="">
+                    </div>
+                    <div class="col-md-12">
+                      <textarea class="form-control" name="message" rows="6" placeholder='{% trans "Mensaje" %}' required=""></textarea>
+                    </div>
+                    <div class="col-md-12 text-center">
+                      <button type="submit">{% trans "Enviar" %}</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+    </main>
+
+    <footer id="footer" class="footer position-relative">
+    <div class="container copyright text-center mt-5">
+        <p>© <span>2024 LUME {% trans "Derechos" %} <a href="https://github.com/Adrianlm17">Adrianlm17</a></span></p>
+    </div>
+    </footer>
+
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <div id="preloader"></div>
+    
+    
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/vendor/php-email-form/validate.js"></script>
+    <script src="/static/vendor/aos/aos.js"></script>
+    <script src="/static/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="/static/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="/static/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="/static/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="/static/js/main.js"></script>
+
+{% endblock %}

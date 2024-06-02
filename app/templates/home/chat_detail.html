@@ -1,0 +1,74 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} Chat | LUME {% endblock %} 
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center"> 
+        <div class="col-md-8"> 
+            <div class="card">
+                <div class="card-header">
+                    <a href="{% url 'home:chat' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Volver</a>
+                </div>
+                <div class="card-body justify-content-center">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="title-container">
+                            {{ title_form.titulo }}     <button type="submit" name="edit_title">Guardar Título</button>
+                        </div>
+                    </form>
+                    {% if chat.user == request.user %}
+                        <h3 class="text-center">{{ chat.mensaje_user.email }}</h3> 
+                    {% else %}
+                        <h3 class="text-center">{{ chat.user.email }}</h3> 
+                    {% endif %}
+                    <hr>
+                    <div class="message-container">
+                        <br>
+                        {% for message in messages %}
+                            <div class="message {% if message.user_send == request.user %}sent{% else %}received{% endif %}">
+                                <p>{{ message.text }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer justify-content-center">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="text">
+                            {{ form.text }}
+                        </div>
+                        <br><br>
+                        <button type="submit" class="btn btn-success">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .message {
+        background-color: #f1f1f1;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        width: fit-content;
+    }
+
+    .sent {
+        background-color: #a2dbec;
+        text-align: right;
+        margin-left: auto;
+    }
+
+    .received {
+        background-color: #ddcaf3;
+        text-align: left;
+    }
+
+    .title-container {
+        text-align: center;
+    }
+</style>
+{% endblock content %}

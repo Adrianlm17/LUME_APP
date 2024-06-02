@@ -1,0 +1,81 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} Administrar Viviendas | LUME {% endblock %} 
+
+{% block content %}
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <a href="{% url 'home:comunidades_configuracion' %}" class="btn btn-comunidades"><i class="fa fa-arrow-left"></i> Volver</a>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="{% url 'home:asignar_usuario_comunidad' comunidad_id=comunidad.id %}" class="btn btn-comunidades"><i class="fa fa-plus"></i> Añadir Usuario</a>
+        </div>
+    </div>
+    
+    <br>
+
+    <h2 class="mt-4 text-center" style="font-weight: bold;">Administrar Viviendas | {{ comunidad.nombre }}</h2>
+
+    <br>
+    
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Usuario</th>
+                    <th>Piso</th>
+                    <th>Puerta</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vivienda in viviendas %}
+                <tr>
+                    <td>{{ vivienda.usuario.email }}</td>
+                    <td>{{ vivienda.piso }}</td>
+                    <td>{{ vivienda.puerta }}</td>
+                    <td>{{ vivienda.rol_comunidad }}</td>
+                    <td>
+                        <a href="{% url 'home:editar_vivienda_comunidad' comunidad_id=comunidad.id viviendas_id=vivienda.id %}" class="btn btn-editar btn-sm"><i class="fa fa-edit"></i> Editar</a>
+                        <form method="post" action="{% url 'home:eliminar_vivienda' comunidad_id=comunidad.id viviendas_id=vivienda.id %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-eliminar btn-sm"><i class="fa fa-trash"></i> Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .table {
+        border-collapse: collapse;
+    }
+
+    .table-bordered th, .table-bordered td {
+        border: 1px solid #d3d1cc;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #c2c2c2;
+    }
+
+    .table-striped tbody tr:nth-of-type(even) {
+        background-color: rgb(234, 234, 234);
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.1);
+    }
+
+    .thead-dark th {
+        background-color: #343a40;
+        color: white;
+    }
+</style>
+{% endblock content %}

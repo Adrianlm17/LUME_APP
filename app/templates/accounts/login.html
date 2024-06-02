@@ -1,0 +1,59 @@
+{% extends 'layouts/base_lume.html' %}
+{% load static %} 
+
+{% block title %} LUME - LOGIN {% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}"> 
+{% endblock %}
+
+{% block body %}
+
+    <div id="alerts"></div>
+
+    <div class="login-box animate__animated animate__fadeIn">
+        <h1 style="color: white;">LOGIN</h1>
+
+        <h6 class="card-category">
+            {% if msg %}
+                <br>
+                <span class="text-danger">{{ msg | safe }}</span>
+            {% endif %}  
+        </h6>
+
+        <br>
+
+        <form role="form" method="post" action="">
+
+            {% csrf_token %} 
+
+            <div>
+                {{ form.email }}
+            </div>
+
+            <br><br>
+
+            <div>
+                {{ form.password }}
+            </div>
+            
+            <br><br>
+
+            <button type="submit" name="login" class="btn btn-secondary pull-left">Login</button>
+        </form>
+
+        <br><br>
+
+        <p class="mt-3">
+            ¿Do not you have an account yet? <a href="{% url 'register' %}">Sign up</a>
+        </p>
+
+        <br>
+
+        <p class="mt-3">
+            ¿Did you forget your password? <a href="{% url 'reset_password' %}">Reset password</a>
+        </p>
+        
+    </div>
+
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends "layouts/base_admin.html" %}
+
+{% block title %} ADMIN | LUME {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+{% if success %}
+  <div class="alert alert-success alert-dismissible">
+    <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>¡CREADA!</strong> Comunidad creada correctamente
+  </div> 
+{% endif %} 
+
+<div class="row">
+  <div class="col-md-8">
+      <div class="card">
+        <div class="card-header card-header-primary">
+            <h4 class="card-title">CREAR COMUNIDAD</h4>
+        </div>
+        <div class="card-body">
+
+          {% if msg %}
+            <br>
+            <h6 class="card-category">
+              <span class="text-danger">{{ msg | safe }}</span>
+            </h6>
+          {% endif %}  
+
+          <br>
+
+          <form method="post" enctype="multipart/form-data">
+            
+            {% csrf_token %}
+            
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Nombre:</label>
+                  {{ form.nombre }}
+                  <span class="text-danger">{{ form.nombre.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>País:</label>
+                  {{ form.pais }}
+                  <span class="text-danger">{{ form.pais.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Provincia:</label>
+                  {{ form.provincia }}
+                  <span class="text-danger">{{ form.provincia.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Municipio:</label>
+                  {{ form.municipio }}
+                  <span class="text-danger">{{ form.municipio.errors }}</span>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Dirección:</label>
+                  {{ form.dirrecion }}
+                  <span class="text-danger">{{ form.dirrecion.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Portal:</label>
+                  {{ form.portal }}
+                  <span class="text-danger">{{ form.portal.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Dinero:</label>
+                  {{ form.dinero }}
+                  <span class="text-danger">{{ form.dinero.errors }}</span>
+                </div>
+                <div class="form-group">
+                  <label>Numero cuenta:</label>
+                  {{ form.numero_cuenta }}
+                  <span class="text-danger">{{ form.numero_cuenta.errors }}</span>
+                </div>
+              </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+              <div class="col-sm-12 text-center">
+                <button type="submit" class="btn btn-primary">Crear Comunidad</button>
+              </div>
+            </div>
+          </form>
+        </div>        
+      </div>
+  </div> 
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
