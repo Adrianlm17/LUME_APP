@@ -1,0 +1,77 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} Crear Incidencia | LUME {% endblock %}
+
+{% block content %}
+<a href="{% url 'home:ver_incidencias' %}" class="btn btn-light bg-dark"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<br>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header card-header-light bg-dark text-center">
+                <h4 class="card-title mt-0"><strong>Crear Incidencia</strong></h4>
+            </div>
+            <div class="card-body text-center"> <!-- Añadido text-center aquí -->
+                <form method="post" enctype="multipart/form-data" class="d-inline-block"> <!-- Añadido class="d-inline-block" aquí -->
+                    {% csrf_token %}
+                    {{ incidencia_form.non_field_errors }}
+                    <div class="form-group row">
+                        <label for="titulo" class="col-sm-3 col-form-label"><strong>Título</strong></label>
+                        <div class="col-sm-15">
+                            {{ incidencia_form.titulo }}
+                            {% if incidencia_form.errors.titulo %}
+                                <span class="text-danger">{{ incidencia_form.errors.titulo }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <br>
+                    
+                    <div class="form-group row">
+                        <label for="descripcion" class="col-sm-3 col-form-label"><strong>Descripción</strong></label>
+                        <div class="col-sm-15">
+                            {{ incidencia_form.descripcion }}
+                            {% if incidencia_form.errors.descripcion %}
+                                <span class="text-danger">{{ incidencia_form.errors.descripcion }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <br>
+                    
+                    <div class="row">
+                        <label for="archivo" class="col-sm-4 col-form-label"><strong>Archivo adjunto</strong></label>
+                        <div class="col-sm-3">
+                            {{ incidencia_form.archivo }}
+                            {% if incidencia_form.errors.archivo %}
+                                <span class="text-danger">{{ incidencia_form.errors.archivo }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <br>
+                    
+                    <div class="form-group row">
+                        <label for="prioridad" class="col-sm-3 col-form-label"><strong>Prioridad</strong></label>
+                        <div class="col-sm-13">
+                            {{ incidencia_form.prioridad }}
+                            {% if incidencia_form.errors.prioridad %}
+                                <span class="text-danger">{{ incidencia_form.errors.prioridad }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <br>
+                    
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-light bg-dark">Crear Incidencia</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

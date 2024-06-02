@@ -1,0 +1,225 @@
+{% extends "layouts/base_app.html" %}
+
+{% block title %} CONFIG COMUNIDAD | LUME {% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if comunidad_seleccionada|length > 1 %}
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="text-center">Configurar Comunidad {{ comunidad_seleccionada.nombre }}</h2>
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="form-group">
+                    <select name="comunidad_seleccionada" class="form-control">
+                        {% for comunidad in comunidades %}
+                            <option value="{{ comunidad.id }}" {% if comunidad.id == comunidad_seleccionada.id %}selected{% endif %}>{{ comunidad.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-comunidades">Cambiar comunidad</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if success %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>¡ACTUALIZADA!</strong> Comunidad actualizada correctamente
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div> 
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header card-header-comunidades">
+                    <h4 class="card-title">Editar Comunidad</h4>
+                </div>
+                <div class="card-body">
+                    {% if msg %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ msg | safe }}
+                    </div>
+                    {% endif %}  
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            {% for field in form %}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h4>{{ field.label }}</h4>
+                                    {{ field }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="form-group">
+                            <h4>Token</h4>
+                            <input type="text" name="token" value="{% if comunidad_seleccionada %}{{ comunidad_seleccionada.token }}{% endif %}" class="form-control text-center" readonly>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-comunidades">Guardar cambios</button>
+                        </div>
+                    </form>
+                </div>        
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header card-header-comunidades">
+                    <h4 class="card-title">Anuncio Comunidad</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'home:comunidades_configuracion' comunidad_seleccionada.id %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <h4>Titulo:</h4>
+                            {{ crear_anuncio_form.titulo }}
+                        </div>
+                        <div class="form-group">
+                            <h4>Descripción:</h4>
+                            {{ crear_anuncio_form.descripcion }}
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <h4 class="mr-2">Fecha:</h4>
+                            {{ crear_anuncio_form.fecha_anuncio }}
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-comunidades">Enviar Anuncio</button>
+                        </div>
+                    </form>
+                </div>       
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header card-header-comunidades">
+                    <h4 class="card-title">Administrar Viviendas</h4>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Administra las viviendas de tu comunidad, permitiendo añadir, modificar o incluso expulsar a miembros de tu comunidad!
+                    </p>
+                    <div class="text-center">
+                        <a href="{% url 'home:administrar_viviendas' comunidad_seleccionada.id %}" class="btn btn-comunidades">Administrar Viviendas</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header card-header-comunidades">
+                    <h4 class="card-title">Administrar Distribución de Gastos</h4>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Administra la distribución de los gastos de tu comunidad, permitiendo pagar por iguales o pagar por coeficientes!
+                    </p>
+                    <div class="text-center">
+                        <a href="{% url 'home:administrar_distribucion_gastos' comunidad_seleccionada.id %}" class="btn btn-comunidades">Administrar Distribución de Gastos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4 mx-auto" style="max-width: 800px;">
+        <div class="card-header card-header-comunidades">
+            <h4 class="card-title">Seguro de la Comunidad</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'home:comunidades_configuracion' comunidad_seleccionada.id %}">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <h4>{{ seguro_comunidad_form.empresa.label }}</h4>
+                            {{ seguro_comunidad_form.empresa }}
+                        </div>
+                        <div class="form-group">
+                            <h4>{{ seguro_comunidad_form.cubre.label }}</h4>
+                            {{ seguro_comunidad_form.cubre }}
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <div class="form-group">
+                            <h4>{{ seguro_comunidad_form.cantidad.label }}</h4>
+                            {{ seguro_comunidad_form.cantidad }}
+                        </div>
+                        <div class="form-group">
+                            <h4>{{ seguro_comunidad_form.pagado.label }}</h4>
+                            {{ seguro_comunidad_form.pagado }}
+                        </div>
+                        <div class="form-group">
+                            <h4>{{ seguro_comunidad_form.fecha_pago.label }}</h4>
+                            {{ seguro_comunidad_form.fecha_pago }}
+                        </div>
+                        <div class="form-group">
+                            <h4>{{ seguro_comunidad_form.fecha_vencimiento.label }}</h4>
+                            {{ seguro_comunidad_form.fecha_vencimiento }}
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-comunidades">Guardar Seguro</button>
+                </div>
+            </form>
+        </div>       
+    </div>
+</div>
+
+<style>
+    .form-group h4 {
+        margin-bottom: 10px;
+    }
+
+    .btn-comunidades {
+        background-color: #007bff;
+        color: white;
+        border: none;
+    }
+
+    .btn-comunidades:hover {
+        background-color: #0056b3;
+        color: white;
+    }
+
+    .form-group.d-flex {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .form-group.d-flex h4 {
+        margin-right: 10px;
+    }
+
+    #id_titulo, #id_empresa, #id_cubre {
+      width: 100%;
+    }
+
+    #id_descripcion {
+      width: 100%;
+      padding-bottom: 140px;
+    }
+    
+    .col-md-6.text-center .form-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>
+{% endblock content %}

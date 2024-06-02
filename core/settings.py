@@ -15,8 +15,7 @@ SECRET_KEY = 'django-insecure-bj5b@#n@d&t3s553ju3zyap%9n8dew@hp)b*l)#+6^ttp0khk7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -27,24 +26,32 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app.home'
+    'app.home',
+    'taggit',
+    'app.admin_lume',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'app.authentication.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 ROOT_URLCONF = 'core.urls'
 
-LOGIN_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "/home"
 
-LOGOUT_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "/home"
 
 TEMPLATE_DIR = os.path.join(CORE_DIR, "app/templates")
 
@@ -100,18 +107,28 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'es-ES'
+LANGUAGE_CODE = 'es'
+
+LANGUAGES = [
+    ('es', 'Español'),
+    ('en', 'English'),
+    ('de', 'Deutsch'),
+]
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
-
+USE_L10N = True
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(CORE_DIR, 'static')
 
 STATIC_URL = '/static/'
 
@@ -124,3 +141,17 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# MEDIA
+MEDIA_ROOT = os.path.join(BASE_DIR, 'app', 'static', 'app_files')
+MEDIA_URL = '/app/static/app_files/'
+
+# EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'lume.app.official@gmail.com'
+EMAIL_HOST_PASSWORD = 'hwfp rmcq abgr vppa'

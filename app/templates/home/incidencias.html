@@ -1,0 +1,96 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} Incidencias | LUME {% endblock %} 
+
+{% block content %}
+
+{% if comunidades|length > 1 %}
+  
+  <h2>{{ comunidad_seleccionada.nombre }}</h2>
+
+  <form method="post" action="{% url 'home:cambiar_comunidad_incidencias' comunidad_seleccionada.id %}">
+      {% csrf_token %}
+      <select name="comunidad_id">
+          {% for comunidad in comunidades %}
+              <option value="{{ comunidad.id }}" {% if comunidad.id == comunidad_seleccionada.id %}selected{% endif %}>{{ comunidad.nombre }}</option>
+          {% endfor %}
+      </select>
+      
+      <button type="submit" class="btn btn-light bg-dark">Cambiar comunidad</button>
+  </form>
+{% endif %}
+
+<div class="text-center mt-3">
+    <a href="{% url 'home:ver_empresas' %}" class="btn btn-light bg-dark">Ver Empresas</a>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-light bg-dark">
+                <h4 class="card-title mt-0"><i class="material-icons">report</i> Incidencias</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Titulo</th>
+                                <th>Descripción</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Empresa</th>
+                                <th>Prioridad</th>
+                                <th>Presupuesto</th>
+                                <th>Ver</th>
+                                {% if user.userprofile.user_rol == 'community_admin' or  user.userprofile.user_rol == 'lume' or  user.userprofile.user_rol == 'company_boss' %}
+                                    <th>Editar</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for incidencia in incidencias %}
+                            <tr>
+                                <td>{{ incidencia.numero }}</td>
+                                <td>{{ incidencia.titulo }}</td>
+                                <td>{{ incidencia.descripcion }}</td>
+                                <td>{{ incidencia.fecha_apertura }}</td>
+                                <td>{{ incidencia.estado }}</td>
+                                <td>{{ incidencia.empresa }}</td>
+                                <td>{{ incidencia.prioridad }}</td>
+                                <td>{{ incidencia.gasto }}€</td>
+                                <td>
+                                    <a href="{% url 'home:ver_incidencia' incidencia.numero %}" class="btn btn-dark">Ver</a>
+                                </td>
+                                {% if user.userprofile.user_rol == 'community_admin' or  user.userprofile.user_rol == 'lume' %}
+                                    <td><a href="{% url 'home:editar_incidencia' incidencia.numero %}" class="btn btn-dark">Editar</a></td>
+                                {% elif user.userprofile.user_rol == 'company_boss' %}
+                                    <td><a href="{% url 'home:editar_incidencia_empresa' incidencia.numero %}" class="btn btn-dark">Editar</a></td>
+                                {% endif %}                                
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="8">No hay incidencias disponibles.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>                        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if user.userprofile.user_rol == 'community_admin' or  user.userprofile.user_rol == 'community_user' or user.userprofile.user_rol == 'lume' %}
+<div class="fixed-plugin">
+    <div class="dropdown show-dropdown">
+        <a href="{% url 'home:crear_incidencia' comunidad_seleccionada.id %}">
+            <i class="fa fa-plus fa-2x" style="color: #fff;"></i>
+        </a>
+    </div>
+</div>
+{% endif %}
+
+{% endblock content %}

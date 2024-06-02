@@ -1,0 +1,70 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} Ver Acta | LUME {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+    .card {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+    }
+    .form-group label {
+        color: #555; 
+        font-weight: bold;
+    }
+    .form-group p {
+        border: 1px solid #ddd; 
+        background-color: #e7e7e7;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<a href="{% url 'home:actas' %}" class="btn btn-light bg-actas"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+      <div class="card">
+        <div class="card-header card-header-actas">
+            <h4 class="card-title"><i class="material-icons">history_edu</i> ACTA</h4>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label>Título:</label>
+            <p>{{ acta.titulo }}</p>
+          </div>
+          <div class="form-group">
+            <label>Fecha:</label>
+            <p>{{ acta.fecha }}</p>
+          </div>
+          <div class="form-group">
+            <label>Texto del Acta:</label>
+            <p style="height: 250px;">{{ acta.texto }}</p>
+          </div>
+          <div class="form-group">
+            <label>Firmado por:</label>
+            <p>{{ acta.firmada.username }}</p>
+          </div>
+          
+          {% if acta.archivo %}
+            <div>
+              <label>Archivos adjuntos:</label>
+              <p><a href="{% url 'home:ver_acta' acta.id %}?download=true"><i class="material-icons">file_download</i> DESCARGAR</a></p>
+            </div>
+          {% endif %}
+          
+        </div>        
+      </div>
+  </div> 
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

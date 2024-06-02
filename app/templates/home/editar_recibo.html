@@ -1,0 +1,110 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %}Editar Recibo | CHAT | LUME{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header card-header-success">
+                <h2>{{ recibo.titulo }}</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" id="recibo_form">
+                    {% csrf_token %}
+                    
+                    <!-- Mostrar errores generales del formulario -->
+                    {% if recibo_form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ recibo_form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <label>Titulo:</label>
+                        <input type="text" class="form-control" value="{{ recibo.titulo }}" readonly>
+                        <!-- Mostrar errores de campo específico -->
+                        {% if recibo_form.titulo.errors %}
+                            <div class="alert alert-danger">
+                                {{ recibo_form.titulo.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción:</label><br>
+                        <textarea class="form-control" rows="4" readonly>{{ recibo.descripcion }}</textarea>
+                        <!-- Mostrar errores de campo específico -->
+                        {% if recibo_form.descripcion.errors %}
+                            <div class="alert alert-danger">
+                                {{ recibo_form.descripcion.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Tope:</label>
+                        <input type="text" class="form-control" value="{{ recibo.fecha_tope }}" readonly>
+                        <!-- Mostrar errores de campo específico -->
+                        {% if recibo_form.fecha_tope.errors %}
+                            <div class="alert alert-danger">
+                                {{ recibo_form.fecha_tope.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad Total:</label>
+                        <input type="text" class="form-control" value="{{ recibo.cantidad_total }}" readonly>
+                        <!-- Mostrar errores de campo específico -->
+                        {% if recibo_form.cantidad_total.errors %}
+                            <div class="alert alert-danger">
+                                {{ recibo_form.cantidad_total.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="archivo">Archivo adjunto:</label>
+                        <input type="file" name="archivo" class="form-control" disabled>
+                        {% if recibo.archivo %}
+                            <p>Archivo actual: <a href="{{ recibo.archivo.url }}" download>{{ recibo.archivo.name }}</a></p>
+                        {% endif %}
+                        <!-- Mostrar errores de campo específico -->
+                        {% if recibo_form.archivo.errors %}
+                            <div class="alert alert-danger">
+                                {{ recibo_form.archivo.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-body table-responsive">
+                        <table class="table table-hover">
+                            <thead class="text-dark">
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for form in motivo_recibo_formset %}
+                                    <tr>
+                                        <td>{{ form.tipo }}</td>
+                                        <td>{{ form.cantidad }}</td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td>Total</td>
+                                    <td>{{ total_gastos }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" onclick="location.href='{% url 'home:crear_motivo' comunidad_id %}'">Agregar Motivo</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

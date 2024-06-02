@@ -1,0 +1,49 @@
+{% extends "layouts/base_admin.html" %}
+
+{% block title %} ADMIN | LUME {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<a href="{% url 'admin_lume:companys' %}" class="btn btn-light bg-dark"><i class="fa fa-arrow-left"></i> Volver</a>
+
+{% if success %}
+  <div class="alert alert-success alert-dismissible">
+    <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>¡ACTUALIZADA!</strong> Empresa actualizada correctamente
+  </div> 
+{% endif %} 
+
+<div class="row">
+  <div class="col-md-8">
+      <div class="card">
+        <div class="card-header card-header-primary">
+            <h4 class="card-title">Editar Empresas</h4>
+        </div>
+        <div class="card-body">
+
+          {% if msg %}
+            <br>
+            <h6 class="card-category">
+              <span class="text-danger">{{ msg | safe }}</span>
+            </h6>
+          {% endif %}  
+
+          <br>
+
+          <form method="post">
+            {% csrf_token %}
+            {{ companys_form.as_p }}
+            <button type="submit">Guardar cambios</button>
+          </form>
+        </div>        
+      </div>
+  </div> 
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

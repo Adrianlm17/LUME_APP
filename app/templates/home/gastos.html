@@ -1,0 +1,361 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} CHAT | LUME {% endblock %} 
+
+{% block stylesheets %} 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+
+{% if comunidades|length > 1 %}
+  
+  <div class="card">
+    <div class="card-header card-header-gastos text-center">
+      <h2>{{ comunidad_seleccionada.nombre }}</h2>
+    
+  
+      <div class="justify-content: right">
+        <form method="post" action="{% url 'home:cambiar_comunidad_gastos' comunidad_seleccionada.id %}">
+          {% csrf_token %}
+          <select name="comunidad_id">
+              {% for comunidad in comunidades %}
+                  <option value="{{ comunidad.id }}" {% if comunidad.id == comunidad_seleccionada.id %}selected{% endif %}>{{ comunidad.nombre }}</option>
+              {% endfor %}
+          </select>
+          
+          <button type="submit" class="btn btn-gastos">Cambiar comunidad</button>
+      </form>
+      </div>
+  
+</div>
+</div>
+{% endif %}
+
+<br>
+
+<div class="row">
+  <div class="col-lg-4 col-md-3 col-sm-3">
+    <div class="card card-stats">
+        <div class="card-header card-header-warning card-header-icon">
+            <div class="card-icon">
+                <i class="material-icons">credit_card</i>
+            </div>
+            <p class="card-category">Numero Cuenta Bancaria</p>
+            {% if comunidad_seleccionada.numero_cuenta %}
+              <h3 class="card-title" style="font-size: 15px;">{{ comunidad_seleccionada.numero_cuenta }}</h3>
+            {% else %}
+              <h3 class="card-title">No hay cuenta bancaria</h3>
+            {% endif %}
+        </div>
+    </div>
+</div>
+  <div class="col-lg-4 col-md-3 col-sm-3">
+      <div class="card card-stats">
+          <div class="card-header card-header-success card-header-icon">
+              <div class="card-icon">
+                  <i class="material-icons">attach_money</i>
+              </div>
+              <p class="card-category">Dinero Actual Comunidad</p>
+              <h3 class="card-title">{{ dinero_actual_comunidad }}€</h3>
+          </div>
+      </div>
+  </div>
+  <div class="col-lg-4 col-md-3 col-sm-3">
+      <div class="card card-stats">
+          <div class="card-header card-header-info card-header-icon">
+              <div class="card-icon">
+                  <i class="material-icons">calendar_today</i>
+              </div>
+              <p class="card-category">Fecha Próximo Recibo</p>
+              <h3 class="card-title">{{ proximo_recibo_pendiente }}</h3>
+          </div>
+      </div>
+  </div>
+</div>
+
+<br>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card card-chart">
+      <canvas id="historialAnualChart"></canvas>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card card-chart">
+      <canvas id="distribucionGastosChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="row">
+  <div class="col-lg-6">
+    <div class="card">
+        <div class="card-header card-header-tabs card-header-primary">
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper">
+                    <ul class="nav nav-tabs" data-tabs="tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#historial" data-toggle="tab">
+                                <i class="material-icons">history_edu</i> Historial
+                                <div class="ripple-container"></div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#pagos" data-toggle="tab">
+                                <i class="material-icons">timer</i> Próximos pagos
+                                <div class="ripple-container"></div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#mispagos" data-toggle="tab">
+                                <i class="material-icons">payments</i> Mis pagos
+                                <div class="ripple-container"></div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="tab-content">
+                <div class="tab-pane active" id="historial">
+                  {% if historial_dinero_comunidad %}
+                    <table class="table">
+                      <thead>
+                          <tr>
+                              <th>Tipo</th>
+                              <th>Título</th>
+                              <th>Fecha</th>
+                              <th>Cantidad</th>
+                              <th>Estado</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {% for movimiento in historial_dinero_comunidad %}
+                              <tr>
+                                  <td>{{ movimiento.tipo }}</td>
+                                  <td>{{ movimiento.titulo }}</td>
+                                  <td>{{ movimiento.fecha }}</td>
+                                  <td>{{ movimiento.cantidad }}</td>
+                                  {% if movimiento.estado %}
+                                    <td>{{ movimiento.estado }}</td>
+                                  {% else %}
+                                    <td> SIN ESTADO </td>
+                                  {% endif %}
+                              </tr>
+                          {% endfor %}
+                      </tbody>
+                    </table>
+                    <div class="row justify-content-center">
+                        <div class="col-md-6 text-center">
+                            <a href="{% url 'home:historial_completo' comunidad_seleccionada.id %}" class="btn btn-eventos">Ver Historial completo</a>
+                        </div>
+                    </div>
+                  {% else %}
+                    <h4>¡No hay movimientos actualmente!</h4>
+                  {% endif %}
+              
+                </div>
+                <div class="tab-pane" id="pagos">
+                    {% if proximos_pagos %}
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                  <th>TITULO</th>
+                                  <th>FECHA</th>
+                                  <th>CANTIDAD</th>
+                                </tr>
+                                {% for pago in proximos_pagos %}
+                                    <tr>
+                                        <td>{{ pago.titulo }}</td>
+                                        <td>{{ pago.fecha }}</td>
+                                        <td>{{ pago.cantidad }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <h4>¡No hay pagos registrados!</h4>
+                    {% endif %}
+                </div>
+                <div class="tab-pane" id="mispagos">
+                    {% if mis_pagos %}
+                        <table class="table">
+                          <tbody>
+                            <tr>
+                              <th>TITULO</th>
+                              <th>FECHA</th>
+                              <th>CANTIDAD</th>
+                              <th>ESTADO</th>
+                            </tr>
+                            {% for pago in mis_pagos %}
+                                <tr>
+                                    <td>{{ pago.titulo }}</td>
+                                    <td>{{ pago.fecha }}</td>
+                                    <td>{{ pago.cantidad }}</td>
+                                    <td>{{ pago.estado }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    {% else %}
+                        <h4>¡No tienes pagos!</h4>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-12">
+    <div class="card">
+        <div class="card-header card-header-warning">
+            <h4 class="card-title">Seguro de la comunidad | {{ seguro_comunidad.empresa }}</h4>
+            <p class="card-category">Información acerca del seguro de la comunidad</p>
+        </div>
+        <div class="card-body table-responsive">
+            {% if seguro_comunidad %}
+                <table class="table table-hover">
+                    <thead class="text-warning">
+                        <th>Qué cubre</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ seguro_comunidad.cubre }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h5>Pago anual de: {{ seguro_comunidad.cantidad }}€ | {% if seguro_comunidad.pagado %}Pagado | Fecha Vencimiento:{{ seguro_comunidad.fecha_vencimiento}}{% else %}Pendiente | Fecha Pago:{{ seguro_comunidad.fecha_pago}} {% endif %}</h5>
+            {% else %}
+                <h4>¡La comunidad no tiene seguro!</h4>
+            {% endif %}
+        </div>
+    </div>
+  </div>
+</div>
+
+<br><br><br>
+
+{% if es_presidente_o_vicepresidente %}
+<div class="row justify-content-center">
+  <div class="text-center mr-4">
+    <a href="{% url 'home:crear_gasto' comunidad_seleccionada.id %}" class="btn btn-gastos">Crear Gasto | Derrama</a>
+  </div>
+  <div class="text-center mr-4">
+    <a href="{% url 'home:mostrar_modificar_gastos_recibos' comunidad_seleccionada.id %}" class="btn btn-gastos">Modificar Gasto | Recibo</a>
+  </div>
+  <div class="text-center mr-4">
+    <a href="{% url 'home:crear_recibo' comunidad_seleccionada.id %}" class="btn btn-gastos">Crear Recibo</a>
+  </div>
+</div>
+{% endif %}
+
+
+
+
+
+<script>
+  // Datos del historial anual
+  var historialAnualData = {
+    labels: [{% for movimiento in historial_dinero_mensual_comunidad %}"{{ movimiento.mes }}",{% endfor %}],
+    datasets: [{
+      label: 'Gastos mensuales',
+      data: [
+        {% for movimiento in historial_dinero_mensual_comunidad %}
+          {% if movimiento.cantidad is not None %}
+            {{ movimiento.cantidad|stringformat:"f" }},
+          {% else %}
+            null,
+          {% endif %}
+        {% endfor %}
+      ],
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      borderColor: 'rgba(255, 99, 132, 2)',
+      borderWidth: 1
+    }]
+  };
+
+  // Ajustar la cantidad de datos para que coincida con el número de etiquetas
+  var dataLength = historialAnualData.labels.length;
+  while (historialAnualData.datasets[0].data.length < dataLength) {
+    historialAnualData.datasets[0].data.unshift(null);
+  }
+
+  // Opciones del historial anual
+  var historialAnualOptions = {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  };
+
+  // Dibuja el gráfico del historial anual
+  var historialAnualChart = new Chart(document.getElementById('historialAnualChart'), {
+    type: 'line',
+    data: historialAnualData,
+    options: historialAnualOptions
+  });
+
+
+
+
+
+
+
+
+
+  
+  // Datos de distribución de gastos
+  var distribucionGastosData = {
+    labels: [{% for tipo, cantidad in distribucion_gastos_ultimo_recibo.items %}"{{ tipo }}",{% endfor %}],
+    datasets: [{
+      label: 'Distribución de gastos',
+      data: [{% for tipo, cantidad in distribucion_gastos_ultimo_recibo.items %}{{ cantidad }},{% endfor %}],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(128, 128, 0, 0.2)', 
+        'rgba(0, 128, 128, 0.2)'
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
+        'rgba(128, 128, 0, 1)',
+        'rgba(0, 128, 128, 1)'
+      ],
+      borderWidth: 1
+    }]
+  };
+
+
+  // Opciones de distribución de gastos
+  var distribucionGastosOptions = {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  };
+
+  // Dibuja el gráfico de distribución de gastos
+  var distribucionGastosChart = new Chart(document.getElementById('distribucionGastosChart'), {
+    type: 'bar',
+    data: distribucionGastosData,
+    options: distribucionGastosOptions
+  });
+  </script>
+
+{% endblock content %}

@@ -1,0 +1,58 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} Detalle del Evento/Recordatorio | LUME {% endblock %} 
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center"> 
+        <div class="col-md-8"> 
+            <div class="card">
+                <div class="card-header">
+                    <a href="{% url 'home:calendario_actual' %}" class="btn btn-light"><i class="fa fa-arrow-left"></i> Volver</a>
+                </div>
+                <div class="card-body justify-content-center">
+                    <h2 class="card-title" style="text-align: center; font-weight: bold;">Detalle del Evento/Recordatorio</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label for="id_fecha">Fecha:</label>
+                            <input type="text" class="form-control" id="id_fecha" name="fecha" value="{{ evento.fecha }}" disabled>
+                        </div>
+                        
+                        <br>
+
+                        <div class="form-group">
+                            <label for="id_titulo">Título:</label>
+                            <input type="text" class="form-control" id="id_titulo" name="titulo" value="{{ evento.titulo }}">
+                        </div>
+                        
+                        <br>
+
+                        <div class="form-group">
+                            <label for="id_descripcion">Descripción:</label>
+                            <textarea class="form-control" id="id_descripcion" name="descripcion" rows="4">{{ evento.descripcion }}</textarea>
+                        </div>
+                        
+                        <br>
+                        
+                        <div class="card-footer justify-content-center">
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card-footer justify-content-center">
+                    <form method="post" action="{% url 'home:delete_calendario' evento.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

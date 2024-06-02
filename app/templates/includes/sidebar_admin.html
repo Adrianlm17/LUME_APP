@@ -1,0 +1,93 @@
+    <div class="sidebar" data-color="purple" style="background-color: #0D1B2A;">
+      <div class="logo">
+        <a class="navbar-brand" href="#">
+          <img src="/static/img/LUME_visits.png" alt="LUME Logo" height="70px">
+        </a>
+      </div>
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+        {% if request.user.is_authenticated %}
+
+          <li class="nav-item {% if 'index' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/index.html">
+              <i class="material-icons">dashboard</i>
+              <p>Index</p>
+            </a>
+          </li>
+          <li class="nav-item admin">
+            <a class="nav-link" href="/home/index.html">
+              <i class="material-icons">other_houses</i>
+              <p>APP</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'create_user' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/create_user.html">
+              <i class="material-icons">person_add_alt_1</i>
+              <p>Crear Usuario</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'ver_usuario' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/users.html">
+              <i class="material-icons">groups</i>
+              <p>Ver Usuarios</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'crear_comunidad' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/create_community.html">
+              <i class="material-icons">house</i>
+              <p>Crear Comunidad</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'ver_comunidad' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/communitys.html">
+              <i class="material-icons">other_houses</i>
+              <p>Ver Comunidades</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'crear_empresa' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/create_company.html">
+              <i class="material-icons">add_business</i>
+              <p>Crear Empresa</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'ver_empresa' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/companys.html">
+              <i class="material-icons">other_houses</i>
+              <p>Ver Empresa</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'asignar_vivienda' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/create_viviendas.html">
+              <i class="material-icons">group_add</i>
+              <p>Asignar Viviendas</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'ver_vivienda' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/viviendas.html">
+              <i class="material-icons">house_siding</i>
+              <p>Ver Viviendas</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'asignar_trabajador' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/create_worker.html">
+              <i class="material-icons">shopping_cart</i>
+              <p>Asignar Trabajador</p>
+            </a>
+          </li>
+          <li class="nav-item {% if 'ver_trabajador' in segment %} active {% endif %}">
+            <a class="nav-link" href="/admin_lume/trabajadores.html">
+              <i class="material-icons">add_shopping_cart</i>
+              <p>Ver Trabajador</p>
+            </a>
+          </li>
+          <li class="nav-item salir">
+            <a class="nav-link" href="{% url 'logout' %}" >
+              <i class="material-icons">logout</i>
+              <p>Salir</p>
+            </a>
+          </li>       
+        {% endif %}
+        </ul>
+      </div>
+
+    </div>

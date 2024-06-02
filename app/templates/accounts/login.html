@@ -1,4 +1,4 @@
-{% extends 'layouts/base.html' %}
+{% extends 'layouts/base_lume.html' %}
 {% load static %} 
 
 {% block title %} LUME - LOGIN {% endblock %}
@@ -12,7 +12,7 @@
     <div id="alerts"></div>
 
     <div class="login-box animate__animated animate__fadeIn">
-        <h2>LOGIN</h2>
+        <h1 style="color: white;">LOGIN</h1>
 
         <h6 class="card-category">
             {% if msg %}
@@ -28,7 +28,7 @@
             {% csrf_token %} 
 
             <div>
-                {{ form.username }}
+                {{ form.email }}
             </div>
 
             <br><br>
@@ -45,8 +45,15 @@
         <br><br>
 
         <p class="mt-3">
-            ¿Aún no tienes una cuenta? <a href="{% url 'register' %}">Regístrate</a>
+            ¿Do not you have an account yet? <a href="{% url 'register' %}">Sign up</a>
         </p>
+
+        <br>
+
+        <p class="mt-3">
+            ¿Did you forget your password? <a href="{% url 'reset_password' %}">Reset password</a>
+        </p>
+        
     </div>
 
 {% endblock %}

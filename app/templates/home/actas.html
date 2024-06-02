@@ -1,0 +1,73 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} ACTAS | LUME {% endblock %} 
+
+{% block content %}
+
+{% if comunidades|length > 1 %}
+
+    <div>
+        <h2 style="font-weight: bold;">{{ comunidad_seleccionada.nombre }}</h2>
+    </div>
+
+    <form method="post" action="{% url 'home:cambiar_comunidad_actas' comunidad_seleccionada.id %}">
+        {% csrf_token %}
+        <select name="comunidad_id">
+            {% for comunidad in comunidades %}
+                <option value="{{ comunidad.id }}" {% if comunidad.id == comunidad_seleccionada.id %}selected{% endif %}>{{ comunidad.nombre }}</option>
+            {% endfor %}
+        </select>
+        
+        <button type="submit" class="btn btn-actas">Cambiar comunidad</button>
+    </form>
+    {% endif %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-actas">
+                <h4 class="card-title mt-0"><i class="material-icons">library_books</i> ACTAS</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Comunidad</th>
+                                <th>Título</th>
+                                <th>Fecha</th>
+                                <th>Ver Acta</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for acta in actas_usuario %}
+                            <tr>
+                                <td>{{ acta.comunidad.nombre }}</td>
+                                <td>{{ acta.titulo }}</td>
+                                <td>{{ acta.fecha }}</td>
+                                <td>
+                                    <a href="{% url 'home:ver_acta' acta.id %}" class="btn btn-actas">Ver Acta</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4">¡No hay actas actualmente!</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if es_presidente_o_vicepresidente %}
+<div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+        <a href="{% url 'home:crear_acta' comunidad_seleccionada.id %}" class="btn btn-success">Crear Actas</a>
+    </div>
+</div>
+{% endif %}
+{% endblock content %}

@@ -2,12 +2,15 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+from app.home.models import Comunidad, Empresa
+
+
 
 class LoginForm(forms.Form):
-    username = forms.CharField(
-        widget=forms.TextInput(
+    email = forms.EmailField(
+        widget=forms.EmailInput(
             attrs={
-                "placeholder": "Username",
+                "placeholder": "E-mail",
                 "class": "form-control"
             }
         ))
@@ -22,18 +25,26 @@ class LoginForm(forms.Form):
 
 
 class SignUpForm(UserCreationForm):
-    name = forms.CharField(
+    username = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Name",
+                "placeholder": "Username",
                 "class": "form-control"
             }
         ))
 
-    surname = forms.CharField(
+    first_name = forms.CharField(
         widget=forms.TextInput(
             attrs={
                 "placeholder": "Surname",
+                "class": "form-control"
+            }
+        ))
+    
+    last_name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Second surname",
                 "class": "form-control"
             }
         ))
@@ -41,23 +52,10 @@ class SignUpForm(UserCreationForm):
     email = forms.EmailField(
         widget=forms.EmailInput(
             attrs={
-                "placeholder": "Gmail",
+                "placeholder": "E-mail",
                 "class": "form-control"
             }
         ))
-
-    phone = forms.RegexField(
-        regex="^[0-9]{3}-?[0-9]{2}-?[0-9]{3}$",
-        widget=forms.TextInput(
-            attrs={
-                "type": "tel",
-                "pattern": "[0-9]+",
-                "id": "phone",
-                "placeholder": "Phone",
-                "class": "form-control"
-            }
-        )
-    )
 
     password1 = forms.CharField(
         widget=forms.PasswordInput(
@@ -77,4 +75,18 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('name', 'surname', 'email', 'phone', 'password1', 'password2')
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
+
+
+class TokenForm(forms.Form):
+    token = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Token",
+                "class": "form-control"
+            }
+        ))
+    
+    class Meta:
+        model = Empresa, Comunidad
+        fields = ('token')

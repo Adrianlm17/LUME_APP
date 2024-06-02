@@ -1,0 +1,116 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} Personal Config {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  {% if success %}
+    <div class="alert alert-success alert-dismissible">
+      <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>¡Actualizado!</strong> Datos actualizados correctamente
+    </div> 
+{% endif %} 
+
+  <div class="row">
+    <div class="col-md-8">
+        <div class="card">
+          <div class="card-header card-header-config">
+              <h4 class="card-title">PERFIL PERSONAL</h4>
+          </div>
+          <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+              
+              {% csrf_token %}
+              
+              {% if msg %}
+                <br>
+                <h6 class="card-category">
+                  <span class="text-danger">{{ msg | safe }}</span>
+                </h6>
+              {% endif %}  
+
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <h4>{{ user_form.username.label_tag }}</h4>
+                    {{ user_form.username }}
+                    <span class="text-danger">{{ user_form.username.errors }}</span>
+                  </div>
+                  <div class="form-group">
+                      <h4>{{ user_form.email.label_tag }}</h4>
+                      {{ user_form.email }}
+                      <span class="text-danger">{{ user_form.email.errors }}</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <h4>{{ user_form.first_name.label_tag }}</h4>
+                      {{ user_form.first_name }}
+                      <span class="text-danger">{{ user_form.first_name.errors }}</span>
+                    </div>
+                    <div class="form-group">
+                      <h4>{{ user_form.last_name.label_tag }}</h4>
+                      {{ user_form.last_name }}
+                      <span class="text-danger">{{ user_form.last_name.errors }}</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <h4>{{ profile_form.phone.label_tag }}</h4>
+                      {{ profile_form.phone }}
+                      <span class="text-danger">{{ profile_form.phone.errors }}</span>
+                    </div>
+                    <div class="form-group">
+                      <h4>{{ profile_form.birthday.label_tag }}</h4>
+                      {{ profile_form.birthday }}
+                      <span class="text-danger">{{ profile_form.birthday.errors }}</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <h4>{{ profile_form.lang.label_tag }}</h4>
+                      {{ profile_form.lang }}
+                      <span class="text-danger">{{ profile_form.lang.errors }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                  <div class="col-sm-12 text-center">
+                    <button type="submit" class="btn btn-config">Guardar Cambios</button>
+                  </div>
+                </div>
+            </form>
+          </div>        
+        </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card card-profile">
+        <div class="card-avatar">
+          <!-- Mostrar la imagen actual del perfil -->
+          <img class="img" src="{% static 'app_files/' %}{{ profile_form.instance.IMG_profile }}" />
+        </div>
+        <div class="card-body">
+          <!-- Formulario para actualizar la imagen de perfil -->
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ profile_IMG.IMG_profile }}
+            <!-- Campo oculto para indicar que se está actualizando la imagen -->
+            <input type="hidden" name="profile_img_submit" value="1">
+            <br><br>
+            <button type="submit" class="btn btn-config btn-round">Guardar Imagen</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+  {% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

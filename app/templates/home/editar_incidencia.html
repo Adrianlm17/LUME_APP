@@ -1,0 +1,82 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %} Editar Incidencia | LUME {% endblock %} 
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/static/css/starability-all.min.css"/>
+{% endblock stylesheets %}
+
+{% block content %}
+<a href="{% url 'home:ver_incidencias' %}" class="btn btn-light bg-dark"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<br>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header card-header-light bg-dark">
+                <h4 class="card-title mt-0"><i class="material-icons">edit</i> Editar Incidencia</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="titulo">Título:</label><br>
+                                {{ incidencia_form.titulo }}
+                                {{ incidencia_form.titulo.errores }}
+                            </div>
+                            <div class="form-group">
+                                <label for="titulo">Descripción:</label><br>
+                                {{ incidencia_form.descripcion }}
+                            </div>
+                            <div class="form-group">
+                                <label for="titulo">Prioridad:</label><br>
+                                {{ incidencia_form.prioridad }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_valoracion">Valoración:</label>
+                                <fieldset class="starability-basic">
+                                    <input type="radio" id="rate5" name="valoracion" value="1" />
+                                    <label for="rate5" title="Amazing">1 estrellas</label>
+                                    <input type="radio" id="rate4" name="valoracion" value="2" />
+                                    <label for="rate4" title="Very good">2 estrellas</label>
+                                    <input type="radio" id="rate3" name="valoracion" value="3" />
+                                    <label for="rate3" title="Average">3 estrellas</label>
+                                    <input type="radio" id="rate2" name="valoracion" value="4" />
+                                    <label for="rate2" title="Not good">4 estrellas</label>
+                                    <input type="radio" id="rate1" name="valoracion" value="5" />
+                                    <label for="rate1" title="Terrible">5 estrellas</label>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label for="titulo">Archivo:</label><br>
+                                {{ incidencia_form.archivo }}
+                            </div>
+                            <div class="form-group">
+                                <label for="titulo">Estado:</label><br>
+                                {{ incidencia_form.estado }}
+                            </div>
+                            <div class="form-group">
+                                <label for="titulo">Empresa:</label><br>
+                                {{ incidencia_form.empresa }}
+                            </div>
+                            <div class="form-group">
+                                <label for="titulo">Gasto:</label><br>
+                                {{ incidencia_form.gasto }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-light bg-dark">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
