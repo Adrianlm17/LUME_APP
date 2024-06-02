@@ -5,5 +5,4 @@ from .models import UserProfile
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'IMG_profile')
 
-
 admin.site.register(UserProfile, UserProfileAdmin)

@@ -8,7 +8,7 @@ class UpdateProfileForm(forms.ModelForm):
     username = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Username",
+                "placeholder": "Nombre",
                 "class": "form-control"
             }
         ))
@@ -292,5 +292,3 @@ class EventoForm(forms.ModelForm):
         super(EventoForm, self).__init__(*args, **kwargs)
         if user:
             self.fields['comunidad'].queryset = Comunidad.objects.filter(vivienda__usuario=user).distinct()
-
-

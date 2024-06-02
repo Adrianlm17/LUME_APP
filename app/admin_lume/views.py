@@ -16,9 +16,7 @@ from app.admin_lume.forms import CrearCompanyForm, CrearComunidadForm, CrearTrab
 # ---------------------------------------------------------- INDEX ---------------------------------------------------------- 
 @login_required(login_url="/login/login_admin/")
 def admin_index(request):
-
     context = {'segment': 'index'}
-
     html_template = loader.get_template('admin_lume/index.html')
     return HttpResponse(html_template.render(context, request))
 
@@ -29,19 +27,16 @@ def pages(request):
     context = {}
     
     try:
-
         load_template = request.path.split('/')[-1]
-
         if load_template == 'admin':
             return HttpResponseRedirect(reverse('admin:index'))
+        
         context['segment'] = load_template
-
         html_template = loader.get_template('admin_lume/' + load_template)
         return HttpResponse(html_template.render(context, request))
 
     # ------------------------ EXCEPTS ------------------------
     except TemplateDoesNotExist:
-
         html_template = loader.get_template('errors/404.html')
         return HttpResponse(html_template.render(context, request))
 
@@ -53,6 +48,7 @@ def pages(request):
 @login_required(login_url="/login/login_admin/")
 def user_list(request):
     users = User.objects.all()
+
     return render(request, 'admin_lume/users.html', {'segment': 'ver_usuario', 'users': users})
 
 
@@ -69,6 +65,7 @@ def create_user(request):
             
             if User.objects.filter(email=email).exists():
                 msg = '¡El correo electrónico ya está en uso!'
+
             else:
                 user = form.save()
                 profile = form_profile.save(commit=False) 
@@ -77,8 +74,10 @@ def create_user(request):
                 password = form.cleaned_data.get("password1")
                 user = authenticate(username=email, password=password)
                 success = True
+
         else:
             msg = '¡Formulario no válido!'
+
     else:
         form = SignUpForm()
         form_profile = CrearUserProfileForm()
@@ -104,6 +103,7 @@ def edit_user(request, user_id):
 
         else:
             msg = '¡Formulario no válido!'
+
     else:
         user_form = UpdateProfileForm(instance=user)
         profile_form = CrearUserProfileForm(instance=profile_instance)
@@ -119,6 +119,7 @@ def delete_user(request, user_id):
         user.delete()
     
     users = User.objects.all()
+
     return render(request, 'admin_lume/users.html', {'segment': 'ver_usuario', 'users': users})
 
 
@@ -129,6 +130,7 @@ def delete_user(request, user_id):
 @login_required(login_url="/login/login_admin/")
 def community_list(request):
     communitys = Comunidad.objects.all()
+
     return render(request, 'admin_lume/communitys.html', {'segment': 'ver_comunidad', 'communitys': communitys})
 
 
@@ -142,8 +144,6 @@ def create_community(request):
         if form.is_valid():
             comunidad = form.save(commit=False)
             comunidad.token = secrets.token_urlsafe(16)
-
-            # Geolocalización de la dirección de la comunidad
             direccion = f"{comunidad.dirrecion}, {comunidad.municipio}, {comunidad.provincia}, {comunidad.pais}"
             geolocalizador = Nominatim(user_agent="my_geocoder")
             ubicacion = geolocalizador.geocode(direccion)
@@ -173,7 +173,6 @@ def edit_community(request, communitys_id):
         communitys_form = CrearComunidadForm(request.POST, instance=communitys)
         
         if communitys_form.is_valid():
-            # Geolocalización de la dirección de la comunidad
             direccion = f"{communitys_form.cleaned_data['dirrecion']}, {communitys_form.cleaned_data['municipio']}, {communitys_form.cleaned_data['provincia']}, {communitys_form.cleaned_data['pais']}"
             geolocalizador = Nominatim(user_agent="my_geocoder")
             ubicacion = geolocalizador.geocode(direccion)
@@ -187,6 +186,7 @@ def edit_community(request, communitys_id):
 
         else:
             msg = '¡Formulario no válido!'
+
     else:
         communitys_form = CrearComunidadForm(instance=communitys)
 
@@ -225,8 +225,6 @@ def create_company(request):
         if company.is_valid():
             comunidad = company.save(commit=False)
             comunidad.token = secrets.token_urlsafe(16)
-
-            # Geolocalización de la dirección
             direccion = f"{comunidad.direccion}, {comunidad.municipio}, {comunidad.provincia}, {comunidad.pais}"
             geolocalizador = Nominatim(user_agent="my_geocoder")
             ubicacion = geolocalizador.geocode(direccion)
@@ -246,6 +244,7 @@ def create_company(request):
 
     return render(request, 'admin_lume/create_company.html', {'segment': 'crear_empresa', "company": company, "msg": msg, "success": success})
 
+
 def edit_company(request, companys_id):
     msg = None
     success = False
@@ -255,7 +254,6 @@ def edit_company(request, companys_id):
         companys_form = CrearCompanyForm(request.POST, instance=companys)
         
         if companys_form.is_valid():
-            # Geolocalización de la dirección
             direccion = f"{companys_form.cleaned_data['direccion']}, {companys_form.cleaned_data['municipio']}, {companys_form.cleaned_data['provincia']}, {companys_form.cleaned_data['pais']}"
             geolocalizador = Nominatim(user_agent="my_geocoder")
             ubicacion = geolocalizador.geocode(direccion)
@@ -269,6 +267,7 @@ def edit_company(request, companys_id):
 
         else:
             msg = '¡Formulario no válido!'
+
     else:
         companys_form = CrearCompanyForm(instance=companys)
 
@@ -395,6 +394,7 @@ def edit_trabajador(request, trabajadors_id):
 
         else:
             msg = '¡Formulario no válido!'
+
     else:
         trabajadors_form = CrearTrabajadorForm(instance=trabajadors)
 
