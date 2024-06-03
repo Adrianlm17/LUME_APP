@@ -42,10 +42,12 @@ class UpdateProfileForm(forms.ModelForm):
         fields = ['username', 'first_name', 'last_name', 'email']
 
 
+
 class UpdateIMGForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['IMG_profile']
+
 
 
 class NotaForm(forms.ModelForm):
@@ -54,10 +56,12 @@ class NotaForm(forms.ModelForm):
         fields = ['titulo', 'descripcion']
 
 
+
 class ChatForm(forms.ModelForm):
     class Meta:
         model = Chat
         fields = ["titulo", "IMG_profile"]
+
 
 
 class GroupChatForm(forms.Form):
@@ -67,6 +71,7 @@ class GroupChatForm(forms.Form):
     class Meta:
         model = GroupChat
         fields = ["title", "users", "IMG_profile"]
+
 
 
 class ExtendsChatForm(forms.ModelForm):
@@ -93,7 +98,8 @@ class ExtendsGroupChatForm(forms.ModelForm):
             }),
         }
 
-    
+
+
 class ActaForm(forms.ModelForm):
     class Meta:
         model = Acta
@@ -119,6 +125,8 @@ class GastoForm(forms.ModelForm):
             'fecha': forms.DateInput(attrs={'type': 'date'})
         }
 
+
+
 class MotivoReciboForm(forms.ModelForm):
     class Meta:
         model = Motivo
@@ -127,6 +135,8 @@ class MotivoReciboForm(forms.ModelForm):
 MotivoReciboFormSet = forms.inlineformset_factory(
     Recibo, Motivo, form=MotivoReciboForm, extra=1
 )
+
+
 
 class ReciboForm(forms.ModelForm):
     cantidad_pagada = forms.DecimalField(label='Cantidad pagada', required=False)
@@ -139,10 +149,13 @@ class ReciboForm(forms.ModelForm):
             'fecha': forms.DateInput(attrs={'type': 'date'})
         }
 
+
+
 class PagosUsuarioForm(forms.ModelForm):
     class Meta:
         model = PagosUsuario
         fields = ['titulo', 'descripcion', 'fecha', 'cantidad', 'estado', 'archivo', 'cantidad_pagada']
+
 
 
 class EditarComunidadForm(forms.ModelForm):
@@ -152,16 +165,19 @@ class EditarComunidadForm(forms.ModelForm):
         fields = ['nombre', 'pais', 'provincia', 'municipio', 'dirrecion', 'portal', 'dinero', 'numero_cuenta']
 
 
+
 class MetodoPagoForm(forms.ModelForm):
     class Meta:
         model = Comunidad
         fields = ['metodo_pago']
 
 
+
 class PorcentajePagoForm(forms.ModelForm):
     class Meta:
         model = Vivienda
         fields = ['porcentaje_pago']
+
 
 
 class CrearAnuncioForm(forms.ModelForm):
@@ -173,6 +189,7 @@ class CrearAnuncioForm(forms.ModelForm):
             'fecha_anuncio': forms.DateInput(attrs={'type': 'date'}),
         }
         
+
 
 class AsignarUsuarioComunidadForm(forms.ModelForm):
     USER_ROL_CHOICES = [
@@ -198,6 +215,8 @@ class AsignarUsuarioComunidadForm(forms.ModelForm):
         model = Vivienda
         fields = ['usuario', 'rol_comunidad', 'piso', 'puerta']
 
+
+
 class SeguroComunidadForm(forms.ModelForm):
     class Meta:
         model = SeguroComunidad
@@ -215,6 +234,7 @@ class SeguroComunidadForm(forms.ModelForm):
         }
 
 
+
 class IncidenciaForm(forms.ModelForm):
     class Meta:
         model = Incidencia
@@ -222,6 +242,7 @@ class IncidenciaForm(forms.ModelForm):
         widgets = {
             'descripcion': forms.Textarea(attrs={'rows': 5}),
         }
+
 
 
 class IncidenciaAdminForm(forms.ModelForm):
@@ -247,6 +268,7 @@ class IncidenciaAdminForm(forms.ModelForm):
         self.fields['descripcion'].widget = forms.Textarea(attrs={'rows': 5})
 
 
+
 class IncidenciaEmpresaForm(forms.ModelForm):
     ESTADO_CHOICES = [
         ('Aceptada', 'Aceptada'),
@@ -269,16 +291,19 @@ class IncidenciaEmpresaForm(forms.ModelForm):
         self.fields['descripcion'].widget = forms.Textarea(attrs={'rows': 5})
 
 
+
 class EditarEmpresaForm(forms.ModelForm):
     class Meta:
         model = Empresa
         fields = ['nombre', 'descripcion', 'telefono', 'correo', 'pais', 'provincia', 'municipio', 'direccion', 'tags']
 
 
+
 class UpdateIMGEmpresaForm(forms.ModelForm):
     class Meta:
         model = Empresa
         fields = ['IMG_profile']
+
 
 
 class EventoForm(forms.ModelForm):
