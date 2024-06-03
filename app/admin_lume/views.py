@@ -146,11 +146,17 @@ def create_community(request):
             comunidad.token = secrets.token_urlsafe(16)
             direccion = f"{comunidad.dirrecion}, {comunidad.municipio}, {comunidad.provincia}, {comunidad.pais}"
             geolocalizador = Nominatim(user_agent="my_geocoder")
-            ubicacion = geolocalizador.geocode(direccion)
+            try:
+                ubicacion = geolocalizador.geocode(direccion)
+                
+                if ubicacion:
+                    comunidad.lat = ubicacion.latitude
+                    comunidad.lng = ubicacion.longitude
+                    
+            except:
+                ubicacion = direccion
 
-            if ubicacion:
-                comunidad.lat = ubicacion.latitude
-                comunidad.lng = ubicacion.longitude
+            
 
             comunidad.save()
             success = True

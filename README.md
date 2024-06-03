@@ -185,7 +185,6 @@ A pesar de haber elegido un tema el cual a medida que iba desarrollando o diseñ
 #### Mejoras
 Aunque el proyecto haya terminado y haya cumplido con todos los requisitos que esperaba, me han surgido diferentes ideas de mejoras las cuales me habría gustado poder implementar:
 
-- Implementar un sistema de calendario grupal para la comunidad donde se gestione la limpieza de la comunidad en caso de ser una limpieza realizada por los usuarios.
 - Implementar un sistema de gestión de plazas de parking.
 - Añadir un mapa en el cual permitiera ver los diferentes eventos de las comunidades cercanas, con la finalidad de poder obtener de una forma visual la ubicación del evento.
 - Y también añadir un mapa para visualizar las ubicaciones de las empresas, de cara a la gestión de incidencias saber donde se ubica cada empresa y poder tomar una decisión sobre a quién asignar una incidencia de una forma más visual.

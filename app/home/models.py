@@ -188,6 +188,7 @@ class Chat(models.Model):
         return f"Chat {self.id} - From: {self.user.email} - To: {self.mensaje_user.email}"
 
 
+
 class GroupChat(models.Model):
     title = models.CharField(max_length=100)
     users = models.ManyToManyField(User, related_name='group_chats')
@@ -200,6 +201,7 @@ class GroupChat(models.Model):
         return self.title
 
 
+
 class Message(models.Model):
     group_chat = models.ForeignKey(GroupChat, related_name='messages', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -208,6 +210,7 @@ class Message(models.Model):
 
     def __str__(self):
         return f'Message from {self.user.username}'
+
 
 
 class ChatReadBy(models.Model):
@@ -222,6 +225,8 @@ class ChatReadBy(models.Model):
         status = "Read" if self.is_read else "Unread"
         return f"Chat {self.chat.id} read by {self.user.email}: {status}"
 
+
+
 class GroupReadBy(models.Model):
     chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -235,6 +240,7 @@ class GroupReadBy(models.Model):
         return f"Chat {self.chat.id} read by {self.user.email}: {status}"
 
 
+
 class ExtendsChat(models.Model):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
     text = models.TextField()
@@ -244,6 +250,7 @@ class ExtendsChat(models.Model):
         return f"Extendido Chat {self.chat.id} - {self.text[:20]}"
     
 
+
 class ExtendsGroupChat(models.Model):
     chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE)
     text = models.TextField()
@@ -251,7 +258,6 @@ class ExtendsGroupChat(models.Model):
 
     def __str__(self):
         return f"Extendido Chat {self.chat.id} - {self.text[:20]}"
-
 
 
 class Acta(models.Model):
@@ -266,6 +272,7 @@ class Acta(models.Model):
         return f"{self.titulo} - {self.comunidad}"
     
 
+
 class Calendario(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE, null=True)
@@ -277,6 +284,8 @@ class Calendario(models.Model):
     def __str__(self):
         return self.titulo
 
+
+
 class Anuncio(models.Model):
     comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=100)
@@ -285,6 +294,19 @@ class Anuncio(models.Model):
 
     def __str__(self):
         return self.titulo
+    
+
+
+class CalendarioLimpieza(models.Model):
+    comunidad = models.ForeignKey(Comunidad, on_delete=models.CASCADE)
+    titulo = models.CharField(max_length=200)
+    descripcion = models.TextField(null=True)
+    zona = models.CharField(max_length=200)
+    fecha = models.DateField()
+    usuarios_asignados = models.ManyToManyField(User, related_name='tareas_limpieza')
+
+    def __str__(self):
+        return f"{self.titulo} - {self.comunidad.nombre}"
     
 
 
@@ -301,6 +323,8 @@ class Recibo(models.Model):
     def __str__(self):
         return f"Recibo: {self.titulo} - {self.fecha_tope}"
     
+
+
 class Motivo(models.Model):
     TIPO_CHOICES = [
         ('luz', 'Luz'),
@@ -322,6 +346,8 @@ class Motivo(models.Model):
     def __str__(self):
         return f"{self.tipo}: {self.cantidad}"
 
+
+
 class Gasto(models.Model):
     titulo = models.CharField(max_length=100)
     descripcion = models.TextField()
@@ -341,6 +367,8 @@ class Gasto(models.Model):
     def __str__(self):
         return f"Gasto: {self.titulo} - {self.fecha_tope}"
 
+
+
 class MotivoRecibo(models.Model):
     recibo = models.ForeignKey(Recibo, on_delete=models.CASCADE, related_name='motivos')
     tipo = models.CharField(max_length=100)
@@ -349,11 +377,15 @@ class MotivoRecibo(models.Model):
     def __str__(self):
         return f"{self.tipo}: {self.cantidad}"
 
+
+
 class Transaccion(models.Model):
     comunidad = models.ForeignKey('Comunidad', on_delete=models.CASCADE)
     monto = models.DecimalField(max_digits=10, decimal_places=2)
     fecha = models.DateField(auto_now_add=True)
     descripcion = models.CharField(max_length=100, null=True)
+
+
 
 class PagosUsuario(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -374,6 +406,7 @@ class PagosUsuario(models.Model):
         return f"Pago: {self.cantidad} - {self.fecha}"
 
 
+
 class SeguroComunidad(models.Model):
     empresa = models.CharField(max_length=200, null=True)
     comunidad = models.OneToOneField('Comunidad', on_delete=models.CASCADE)
@@ -386,6 +419,8 @@ class SeguroComunidad(models.Model):
     def __str__(self):
         estado = "Pagado" if self.pagado else "Pendiente"
         return f"Seguro de {self.comunidad.nombre} - Vencimiento: {self.fecha_vencimiento} ({estado})"
+
+
 
 class Notificacion(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

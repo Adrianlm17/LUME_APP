@@ -32,6 +32,12 @@
           </a>
         </li>
         {% if request.user.userprofile.user_rol == 'community_user' or request.user.userprofile.user_rol == 'lume' or request.user.userprofile.user_rol == 'community_admin' %}
+          <li class="nav-item {% if 'limpieza_comunidad' in segment %} active {% endif %}">
+            <a class="nav-link" href="{% url 'home:calendario_limpieza_defecto' %}">
+              <i class="material-icons">clean_hands</i>
+              <p><b>Limpieza Comunidad</b></p>
+            </a>
+          </li>
           <li class="nav-item {% if 'actas' in segment %} active {% endif %}">
             <a class="nav-link" href="{% url 'home:actas' %}">
               <i class="material-icons">library_books</i>

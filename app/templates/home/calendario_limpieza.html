@@ -1,0 +1,102 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %}LIMPIEZA COMUNIDAD{% endblock %}
+
+{% block content %}
+{% if comunidades|length > 1 %}
+
+    <div>
+        <h2 style="font-weight: bold;">{{ comunidad.nombre }}</h2>
+    </div>
+
+    <form method="post" action="{% url 'home:cambiar_comunidad_limpieza' comunidad.id %}">
+        {% csrf_token %}
+        <select name="comunidad_id">
+            {% for comunidad in comunidades %}
+                <option value="{{ comunidad.id }}" {% if comunidad.id == comunidad.id %}selected{% endif %}>{{ comunidad.nombre }}</option>
+            {% endfor %}
+        </select>
+        
+        <button type="submit" class="btn btn-limpieza">Cambiar comunidad</button>
+    </form>
+{% endif %}
+
+<br>
+
+<div class="text-center">
+    <h1>{{ titulo }}</h1>
+    <a href="{{ url_mes_anterior }}" class="btn btn-limpieza">&lt;</a>
+    <a href="{{ url_mes_siguiente }}" class="btn btn-limpieza">&gt;</a>
+</div>
+
+<table class="table table-bordered calendario-alto">
+    <thead class="thead-dark">
+        <tr>
+            {% for dia in dias_de_la_semana %}
+                <th>{{ dia }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for semana in calendario_mes %}
+            <tr>
+                {% for dia, eventos in semana %}
+                    {% if dia %}
+                        {% if dia == hoy.day and hoy.month == mes and hoy.year == año %}
+                            <td class="calendar-cell hoy" style="background-color: #7182a5;">
+                        {% else %}
+                            <td class="calendar-cell">
+                        {% endif %}
+                            <strong>{{ dia }}</strong>
+                            {% if eventos %}
+                                <ul>
+                                    {% for evento in eventos %}
+                                        <a href="{% url 'home:detalle_tarea_limpieza' evento.id %}" class="btn" style="color: azure; background-color: #2176d8;">
+                                            {{ evento.titulo|slice:":50" }}
+                                        </a><br>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    {% else %}
+                        <td class="calendar-cell"></td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+
+<div class="text-center">
+    <a href="{% url 'home:crear_tarea_limpieza' comunidad.id %}" class="btn btn-limpieza">Crear Nueva Tarea</a>
+</div>
+
+{% block stylesheets %}
+<style>
+    .calendario-alto td {
+        height: 100px;
+        vertical-align: top;
+        padding: 10px;
+        background-color: #e6f8fa;
+        border: 1px solid black;
+    }
+
+    .table-bordered {
+        border: 2px solid black;
+        border-collapse: collapse;
+    }
+
+    .table-bordered th, .table-bordered td {
+        border: 1px solid black;
+    }
+
+    .thead-dark th {
+        background-color: #343a40;
+        color: white;
+    }
+</style>
+{% endblock stylesheets %}
+{% endblock content %}

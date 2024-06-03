@@ -58,7 +58,11 @@
                                 <td>{{ incidencia.descripcion }}</td>
                                 <td>{{ incidencia.fecha_apertura }}</td>
                                 <td>{{ incidencia.estado }}</td>
-                                <td>{{ incidencia.empresa }}</td>
+                                {% if incidencia.empresa %}
+                                    <td>{{ incidencia.empresa }}</td>
+                                {% else %}
+                                    <td>Sin empresa</td>
+                                {% endif %}
                                 <td>{{ incidencia.prioridad }}</td>
                                 <td>{{ incidencia.gasto }}€</td>
                                 <td>

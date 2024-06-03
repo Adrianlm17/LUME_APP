@@ -52,12 +52,21 @@ urlpatterns = [
     path('unirse_evento/<int:event_id>/', home_views.unirse_evento, name='unirse_evento'),
     path('desapuntarse_evento/<int:event_id>/', home_views.desapuntarse_evento, name='desapuntarse_evento'),
 
-    # ------------------------------- CALENDAR ------------------------------
+    # ------------------------------- CALENDARIO ------------------------------
     path('calendario', home_views.calendario, name='calendario_actual'),
     path('<int:año>/<int:mes>/calendario.html', home_views.calendario, name='calendario'),
     path('crear_recordatorio.html', home_views.crear_recordatorio, name='crear_recordatorio'),
     path('detalle_evento/<int:evento_id>/', home_views.detalle_evento, name='detalle_evento'),
     path('<int:recordatorio_id>/delete_calendario', home_views.delete_calendario, name='delete_calendario'),
+
+    # ------------------------------- CALENDARIO LIMPIEZA ------------------------------
+    path('calendario_limpieza', home_views.calendario_limpieza, name='calendario_limpieza_defecto'),
+    path('calendario_limpieza/<int:comunidad_id>/', home_views.calendario_limpieza, name='calendario_limpieza'),
+    path('calendario_limpieza/<int:comunidad_id>/<int:año>/<int:mes>/', home_views.calendario_limpieza, name='calendario_limpieza'),
+    path('crear_tarea_limpieza/<int:comunidad_id>/', home_views.crear_tarea_limpieza, name='crear_tarea_limpieza'),
+    path('detalle_tarea_limpieza/<int:tarea_id>/', home_views.detalle_tarea_limpieza, name='detalle_tarea_limpieza'),
+    path('eliminar_tarea_limpieza/<int:tarea_id>/', home_views.eliminar_tarea_limpieza, name='eliminar_tarea_limpieza'),
+    path('cambiar_comunidad_limpieza/<int:comunidad_id>/', home_views.cambiar_comunidad_limpieza, name='cambiar_comunidad_limpieza'),
 
     # ------------------------------- ANUNCIOS ------------------------------
     path('<int:anuncio_id>/detalles_anuncio', home_views.detalles_anuncio, name='detalles_anuncio'),
@@ -76,10 +85,10 @@ urlpatterns = [
     path('<int:comunidad_seleccionada>/editar_recibo_gasto/<str:tipo>/<int:recibo_id>/', home_views.editar_recibo_gasto, name='editar_recibo_gasto'),
     path('<int:comunidad_seleccionada>/eliminar_recibo_gasto/<str:tipo>/<int:recibo_id>/', home_views.eliminar_recibo_gasto, name='eliminar_recibo_gasto'),
 
-    # ------------------------------- USER CONFIG -------------------------------
+    # ------------------------------- CONFIG PERFIL -------------------------------
     path('config.html', home_views.edit_profile, name='config'),
 
-    # ------------------------------- COMMUNITY CONFIG -------------------------------
+    # ------------------------------- CONFIG COMUNIDAD -------------------------------
     path('comunidades_configuracion', home_views.comunidades_configuracion, name='comunidades_configuracion'),
     path('<int:comunidad_seleccionada>/comunidades_configuracion', home_views.comunidades_configuracion, name='comunidades_configuracion'),
     path('<int:comunidad_seleccionada>/administrar_viviendas', home_views.administrar_viviendas, name='administrar_viviendas'),
@@ -88,7 +97,7 @@ urlpatterns = [
     path('<int:comunidad_id>/<int:viviendas_id>/editar_vivienda_comunidad', home_views.editar_vivienda_comunidad, name='editar_vivienda_comunidad'),
     path('<int:comunidad_id>/administrar_distribucion_gastos', home_views.administrar_distribucion_gastos, name='administrar_distribucion_gastos'),
 
-    # ------------------------------- EMPRESA CONFIG -------------------------------
+    # ------------------------------- CONFIG EMPRESA -------------------------------
     path('config_empresa', home_views.edit_empresa_profile, name='config_empresa'),
 
     # ------------------------------- EXTRA -------------------------------

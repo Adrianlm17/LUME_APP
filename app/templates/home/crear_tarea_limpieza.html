@@ -1,0 +1,98 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %}Asignar Limpieza{% endblock %}
+
+{% block content %}
+<a href="{% url 'home:calendario_limpieza' comunidad.id %}" class="btn btn-limpieza mb-3"><i class="fa fa-arrow-left"></i> Volver</a>
+
+<div class="container">
+    <div class="card">
+        <div class="card-header text-center">
+            <h2>Asignar Limpieza | {{ comunidad.nombre }}</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="fecha">Fecha:</label>
+                    <input type="date" class="form-control" id="fecha" name="fecha" required>
+                </div>
+                
+                <div class="form-group mt-3">
+                    <label for="titulo">Título:</label>
+                    <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Escribe un título..." required>
+                </div>
+                
+                <div class="form-group mt-3">
+                    <label for="descripcion">Descripción:</label>
+                    <textarea class="form-control" id="descripcion" name="descripcion" rows="4" placeholder="Escribe una descripción..." required></textarea>
+                </div>
+                
+                <div class="form-group mt-3">
+                    <label for="zona">Zona:</label>
+                    <input type="text" class="form-control" id="zona" name="zona" placeholder="Especifica la zona..." required>
+                </div>
+                
+                <div class="form-group mt-3">
+                    <label for="usuarios_asignados">Usuarios Asignados:</label>
+                    <select multiple class="form-control" id="usuarios_asignados" name="usuarios_asignados" style="height: 100px;">
+                        {% for usuario in usuarios %}
+                            <option value="{{ usuario.id }}">{{ usuario.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% block stylesheets %}
+<style>
+    .container {
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .card {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        background-color: #f9f9f9;
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: rgb(0, 0, 0);
+        padding: 10px;
+        font-weight: bold;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: 5px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock stylesheets %}
+{% endblock content %}
